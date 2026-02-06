@@ -15,12 +15,12 @@ const viewButtonInstanceParams: Record<
 > = {
     budget: {
         label: "Budget",
-        route: ROUTES.budget,
+        route: ROUTES.viewBudget,
         icon: <PieChart className="size-4" />,
     },
     transactions: {
         label: "Transactions",
-        route: ROUTES.transactions.allAccounts.asPath,
+        route: ROUTES.viewAlltransactions.resolvedPath,
         icon: <Wallet className="size-4" />,
     },
 };
@@ -65,7 +65,7 @@ const AccountButton = ({
 }) => {
     return (
         <Link
-            href={ROUTES.transactions.account.asPath(bankAccount.id)}
+            href={ROUTES.viewAccountTransactions.resolvedPath(bankAccount.id)}
             key={bankAccount.id}
             className={cn(
                 "w-full text-left px-3 py-1.5 rounded-lg transition-colors block no-underline",

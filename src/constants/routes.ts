@@ -1,14 +1,14 @@
 const ROUTES = {
-    budget: "/budget",
-    transactions: {
-        allAccounts: {
-            asPath: "/transactions/all",
-            segmentName: "all",
-        },
-        account: {
-            asPath: (bankAccountId: string) => `/transactions/${bankAccountId}`,
-            pathDefinition: "/transactions/[bankAccountId]",
-        },
+    viewBudget: "/budget",
+    viewAlltransactions: {
+        resolvedPath: "/transactions/all",
+        segmentName: "all",
+    },
+    viewAccountTransactions: {
+        resolvedPath: (bankAccountId: string) =>
+            `/transactions/${bankAccountId}`,
+        urlTemplate: "/transactions/[bankAccountId]",
+        urlParam: "bankAccountId",
     },
 } as const;
 

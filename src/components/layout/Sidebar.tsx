@@ -48,7 +48,7 @@ const bankAccounts: BankAccount[] = [
 const parseAccountFromUrlSegment = (
     segment: string
 ): BankAccount | "all" | null => {
-    const allTxnSegment = ROUTES.transactions.allAccounts.segmentName;
+    const allTxnSegment = ROUTES.viewAccountTransactions.segmentName;
     if (!segment) {
         return null;
     } else if (segment === allTxnSegment) {
