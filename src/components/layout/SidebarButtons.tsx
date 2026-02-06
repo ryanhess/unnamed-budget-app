@@ -68,7 +68,7 @@ const AccountButton = ({
             href={ROUTES.transactions.account.asPath(bankAccount.id)}
             key={bankAccount.id}
             className={cn(
-                "w-full text-left px-3 py-1.5 rounded-lg transition-colors",
+                "w-full text-left px-3 py-1.5 rounded-lg transition-colors block no-underline",
                 isSelected
                     ? "bg-slate-200 text-slate-900"
                     : "hover:bg-slate-100 text-slate-700"
