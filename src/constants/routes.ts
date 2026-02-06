@@ -1,13 +1,15 @@
 const ROUTES = {
     budget: "/budget",
     transactions: {
-        allAccounts: "/transactions/all",
+        allAccounts: {
+            asPath: "/transactions/all",
+            segmentName: "all",
+        },
         account: {
-            urlEvaluated: (bankAccountId: string) =>
-                `/transactions/${bankAccountId}`,
-            urlDefinition: "/transactions/[bankAccountId]",
+            asPath: (bankAccountId: string) => `/transactions/${bankAccountId}`,
+            pathDefinition: "/transactions/[bankAccountId]",
         },
     },
-};
+} as const;
 
 export { ROUTES };

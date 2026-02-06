@@ -20,7 +20,7 @@ const viewButtonInstanceParams: Record<
     },
     transactions: {
         label: "Transactions",
-        route: ROUTES.transactions.allAccounts,
+        route: ROUTES.transactions.allAccounts.asPath,
         icon: <Wallet className="size-4" />,
     },
 };
@@ -58,18 +58,18 @@ const ViewSidebarSection = ({
 
 const AccountButton = ({
     bankAccount,
-    selectedAccount,
+    isSelected,
 }: {
     bankAccount: BankAccount;
-    selectedAccount: number | null;
+    isSelected: boolean;
 }) => {
     return (
         <Link
-            href={ROUTES.transactions.account.urlEvaluated(bankAccount.id)}
+            href={ROUTES.transactions.account.asPath(bankAccount.id)}
             key={bankAccount.id}
             className={cn(
                 "w-full text-left px-3 py-1.5 rounded-lg transition-colors",
-                selectedAccount
+                isSelected
                     ? "bg-slate-200 text-slate-900"
                     : "hover:bg-slate-100 text-slate-700"
             )}

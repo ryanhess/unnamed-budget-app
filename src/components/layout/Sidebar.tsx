@@ -7,15 +7,12 @@ import {
     ChevronRight,
     PieChart,
 } from "lucide-react";
-import { useRouter } from "next/router";
-import { type View, ViewSchema, type BankAccount } from "@/constants";
+import { NextRouter, useRouter } from "next/router";
+import { ROUTES, type View, ViewSchema, type BankAccount } from "@/constants";
 import {
     AccountButton,
     ViewSidebarSection,
 } from "@/components/layout/SidebarButtons";
-
-const validViewFromString = (str: string): View =>
-    ViewSchema.catch("budget").parse(str);
 
 const bankAccounts: BankAccount[] = [
     {
@@ -48,12 +45,39 @@ const bankAccounts: BankAccount[] = [
     },
 ];
 
+const parseAccountFromUrlSegment = (
+    segment: string
+): BankAccount | "all" | null => {
+    const allTxnSegment = ROUTES.transactions.allAccounts.segmentName;
+    if (!segment) {
+        return null;
+    } else if (segment === allTxnSegment) {
+        return allTxnSegment;
+    } else {
+        const resultOfFind = bankAccounts.find((a) => a.id === segment);
+        const bankAccount = resultOfFind || null;
+        return bankAccount;
+    }
+};
+
+const parseRouteParamsFromRouter = (
+    router: NextRouter
+): { view: View; account: BankAccount | "all" | null } => {
+    const segments = router.asPath.split("/");
+    const view = ViewSchema.catch("budget").parse(segments[1]);
+
+    const accountSegment = segments[2];
+
+    const account = parseAccountFromUrlSegment(accountSegment);
+
+    return { view, account };
+};
+
 const Sidebar = () => {
     const router = useRouter();
-    const routeSegments = router.asPath.split("/");
-    const viewSegment = routeSegments[1];
-    const selectedAccount: BankAccount | null = null;
-    const selectedView: View = validViewFromString(viewSegment);
+    const { view: selectedView, account: selectedAccount } =
+        parseRouteParamsFromRouter(router);
+
     const totalBalance = bankAccounts.reduce(
         (sum, account) => sum + account.balance,
         0
@@ -83,13 +107,14 @@ const Sidebar = () => {
                 >
                     <AccountButton
                         bankAccount={allAccounts}
-                        selectedAccount={selectedAccount}
+                        isSelected={selectedAccount === "all"}
                     />
 
                     {bankAccounts.map((bankAccount) => (
                         <AccountButton
+                            key={bankAccount.id}
                             bankAccount={bankAccount}
-                            selectedAccount={selectedAccount}
+                            isSelected={selectedAccount === bankAccount}
                         />
                     ))}
                 </ViewSidebarSection>
