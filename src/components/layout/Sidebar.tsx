@@ -8,7 +8,7 @@ import {
     PieChart,
 } from "lucide-react";
 import { NextRouter, useRouter } from "next/router";
-import { ROUTES, type View, ViewSchema, type BankAccount } from "@/constants";
+import { ROUTES, type View, type BankAccount } from "@/constants";
 import { AccountButton, ViewSidebarSection } from "@/components/layout/sidebarButtons";
 import { bankAccounts } from "@/lib/dummyData/bankAccounts";
 
@@ -29,7 +29,7 @@ const parseRouteParamsFromRouter = (
     router: NextRouter
 ): { view: View; account: BankAccount | "all" | null } => {
     const segments = router.asPath.split("/");
-    const view = ViewSchema.catch("budget").parse(segments[1]);
+    const view = segments[1];
 
     const accountSegment = segments[2];
 
