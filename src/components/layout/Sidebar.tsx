@@ -40,11 +40,16 @@ const parseRouteParamsFromRouter = (
     router: NextRouter
 ): { view: View; account: BankAccount | null } => {
     const segments = router.asPath.split("/");
-    const view = segments[1];
+
+    // NextJS validates the url at runtime naturally with the routes system.
+    // We want to enforce compile time errors, so this just tells Typescript
+    // that from here forward, view should be a View. That way,
+    // downstream attempts to use a different view name would fail at compile time.
+    const view: View = segments[1] as View;
 
     const account = parseAccountFromUrlSegment(router);
 
-    return { view, account }; //How will we compile-time validate the view as a View?
+    return { view, account };
 };
 
 const Sidebar = () => {
