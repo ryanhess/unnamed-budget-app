@@ -69,7 +69,6 @@ const Sidebar = () => {
 
     const totalBalance = getSumOfAllBalances();
     allAccounts.balance = totalBalance;
-    console.log(selectedAccount);
 
     const accountButtonPropsArray: AccountButtonProps[] = bankAccounts.map((account) => ({
         linkResolvedPath: ROUTES.viewAccountTransactions.resolvedPath(account.id),
