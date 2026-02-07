@@ -9,7 +9,11 @@ import {
 } from "lucide-react";
 import { NextRouter, useRouter } from "next/router";
 import { ROUTES, type View, type BankAccount } from "@/constants";
-import { AccountButton, ViewSidebarSection } from "@/components/layout/sidebarButtons";
+import {
+    AccountButton,
+    ViewSidebarSection,
+    type AccountButtonProps,
+} from "@/components/layout/sidebarButtons";
 import { bankAccounts } from "@/lib/dummyData/bankAccounts";
 
 let allAccounts: BankAccount = {
@@ -60,6 +64,22 @@ const Sidebar = () => {
     allAccounts.balance = totalBalance;
     console.log(selectedAccount);
 
+    const accountButtonPropsArray: AccountButtonProps[] = bankAccounts.map((account) => ({
+        linkResolvedPath: ROUTES.viewAccountTransactions.resolvedPath(account.id),
+        isSelected: selectedAccount === account,
+        accountId: account.id,
+        accountName: account.name,
+        accountBalance: account.balance,
+    }));
+
+    const allAccountsButtonProps: AccountButtonProps = {
+        linkResolvedPath: ROUTES.viewAllTransactions.resolvedPath,
+        isSelected: selectedAccount === allAccounts,
+        accountId: allAccounts.id,
+        accountName: allAccounts.name,
+        accountBalance: totalBalance,
+    };
+
     return (
         <div className="w-64 bg-slate-50 border-r border-slate-200 h-full flex flex-col">
             <div className="flex-1 px-3 pt-6 overflow-auto">
@@ -69,17 +89,10 @@ const Sidebar = () => {
                     view="transactions"
                     isSelected={selectedView === "transactions"}
                 >
-                    <AccountButton
-                        bankAccount={allAccounts}
-                        isSelected={selectedAccount === allAccounts}
-                    />
+                    <AccountButton {...allAccountsButtonProps} />
 
-                    {bankAccounts.map((bankAccount) => (
-                        <AccountButton
-                            key={bankAccount.id}
-                            bankAccount={bankAccount}
-                            isSelected={selectedAccount === bankAccount}
-                        />
+                    {accountButtonPropsArray.map((accountButtonProps) => (
+                        <AccountButton {...accountButtonProps} />
                     ))}
                 </ViewSidebarSection>
             </div>
