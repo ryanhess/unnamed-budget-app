@@ -40,6 +40,9 @@ const getAccountNameById = (accountId: string | null): string => {
     return account ? account.name : "All Accounts";
 };
 
+// allow undefined to allow more edge cases. Makes the function more robust.
+// For example, called by a route parser that is allowing a correct NextJS route
+// but is still calling this function erroneously with an undefineed id.
 const getAccountById = (id: string | undefined): BankAccount | null => {
     if (!id) return null;
     const account = bankAccounts.find((acc) => acc.id === id);
