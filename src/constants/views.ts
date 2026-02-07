@@ -1,6 +1,8 @@
-import { z } from "zod";
+// View type. This provides validation at compile time.
+// Use this type any place where the view is the condition for
+// any logic or the key for anything.
+// Next.js does the validation at runtime for routes.
 
-const ViewSchema = z.enum(["budget", "transactions"]);
-type View = z.infer<typeof ViewSchema>;
+type View = "budget" | "transactions";
 
-export { ViewSchema, type View };
+export { type View };
