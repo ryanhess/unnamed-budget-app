@@ -45,4 +45,8 @@ const getAccountById = (id: string): BankAccount | null => {
     return account || null;
 };
 
+const getSumOfAllBalances = () => {
+    return bankAccounts.reduce((sum, account) => sum + account.balance, 0);
+};
+
 export { bankAccounts, getAccountNameById, getAccountById };
