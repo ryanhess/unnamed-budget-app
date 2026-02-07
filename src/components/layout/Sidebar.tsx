@@ -67,7 +67,7 @@ const Sidebar = () => {
     const router = useRouter();
     const { view: selectedView, account: selectedAccount } = parseRouteParamsFromRouter(router);
 
-    const totalBalance = bankAccounts.reduce((sum, account) => sum + account.balance, 0);
+    const totalBalance = getSumOfAllBalances();
     allAccounts.balance = totalBalance;
     console.log(selectedAccount);
 
@@ -108,4 +108,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-export { bankAccounts as accounts };

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ROUTES } from "@/constants";
 import { PieChart, Wallet } from "lucide-react";
 import { cn } from "@/components/ui/utils";
-import { type View, type BankAccount } from "@/constants";
+import { type View } from "@/constants";
 
 const viewButtonInstanceParams: Record<
     View,
