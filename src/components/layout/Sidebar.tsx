@@ -14,7 +14,7 @@ import {
     ViewSidebarSection,
     type AccountButtonProps,
 } from "@/components/layout/sidebarButtons";
-import { bankAccounts } from "@/lib/dummyData/bankAccounts";
+import { bankAccounts, getAccountById, getSumOfAllBalances } from "@/lib/dummyData/bankAccounts";
 
 let allAccounts: BankAccount = {
     id: "all",
@@ -33,8 +33,10 @@ const parseAccountFromUrlSegment = (router: NextRouter): BankAccount | null => {
     const allTxnResolvedPath = ROUTES.viewAllTransactions.resolvedPath;
     if (path === allTxnResolvedPath) {
         return allAccounts;
+    } else if (Array.isArray(idSegment)) {
+        return null;
     } else {
-        const resultOfFind = bankAccounts.find((a) => a.id === idSegment);
+        const resultOfFind = getAccountById(idSegment);
         const bankAccount = resultOfFind || null;
         return bankAccount;
     }
@@ -51,7 +53,12 @@ const parseRouteParamsFromRouter = (
     // downstream attempts to use a different view name would fail at compile time.
     const view: View = segments[1] as View;
 
-    const account = parseAccountFromUrlSegment(router);
+    let account;
+    if (view === "transactions") {
+        account = parseAccountFromUrlSegment(router);
+    } else {
+        account = null;
+    }
 
     return { view, account };
 };
