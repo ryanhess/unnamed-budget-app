@@ -20,7 +20,7 @@ const viewButtonInstanceParams: Record<
     },
     transactions: {
         label: "Transactions",
-        route: ROUTES.viewAlltransactions.resolvedPath,
+        route: ROUTES.viewAllTransactions.resolvedPath,
         icon: <Wallet className="size-4" />,
     },
 };
@@ -41,17 +41,13 @@ const ViewSidebarSection = ({
                 href={viewButtonInstanceParams[view].route}
                 className={cn(
                     "w-full text-left px-3 py-3 rounded-lg transition-colors flex items-center gap-2",
-                    isSelected
-                        ? "bg-slate-900 text-white"
-                        : "hover:bg-slate-100 text-slate-700"
+                    isSelected ? "bg-slate-900 text-white" : "hover:bg-slate-100 text-slate-700"
                 )}
             >
                 {viewButtonInstanceParams[view].icon}
                 <span className="text-sm font-medium">{sectionLabel}</span>
             </Link>
-            {isSelected && (
-                <div className="ml-3 mt-1 space-y-1">{children}</div>
-            )}
+            {isSelected && <div className="ml-3 mt-1 space-y-1">{children}</div>}
         </div>
     );
 };
@@ -63,15 +59,20 @@ const AccountButton = ({
     bankAccount: BankAccount;
     isSelected: boolean;
 }) => {
+    const getResolvedPathByAllOrId = (id: string) => {
+        if (id === "all") {
+            return ROUTES.viewAllTransactions.resolvedPath;
+        }
+        return ROUTES.viewAccountTransactions.resolvedPath(id);
+    };
+
     return (
         <Link
-            href={ROUTES.viewAccountTransactions.resolvedPath(bankAccount.id)}
+            href={getResolvedPathByAllOrId(bankAccount.id)}
             key={bankAccount.id}
             className={cn(
                 "w-full text-left px-3 py-1.5 rounded-lg transition-colors block no-underline",
-                isSelected
-                    ? "bg-slate-200 text-slate-900"
-                    : "hover:bg-slate-100 text-slate-700"
+                isSelected ? "bg-slate-200 text-slate-900" : "hover:bg-slate-100 text-slate-700"
             )}
         >
             <div className="flex items-center justify-between">
@@ -79,9 +80,7 @@ const AccountButton = ({
                 <p
                     className={cn(
                         "text-sm",
-                        bankAccount.balance < 0
-                            ? "text-red-500"
-                            : "text-slate-500"
+                        bankAccount.balance < 0 ? "text-red-500" : "text-slate-500"
                     )}
                 >
                     $

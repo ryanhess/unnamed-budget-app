@@ -4,9 +4,8 @@
 
 const ROUTES = {
     viewBudget: "/budget",
-    viewAlltransactions: {
-        resolvedPath: "/transactions/all",
-        segmentName: "all",
+    viewAllTransactions: {
+        resolvedPath: "/transactions",
     },
     viewAccountTransactions: {
         resolvedPath: (bankAccountId: string) => `/transactions/${bankAccountId}`,
