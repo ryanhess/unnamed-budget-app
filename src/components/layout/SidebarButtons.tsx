@@ -32,7 +32,7 @@ const ViewSidebarSection = ({
 }: {
     view: View;
     isSelected: boolean;
-    children: ReactNode;
+    children?: ReactNode;
 }) => {
     const sectionLabel = viewButtonInstanceParams[view].label;
     return (

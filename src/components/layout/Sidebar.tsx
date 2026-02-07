@@ -97,9 +97,7 @@ const Sidebar = () => {
                 <ViewSidebarSection
                     view="budget"
                     isSelected={selectedView === "budget"}
-                >
-                    <></>
-                </ViewSidebarSection>
+                />
 
                 <ViewSidebarSection
                     view="transactions"
