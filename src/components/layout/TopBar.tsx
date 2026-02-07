@@ -9,7 +9,9 @@ const TopBar = ({ onAddTransaction }: TopBarProps) => {
     return (
         <div className="h-16 border-b border-slate-200 bg-white px-6 flex items-center justify-between">
             <div className="flex items-center gap-4 flex-1">
-                <h1 className="text-xl font-semibold text-slate-900">Budget Tracker</h1>
+                <h1 className="text-xl font-semibold text-slate-900">
+                    Budget Tracker
+                </h1>
             </div>
 
             <div className="flex items-center gap-2">

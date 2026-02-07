@@ -12,7 +12,7 @@ import { ROUTES, type View, ViewSchema, type BankAccount } from "@/constants";
 import {
     AccountButton,
     ViewSidebarSection,
-} from "@/components/layout/SidebarButtons";
+} from "@/components/layout/sidebarButtons";
 
 const bankAccounts: BankAccount[] = [
     {
