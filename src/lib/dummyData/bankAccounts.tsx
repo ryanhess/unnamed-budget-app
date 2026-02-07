@@ -40,4 +40,9 @@ const getAccountNameById = (accountId: string | null): string => {
     return account ? account.name : "All Accounts";
 };
 
-export { bankAccounts, getAccountNameById };
+const getAccountById = (id: string): BankAccount | null => {
+    const account = bankAccounts.find((acc) => acc.id === id);
+    return account || null;
+};
+
+export { bankAccounts, getAccountNameById, getAccountById };
