@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { NextRouter, useRouter } from "next/router";
 import { ROUTES, type View, ViewSchema, type BankAccount } from "@/constants";
-import { AccountButton, ViewSidebarSection } from "@/components/layout/sidebarButtons";
+import { AccountButton, ViewSidebarSection } from "@/components/layout/tmpfile";
 import { bankAccounts } from "@/lib/dummyData/bankAccounts";
 
 const parseAccountFromUrlSegment = (segment: string): BankAccount | "all" | null => {
