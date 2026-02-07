@@ -13,7 +13,7 @@ import { AccountButton, ViewSidebarSection } from "@/components/layout/sidebarBu
 import { bankAccounts } from "@/lib/dummyData/bankAccounts";
 
 const parseAccountFromUrlSegment = (segment: string): BankAccount | "all" | null => {
-    const allTxnSegment = ROUTES.viewAlltransactions.segmentName;
+    const allTxnSegment = ROUTES.viewAllTransactions.segmentName;
     if (!segment) {
         return null;
     } else if (segment === allTxnSegment) {
