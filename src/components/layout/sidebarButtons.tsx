@@ -59,9 +59,16 @@ const AccountButton = ({
     bankAccount: BankAccount;
     isSelected: boolean;
 }) => {
+    const getResolvedPathByAllOrId = (id: string) => {
+        if (id === "all") {
+            return ROUTES.viewAllTransactions.resolvedPath;
+        }
+        return ROUTES.viewAccountTransactions.resolvedPath(id);
+    };
+
     return (
         <Link
-            href={ROUTES.viewAccountTransactions.resolvedPath(bankAccount.id)}
+            href={getResolvedPathByAllOrId(bankAccount.id)}
             key={bankAccount.id}
             className={cn(
                 "w-full text-left px-3 py-1.5 rounded-lg transition-colors block no-underline",
