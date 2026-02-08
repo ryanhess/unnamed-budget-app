@@ -104,7 +104,7 @@ interface TransactionsViewProps {
     accountName: string;
 }
 
-const TransactionsView = ({ selectedAccountId, accountName }: TransactionsViewProps) => {
+const TransactionsView = ({ selectedAccountId, accountName }: TransactionsViewProps): ReactNode => {
     let filteredTransactions;
     let totalAccountBalance;
     if (selectedAccountId) {
