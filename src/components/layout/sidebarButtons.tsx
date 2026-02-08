@@ -3,48 +3,27 @@ import type { Route } from "next";
 import Link from "next/link";
 import { PieChart, Wallet } from "lucide-react";
 import { cn } from "@/components/ui/utils";
-import { type View } from "@/constants";
 
-const viewButtonInstanceParams: Record<
-    View,
-    {
-        label: string;
-        route: Route;
-        icon: ReactNode;
-    }
-> = {
-    budget: {
-        label: "Budget",
-        route: "/budget",
-        icon: <PieChart className="size-4" />,
-    },
-    transactions: {
-        label: "Transactions",
-        route: "/transactions",
-        icon: <Wallet className="size-4" />,
-    },
-};
-
-const ViewSidebarSection = ({
-    view,
-    isSelected,
-    children,
-}: {
-    view: View;
+type ViewSidebarProps = {
+    label: string;
+    route: Route;
+    icon: ReactNode;
     isSelected: boolean;
     children?: ReactNode;
-}) => {
-    const sectionLabel = viewButtonInstanceParams[view].label;
+};
+
+const ViewSidebarSection = ({ label, route, icon, isSelected, children }: ViewSidebarProps) => {
+    const sectionLabel = label;
     return (
         <div className="mb-2">
             <Link
-                href={viewButtonInstanceParams[view].route}
+                href={route}
                 className={cn(
                     "w-full text-left px-3 py-3 rounded-lg transition-colors flex items-center gap-2",
                     isSelected ? "bg-slate-900 text-white" : "hover:bg-slate-100 text-slate-700"
                 )}
             >
-                {viewButtonInstanceParams[view].icon}
+                {icon}
                 <span className="text-sm font-medium">{sectionLabel}</span>
             </Link>
             {isSelected && <div className="ml-3 mt-1 space-y-1">{children}</div>}
@@ -95,4 +74,4 @@ const AccountButton = ({
     );
 };
 
-export { ViewSidebarSection, AccountButton, type AccountButtonProps };
+export { ViewSidebarSection, AccountButton, type AccountButtonProps, type ViewSidebarProps };
