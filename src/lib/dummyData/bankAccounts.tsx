@@ -1,4 +1,4 @@
-import { type BankAccount } from "@/lib/constants/bankAccount";
+import { type BankAccount } from "@/lib/constants/bankAccountType";
 import { Wallet, PiggyBank, CreditCard, Building2 } from "lucide-react";
 
 const bankAccounts: BankAccount[] = [
