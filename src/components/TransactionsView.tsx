@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import {
     ArrowUpRight,
     ArrowDownLeft,
@@ -31,6 +32,24 @@ import {
     selectAllTxnsForAccountId,
     selectAllTxnsForUser,
 } from "@/lib/dummyData/transactions";
+
+const TransactionsCount = ({
+    accountName,
+    txnCount,
+}: {
+    accountName: string;
+    txnCount: number;
+}): ReactNode => {
+    return (
+        <div className="flex-shrink-0 w-[200px]">
+            <h2 className="text-2xl font-semibold text-slate-900 mb-1">{accountName}</h2>
+            <p className="text-slate-600">
+                {txnCount} transaction
+                {txnCount !== 1 ? "s" : ""}
+            </p>
+        </div>
+    );
+};
 
 interface TransactionsViewProps {
     selectedAccountId: string | null;
@@ -73,16 +92,10 @@ export default function TransactionsView({
         <div className="flex-1 bg-white overflow-hidden flex flex-col">
             <div className="flex-shrink-0 w-full">
                 <div className="pt-6 pb-6 px-6 flex items-center justify-between gap-8">
-                    {/* Transaction Count */}
-                    <div className="flex-shrink-0 w-[200px]">
-                        <h2 className="text-2xl font-semibold text-slate-900 mb-1">
-                            {accountName}
-                        </h2>
-                        <p className="text-slate-600">
-                            {filteredTransactions.length} transaction
-                            {filteredTransactions.length !== 1 ? "s" : ""}
-                        </p>
-                    </div>
+                    <TransactionsCount
+                        accountName={accountName}
+                        txnCount={filteredTransactions.length}
+                    />
 
                     {/* Search Transactions */}
                     <div className="flex-1 max-w-md">
