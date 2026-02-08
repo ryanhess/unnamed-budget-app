@@ -51,6 +51,17 @@ const TransactionsCount = ({
     );
 };
 
+const TransactionSearchBar = (): ReactNode => {
+    return (
+        <div className="flex-1 max-w-md">
+            <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+                <Input type="text" placeholder="Search transactions..." className="pl-9" />
+            </div>
+        </div>
+    );
+};
+
 interface TransactionsViewProps {
     selectedAccountId: string | null;
     accountName: string;
@@ -94,17 +105,7 @@ const TransactionsView = ({ selectedAccountId, accountName }: TransactionsViewPr
                         txnCount={filteredTransactions.length}
                     />
 
-                    {/* Search Transactions */}
-                    <div className="flex-1 max-w-md">
-                        <div className="relative">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
-                            <Input
-                                type="text"
-                                placeholder="Search transactions..."
-                                className="pl-9"
-                            />
-                        </div>
-                    </div>
+                    <TransactionSearchBar />
 
                     {/* Balance and Add Transactions */}
                     <div className="flex-shrink-0 flex items-end gap-4">
