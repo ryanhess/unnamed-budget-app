@@ -1,4 +1,4 @@
-import TransactionsView from "@/components/TransactionsView";
+import TransactionsView from "@/components/transactions/TransactionsView";
 
 const AllTransactions = ({}) => {
     return (
