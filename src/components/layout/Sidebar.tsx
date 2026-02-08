@@ -13,6 +13,7 @@ import { type View, type BankAccount } from "@/constants";
 import {
     AccountButton,
     ViewSidebarSection,
+    type ViewSidebarProps,
     type AccountButtonProps,
 } from "@/components/layout/sidebarButtons";
 import { bankAccounts, getAccountById, getSumOfAllBalances } from "@/lib/dummyData/bankAccounts";
@@ -41,6 +42,21 @@ const Sidebar = () => {
     const totalBalance = getSumOfAllBalances();
     allAccounts.balance = totalBalance;
 
+    const sidebarViews: Record<View, Omit<ViewSidebarProps, "children">> = {
+        budget: {
+            label: "Budget",
+            route: "/budget",
+            icon: <PieChart className="size-4" />,
+            isSelected: selectedView === "budget",
+        },
+        transactions: {
+            label: "Transactions",
+            route: "/transactions",
+            icon: <Wallet className="size-4" />,
+            isSelected: selectedView === "transactions",
+        },
+    };
+
     const accountButtonPropsArray = bankAccounts.map((account) => {
         return {
             // needs to be type asserted as Route because the template string
@@ -64,14 +80,10 @@ const Sidebar = () => {
     return (
         <div className="w-64 bg-slate-50 border-r border-slate-200 h-full flex flex-col">
             <div className="flex-1 px-3 pt-6 overflow-auto">
-                <ViewSidebarSection view="budget" isSelected={selectedView === "budget"} />
+                <ViewSidebarSection {...sidebarViews.budget} />
 
-                <ViewSidebarSection
-                    view="transactions"
-                    isSelected={selectedView === "transactions"}
-                >
+                <ViewSidebarSection {...sidebarViews.transactions}>
                     <AccountButton {...allAccountsButtonProps} />
-
                     {accountButtonPropsArray.map((accountButtonProps) => (
                         <AccountButton {...accountButtonProps} />
                     ))}
