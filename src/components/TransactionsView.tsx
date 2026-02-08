@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 import {
     ArrowUpRight,
     ArrowDownLeft,
@@ -33,6 +33,30 @@ import {
     selectAllTxnsForUser,
 } from "@/lib/dummyData/transactions";
 
+const AddTransactionButton = (): ReactNode => {
+    return (
+        <Button variant="outline" size="sm" onClick={() => console.log("Add transaction")}>
+            <Plus className="size-4 mr-2" />
+            Add Transaction
+        </Button>
+    );
+};
+
+const BalanceDisplay = ({ total }: { total: number }): ReactNode => {
+    return (
+        <div className="text-right">
+            <h3 className="text-sm font-medium text-slate-500 mb-1">Total Balance</h3>
+            <p className="text-2xl font-semibold text-slate-900">
+                $
+                {total.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                })}
+            </p>
+        </div>
+    );
+};
+
 const TransactionsCount = ({
     accountName,
     txnCount,
@@ -58,6 +82,19 @@ const TransactionSearchBar = (): ReactNode => {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
                 <Input type="text" placeholder="Search transactions..." className="pl-9" />
             </div>
+        </div>
+    );
+};
+
+const RightHeaderContainer = ({
+    totalAccountBalance,
+}: {
+    totalAccountBalance: number;
+}): ReactNode => {
+    return (
+        <div className="flex-shrink-0 flex items-end gap-4">
+            <AddTransactionButton />
+            <BalanceDisplay total={totalAccountBalance} />
         </div>
     );
 };
@@ -104,34 +141,8 @@ const TransactionsView = ({ selectedAccountId, accountName }: TransactionsViewPr
                         accountName={accountName}
                         txnCount={filteredTransactions.length}
                     />
-
                     <TransactionSearchBar />
-
-                    {/* Balance and Add Transactions */}
-                    <div className="flex-shrink-0 flex items-end gap-4">
-                        {/* Balance */}
-                        <div className="text-right">
-                            <h3 className="text-sm font-medium text-slate-500 mb-1">
-                                Total Balance
-                            </h3>
-                            <p className="text-2xl font-semibold text-slate-900">
-                                $
-                                {totalAccountBalance.toLocaleString("en-US", {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2,
-                                })}
-                            </p>
-                        </div>
-                        {/* Add Transaction button */}
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => console.log("Add transaction")}
-                        >
-                            <Plus className="size-4 mr-2" />
-                            Add Transaction
-                        </Button>
-                    </div>
+                    <RightHeaderContainer totalAccountBalance={totalAccountBalance} />
                 </div>
             </div>
 
