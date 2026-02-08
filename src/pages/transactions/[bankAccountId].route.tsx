@@ -1,4 +1,4 @@
-import TransactionsView from "@/components/TransactionsView";
+import TransactionsView from "@/components/transactions/TransactionsView";
 import { useRouter } from "next/router";
 import { getAccountNameById } from "@/lib/dummyData/bankAccounts";
 
