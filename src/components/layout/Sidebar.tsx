@@ -41,13 +41,17 @@ const Sidebar = () => {
     const totalBalance = getSumOfAllBalances();
     allAccounts.balance = totalBalance;
 
-    const accountButtonPropsArray = bankAccounts.map((account) => ({
-        linkResolvedPath: `/transactions/${account.id}` as Route,
-        isSelected: selectedAccount === account,
-        accountId: account.id,
-        accountName: account.name,
-        accountBalance: account.balance,
-    }));
+    const accountButtonPropsArray = bankAccounts.map((account) => {
+        return {
+            // needs to be type asserted as Route because the template string
+            // cant pass the static type check.
+            linkResolvedPath: `/transactions/${account.id}` as Route,
+            isSelected: selectedAccount === account,
+            accountId: account.id,
+            accountName: account.name,
+            accountBalance: account.balance,
+        };
+    });
 
     const allAccountsButtonProps: AccountButtonProps = {
         linkResolvedPath: "/transactions",
