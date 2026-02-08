@@ -8,7 +8,8 @@ import {
     PieChart,
 } from "lucide-react";
 import { NextRouter, useRouter } from "next/router";
-import { ROUTES, type View, type BankAccount } from "@/constants";
+import { Route } from "next";
+import { type View, type BankAccount } from "@/constants";
 import {
     AccountButton,
     ViewSidebarSection,
@@ -30,8 +31,7 @@ const parseAccountFromUrlSegment = (router: NextRouter): BankAccount | null => {
     // it wont be called because we have 404'd.
     const path = router.asPath;
     const idSegment = router.query.bankAccountId;
-    const allTxnResolvedPath = ROUTES.viewAllTransactions.resolvedPath;
-    if (path === allTxnResolvedPath) {
+    if (path === "/transactions") {
         return allAccounts;
     } else if (Array.isArray(idSegment)) {
         return null;
@@ -70,8 +70,8 @@ const Sidebar = () => {
     const totalBalance = getSumOfAllBalances();
     allAccounts.balance = totalBalance;
 
-    const accountButtonPropsArray: AccountButtonProps[] = bankAccounts.map((account) => ({
-        linkResolvedPath: ROUTES.viewAccountTransactions.resolvedPath(account.id),
+    const accountButtonPropsArray = bankAccounts.map((account) => ({
+        linkResolvedPath: `/transactions/${account.id}` as Route,
         isSelected: selectedAccount === account,
         accountId: account.id,
         accountName: account.name,
@@ -79,7 +79,7 @@ const Sidebar = () => {
     }));
 
     const allAccountsButtonProps: AccountButtonProps = {
-        linkResolvedPath: ROUTES.viewAllTransactions.resolvedPath,
+        linkResolvedPath: "/transactions",
         isSelected: selectedAccount === allAccounts,
         accountId: allAccounts.id,
         accountName: allAccounts.name,
