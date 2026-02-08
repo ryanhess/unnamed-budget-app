@@ -1,2 +1,2 @@
 export * from "@/lib/constants/views";
-export * from "@/lib/constants/bankAccount";
+export * from "@/lib/constants/bankAccountType";
