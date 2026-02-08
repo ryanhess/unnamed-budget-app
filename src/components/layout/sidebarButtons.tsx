@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
+import type { Route } from "next";
 import Link from "next/link";
-import { ROUTES } from "@/constants";
 import { PieChart, Wallet } from "lucide-react";
 import { cn } from "@/components/ui/utils";
 import { type View } from "@/constants";
@@ -9,18 +9,18 @@ const viewButtonInstanceParams: Record<
     View,
     {
         label: string;
-        route: string;
+        route: Route;
         icon: ReactNode;
     }
 > = {
     budget: {
         label: "Budget",
-        route: ROUTES.viewBudget,
+        route: "/budget",
         icon: <PieChart className="size-4" />,
     },
     transactions: {
         label: "Transactions",
-        route: ROUTES.viewAllTransactions.resolvedPath,
+        route: "/transactions",
         icon: <Wallet className="size-4" />,
     },
 };
@@ -53,7 +53,7 @@ const ViewSidebarSection = ({
 };
 
 type AccountButtonProps = {
-    linkResolvedPath: string;
+    linkResolvedPath: Route;
     isSelected: boolean;
     accountId: string;
     accountName: string;

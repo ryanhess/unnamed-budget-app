@@ -8,7 +8,8 @@ import {
     PieChart,
 } from "lucide-react";
 import { NextRouter, useRouter } from "next/router";
-import { ROUTES, type View, type BankAccount } from "@/constants";
+import { Route } from "next";
+import { type View, type BankAccount } from "@/constants";
 import {
     AccountButton,
     ViewSidebarSection,
@@ -24,62 +25,36 @@ let allAccounts: BankAccount = {
     icon: null,
 };
 
-const parseAccountFromUrlSegment = (router: NextRouter): BankAccount | null => {
-    // Where this function is, and potentially anywhere it could be called from,
-    // we can safely assume we are in a transactions view. If we arent, and this otherwise would be called
-    // it wont be called because we have 404'd.
-    const path = router.asPath;
-    const idSegment = router.query.bankAccountId;
-    const allTxnResolvedPath = ROUTES.viewAllTransactions.resolvedPath;
-    if (path === allTxnResolvedPath) {
-        return allAccounts;
-    } else if (Array.isArray(idSegment)) {
-        return null;
-    } else {
-        const resultOfFind = getAccountById(idSegment);
-        const bankAccount = resultOfFind || null;
-        return bankAccount;
-    }
-};
-
-const parseRouteParamsFromRouter = (
-    router: NextRouter
-): { view: View; account: BankAccount | null } => {
-    const segments = router.asPath.split("/");
-
-    // NextJS validates the url at runtime naturally with the routes system.
-    // We want to enforce compile time errors, so this just tells Typescript
-    // that from here forward, view should be a View. That way,
-    // downstream attempts to use a different view name would fail at compile time.
-    const view: View = segments[1] as View;
-
-    let account;
-    if (view === "transactions") {
-        account = parseAccountFromUrlSegment(router);
-    } else {
-        account = null;
-    }
-
-    return { view, account };
-};
-
 const Sidebar = () => {
     const router = useRouter();
-    const { view: selectedView, account: selectedAccount } = parseRouteParamsFromRouter(router);
+    const { pathname, query } = useRouter();
+
+    // using type assertion here so selectedView stays as View downstream
+    // More intensive ways of validating view here would add complexity,
+    // and there is already the failsafe of going to a 404 if a bad route is inputted.
+    // The file system is the source of truth for routes.
+    const selectedView = pathname.split("/")[1] as View;
+    const bankAccountId = query.bankAccountId as string;
+
+    const selectedAccount = getAccountById(bankAccountId) || allAccounts;
 
     const totalBalance = getSumOfAllBalances();
     allAccounts.balance = totalBalance;
 
-    const accountButtonPropsArray: AccountButtonProps[] = bankAccounts.map((account) => ({
-        linkResolvedPath: ROUTES.viewAccountTransactions.resolvedPath(account.id),
-        isSelected: selectedAccount === account,
-        accountId: account.id,
-        accountName: account.name,
-        accountBalance: account.balance,
-    }));
+    const accountButtonPropsArray = bankAccounts.map((account) => {
+        return {
+            // needs to be type asserted as Route because the template string
+            // cant pass the static type check.
+            linkResolvedPath: `/transactions/${account.id}` as Route,
+            isSelected: selectedAccount === account,
+            accountId: account.id,
+            accountName: account.name,
+            accountBalance: account.balance,
+        };
+    });
 
     const allAccountsButtonProps: AccountButtonProps = {
-        linkResolvedPath: ROUTES.viewAllTransactions.resolvedPath,
+        linkResolvedPath: "/transactions",
         isSelected: selectedAccount === allAccounts,
         accountId: allAccounts.id,
         accountName: allAccounts.name,
