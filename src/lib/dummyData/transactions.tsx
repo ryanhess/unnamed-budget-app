@@ -364,15 +364,26 @@ const transactions: Transaction[] = [
     },
 ];
 
-const selectAllTxnById = (accountId: string): Transaction[] =>
+const selectAllTxnsForAccountId = (accountId: string): Transaction[] =>
     transactions.filter((txn) => txn.accountId === accountId);
 
-const sumOfAllAccountsByAccountId = (accountId: string): Number => {
-    const accountTxns = selectAllTxnById(accountId);
+const sumOfAllTxnsForAccountId = (accountId: string): Number => {
+    const accountTxns = selectAllTxnsForAccountId(accountId);
     return accountTxns.reduce((totalBal, txn) => totalBal + txn.amount, 0);
 };
 
-const selectTxnById = (transactionId: string) =>
-    transactions.find((txn) => txn.id === transactionId);
+const selectTxnById = (transactionId: string): Transaction | null => {
+    return transactions.find((txn) => txn.id === transactionId) || null;
+};
 
-export { selectAllTxnById, sumOfAllAccountsByAccountId, selectTxnById };
+const selectAllTxnsForUser = () => [...transactions];
+
+const sumOfAllTxnsForUser = () => transactions.reduce((totalBal, txn) => totalBal + txn.amount, 0);
+
+export {
+    selectAllTxnsForUser,
+    selectAllTxnsForAccountId,
+    sumOfAllTxnsForAccountId,
+    selectTxnById,
+    sumOfAllTxnsForUser,
+};

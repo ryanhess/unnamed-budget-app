@@ -3,7 +3,7 @@ import TransactionsView from "@/components/TransactionsView";
 const AllTransactions = ({}) => {
     return (
         <>
-            <TransactionsView selectedAccount={null} accountName="All Accounts" />
+            <TransactionsView selectedAccountId={null} accountName="All Accounts" />
         </>
     );
 };
