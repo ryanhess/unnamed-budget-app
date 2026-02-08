@@ -1,4 +1,4 @@
-type Transaction {
+type Transaction = {
     id: string;
     date: string;
     merchant: string;
@@ -7,6 +7,6 @@ type Transaction {
     type: "income" | "expense";
     icon: React.ReactNode;
     accountId: string;
-}
+};
 
 export type { Transaction };
