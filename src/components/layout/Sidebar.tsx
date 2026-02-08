@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { NextRouter, useRouter } from "next/router";
 import { Route } from "next";
-import { type View, type BankAccount } from "@/constants";
+import { type View, type BankAccount } from "@/lib/constants";
 import {
     AccountButton,
     ViewSidebarSection,
