@@ -9,8 +9,30 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/components/ui/utils";
-import type { Transaction } from "@/lib/constants/transactionType";
+import type { Transaction } from "@/lib/constants";
 import { formatDate } from "@/lib/dateHelpers";
+import { txnDbColumns, txnDisplayHeaders } from "@/lib/constants/";
+
+const TableHeaders = (): ReactNode => {
+    const middleHeaderNames = txnDisplayHeaders.slice(0, -1);
+    const lastHeaderName = txnDisplayHeaders.at(-1);
+
+    const middleHeaders = middleHeaderNames.map((headerName, i) => (
+        <TableHead key={i} className="bg-white">
+            {headerName}
+        </TableHead>
+    ));
+
+    return (
+        <TableHeader className="sticky top-0 bg-white z-10 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-px after:bg-slate-200">
+            <TableRow>
+                <TableHead className="w-12 bg-white"></TableHead>
+                {middleHeaders}
+                <TableHead className="text-right bg-white">{lastHeaderName}</TableHead>
+            </TableRow>
+        </TableHeader>
+    );
+};
 
 const TransactionsTable = ({
     filteredTransactions,
@@ -21,15 +43,7 @@ const TransactionsTable = ({
         <div className="flex-1 px-6 pb-6 overflow-hidden">
             <div className="border border-slate-200 rounded-lg overflow-auto h-full">
                 <Table>
-                    <TableHeader className="sticky top-0 bg-white z-10 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-px after:bg-slate-200">
-                        <TableRow>
-                            <TableHead className="w-12 bg-white"></TableHead>
-                            <TableHead className="bg-white">Date</TableHead>
-                            <TableHead className="bg-white">Merchant</TableHead>
-                            <TableHead className="bg-white">Category</TableHead>
-                            <TableHead className="text-right bg-white">Amount</TableHead>
-                        </TableRow>
-                    </TableHeader>
+                    <TableHeaders />
                     <TableBody>
                         {filteredTransactions.map((transaction: Transaction) => (
                             <TableRow key={transaction.id} className="cursor-pointer">
