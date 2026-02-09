@@ -32,18 +32,10 @@ const bankAccounts: BankAccount[] = [
     },
 ];
 
-const getAccountNameById = (accountId: string | null): string => {
-    if (accountId === null) {
-        return "All Accounts";
-    }
-    const account = bankAccounts.find((acc) => acc.id === accountId);
-    return account ? account.name : "All Accounts";
-};
-
 // allow undefined to allow more edge cases. Makes the function more robust.
 // For example, called by a route parser that is allowing a correct NextJS route
 // but is still calling this function erroneously with an undefineed id.
-const getAccountById = (id: string | undefined): BankAccount | null => {
+const getBankAccountById = (id: string | undefined | null): BankAccount | null => {
     if (!id) return null;
     const account = bankAccounts.find((acc) => acc.id === id);
     return account || null;
@@ -53,4 +45,4 @@ const getSumOfAllBalances = () => {
     return bankAccounts.reduce((sum, account) => sum + account.balance, 0);
 };
 
-export { bankAccounts, getAccountNameById, getAccountById, getSumOfAllBalances };
+export { bankAccounts, getBankAccountById, getSumOfAllBalances };
