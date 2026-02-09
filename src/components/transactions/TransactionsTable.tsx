@@ -11,6 +11,8 @@ import {
 import { cn } from "@/components/ui/utils";
 import type { Transaction } from "@/lib/constants";
 import { formatDate } from "@/lib/dateHelpers";
+// Decide about this as I build out. Does it serve me to have separately-defined table headers and
+// row fields? Or, do changes to the table just happen here.
 import { txnDbColumns, txnDisplayHeaders } from "@/lib/constants/";
 
 const TableHeaders = (): ReactNode => {
