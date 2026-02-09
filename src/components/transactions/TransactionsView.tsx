@@ -9,6 +9,7 @@ import {
     selectAllTxnsForUser,
 } from "@/lib/dummyData/transactions";
 import TransactionsTable from "@/components/transactions/TransactionsTable";
+import { Transaction } from "@/lib/constants";
 
 const AddTransactionButton = (): ReactNode => {
     return (
@@ -77,35 +78,27 @@ const RightHeaderContainer = ({
 };
 
 interface TransactionsViewProps {
-    selectedAccountId: string | null;
     accountName: string;
+    transactions: Transaction[];
+    balance: number;
 }
 
-const TransactionsView = ({ selectedAccountId, accountName }: TransactionsViewProps): ReactNode => {
-    let filteredTransactions;
-    let totalAccountBalance;
-    if (selectedAccountId) {
-        filteredTransactions = selectAllTxnsForAccountId(selectedAccountId);
-        totalAccountBalance = sumAllTxnsForAccountId(selectedAccountId);
-    } else {
-        filteredTransactions = selectAllTxnsForUser();
-        totalAccountBalance = sumOfAllTxnsForUser();
-    }
-
+const TransactionsView = ({
+    accountName,
+    transactions,
+    balance,
+}: TransactionsViewProps): ReactNode => {
     return (
         <div className="flex-1 bg-white overflow-hidden flex flex-col">
             <div className="flex-shrink-0 w-full">
                 <div className="pt-6 pb-6 px-6 flex items-center justify-between gap-8">
-                    <TransactionsCount
-                        accountName={accountName}
-                        txnCount={filteredTransactions.length}
-                    />
+                    <TransactionsCount accountName={accountName} txnCount={transactions.length} />
                     <TransactionSearchBar />
-                    <RightHeaderContainer totalAccountBalance={totalAccountBalance} />
+                    <RightHeaderContainer totalAccountBalance={balance} />
                 </div>
             </div>
 
-            <TransactionsTable filteredTransactions={filteredTransactions} />
+            <TransactionsTable filteredTransactions={transactions} />
         </div>
     );
 };

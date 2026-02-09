@@ -16,7 +16,11 @@ import {
     type ViewSidebarProps,
     type AccountButtonProps,
 } from "@/components/layout/sidebarButtons";
-import { bankAccounts, getAccountById, getSumOfAllBalances } from "@/lib/dummyData/bankAccounts";
+import {
+    bankAccounts,
+    getBankAccountById,
+    getSumOfAllBalances,
+} from "@/lib/dummyData/bankAccounts";
 
 let allAccounts: BankAccount = {
     id: "all",
@@ -37,7 +41,7 @@ const Sidebar = () => {
     const selectedView = pathname.split("/")[1] as View;
     const bankAccountId = query.bankAccountId as string;
 
-    const selectedAccount = getAccountById(bankAccountId) || allAccounts;
+    const selectedAccount = getBankAccountById(bankAccountId) || allAccounts;
 
     const totalBalance = getSumOfAllBalances();
     allAccounts.balance = totalBalance;
