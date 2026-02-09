@@ -34,6 +34,46 @@ const TableHeaders = (): ReactNode => {
     );
 };
 
+const TransactionTableRow = ({ txn }: { txn: Transaction }): ReactNode => {
+    return (
+        <TableRow key={txn.id} className="cursor-pointer">
+            <TableCell>
+                <div
+                    className={cn(
+                        "flex items-center justify-center size-8 rounded-full",
+                        txn.type === "income"
+                            ? "bg-green-100 text-green-700"
+                            : "bg-slate-100 text-slate-700"
+                    )}
+                >
+                    {txn.icon}
+                </div>
+            </TableCell>
+            <TableCell className="font-medium text-slate-600">{formatDate(txn.date)}</TableCell>
+            <TableCell className="font-medium text-slate-900">{txn.merchant}</TableCell>
+            <TableCell>
+                <Badge variant="secondary" className="text-xs">
+                    {txn.category}
+                </Badge>
+            </TableCell>
+            <TableCell className="text-right">
+                <span
+                    className={cn(
+                        "font-semibold",
+                        txn.type === "income" ? "text-green-600" : "text-slate-900"
+                    )}
+                >
+                    {txn.type === "income" ? "+" : ""}$
+                    {Math.abs(txn.amount).toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                    })}
+                </span>
+            </TableCell>
+        </TableRow>
+    );
+};
+
 const TransactionsTable = ({
     filteredTransactions,
 }: {
@@ -46,47 +86,7 @@ const TransactionsTable = ({
                     <TableHeaders />
                     <TableBody>
                         {filteredTransactions.map((transaction: Transaction) => (
-                            <TableRow key={transaction.id} className="cursor-pointer">
-                                <TableCell>
-                                    <div
-                                        className={cn(
-                                            "flex items-center justify-center size-8 rounded-full",
-                                            transaction.type === "income"
-                                                ? "bg-green-100 text-green-700"
-                                                : "bg-slate-100 text-slate-700"
-                                        )}
-                                    >
-                                        {transaction.icon}
-                                    </div>
-                                </TableCell>
-                                <TableCell className="font-medium text-slate-600">
-                                    {formatDate(transaction.date)}
-                                </TableCell>
-                                <TableCell className="font-medium text-slate-900">
-                                    {transaction.merchant}
-                                </TableCell>
-                                <TableCell>
-                                    <Badge variant="secondary" className="text-xs">
-                                        {transaction.category}
-                                    </Badge>
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    <span
-                                        className={cn(
-                                            "font-semibold",
-                                            transaction.type === "income"
-                                                ? "text-green-600"
-                                                : "text-slate-900"
-                                        )}
-                                    >
-                                        {transaction.type === "income" ? "+" : ""}$
-                                        {Math.abs(transaction.amount).toLocaleString("en-US", {
-                                            minimumFractionDigits: 2,
-                                            maximumFractionDigits: 2,
-                                        })}
-                                    </span>
-                                </TableCell>
-                            </TableRow>
+                            <TransactionTableRow key={transaction.id} txn={transaction} />
                         ))}
                     </TableBody>
                 </Table>
