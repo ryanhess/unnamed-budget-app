@@ -3,7 +3,7 @@ import { Search, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
-    sumOfAllTxnsForAccountId,
+    sumAllTxnsForAccountId,
     sumOfAllTxnsForUser,
     selectAllTxnsForAccountId,
     selectAllTxnsForUser,
@@ -86,7 +86,7 @@ const TransactionsView = ({ selectedAccountId, accountName }: TransactionsViewPr
     let totalAccountBalance;
     if (selectedAccountId) {
         filteredTransactions = selectAllTxnsForAccountId(selectedAccountId);
-        totalAccountBalance = sumOfAllTxnsForAccountId(selectedAccountId);
+        totalAccountBalance = sumAllTxnsForAccountId(selectedAccountId);
     } else {
         filteredTransactions = selectAllTxnsForUser();
         totalAccountBalance = sumOfAllTxnsForUser();
