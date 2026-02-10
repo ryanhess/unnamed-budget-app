@@ -12,7 +12,7 @@ function TransactionsByAccount({
     console.log(accountId);
     return (
         <TransactionsView
-            selectedAccount={accountId || null}
+            selectedAccountId={accountId || null}
             accountName={getAccountName(accountId || null)}
         />
     );
