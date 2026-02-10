@@ -2,7 +2,7 @@ import TransactionsView from "@/components/transactions/TransactionsView";
 import { useRouter, NextRouter } from "next/router";
 import { getBankAccountById } from "@/lib/dummyData/bankAccounts";
 import { Transaction } from "@/lib/constants";
-import { selectAllTxnsForAccountId, sumOfAllTxnsForAccountId } from "@/lib/dummyData/transactions";
+import { selectAllTxnsForAccountId, sumAllTxnsForAccountId } from "@/lib/dummyData/transactions";
 
 const getIdFromRoute = (router: NextRouter): string | null => {
     const queryParam = router.query.bankAccountId;
@@ -36,7 +36,7 @@ const SpecificBankTransactions = ({}) => {
     }
 
     const txns: Transaction[] = selectAllTxnsForAccountId(accountId);
-    const bal = sumOfAllTxnsForAccountId(accountId);
+    const bal = sumAllTxnsForAccountId(accountId);
 
     return (
         //prettier-ignore
