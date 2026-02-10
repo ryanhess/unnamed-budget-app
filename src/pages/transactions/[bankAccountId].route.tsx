@@ -31,6 +31,7 @@ const SpecificBankTransactions = ({}) => {
 
     const bankAccount = getBankAccountById(accountId);
     if (!bankAccount) {
+        router.replace("/transactions");
         return <>NOPE</>;
     }
 
