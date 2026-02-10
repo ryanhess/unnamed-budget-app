@@ -37,10 +37,7 @@ interface TransactionsViewProps {
     accountName: string;
 }
 
-export default function TransactionsView({
-    selectedAccountId,
-    accountName,
-}: TransactionsViewProps) {
+const TransactionsView = ({ selectedAccountId, accountName }: TransactionsViewProps) => {
     let filteredTransactions;
     let totalAccountBalance;
     if (selectedAccountId) {
@@ -186,4 +183,6 @@ export default function TransactionsView({
             </div>
         </div>
     );
-}
+};
+
+export default TransactionsView;
