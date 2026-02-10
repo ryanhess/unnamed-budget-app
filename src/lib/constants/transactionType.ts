@@ -1,3 +1,6 @@
+// This schema is currently dead code for the transactions table, however it may become useful on backend.
+// It stays for now.
+
 import { z } from "zod";
 import { ReactNode } from "react";
 
