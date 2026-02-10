@@ -367,7 +367,7 @@ const transactions: Transaction[] = [
 const selectAllTxnsForAccountId = (accountId: string): Transaction[] =>
     transactions.filter((txn) => txn.accountId === accountId);
 
-const sumAllTxnsForAccountId = (accountId: string): Number => {
+const sumAllTxnsForAccountId = (accountId: string): number => {
     const accountTxns = selectAllTxnsForAccountId(accountId);
     return accountTxns.reduce((totalBal, txn) => totalBal + txn.amount, 0);
 };
