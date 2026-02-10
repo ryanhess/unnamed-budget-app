@@ -26,7 +26,7 @@ import {
 import { cn } from "@/components/ui/utils";
 import { type Transaction } from "@/lib/constants/transactionType";
 import {
-    sumOfAllTxnsForAccountId,
+    sumAllTxnsForAccountId,
     sumOfAllTxnsForUser,
     selectAllTxnsForAccountId,
     selectAllTxnsForUser,
@@ -42,7 +42,7 @@ const TransactionsView = ({ selectedAccountId, accountName }: TransactionsViewPr
     let totalAccountBalance;
     if (selectedAccountId) {
         filteredTransactions = selectAllTxnsForAccountId(selectedAccountId);
-        totalAccountBalance = sumOfAllTxnsForAccountId(selectedAccountId);
+        totalAccountBalance = sumAllTxnsForAccountId(selectedAccountId);
     } else {
         filteredTransactions = selectAllTxnsForUser();
         totalAccountBalance = sumOfAllTxnsForUser();
