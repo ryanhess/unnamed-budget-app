@@ -1,8 +1,12 @@
-type BudgetItem = {
-    id: string;
-    name: string;
-    assigned: number;
-    spent: number;
-};
+import { z } from "zod";
 
-export type { BudgetItem };
+const BudgetItemSchema = z.object({
+    id: z.string(),
+    name: z.string(),
+    assigned: z.number(),
+    spent: z.number(),
+});
+
+type BudgetItem = z.infer<typeof BudgetItemSchema>;
+
+export type { BudgetItemSchema, BudgetItem };

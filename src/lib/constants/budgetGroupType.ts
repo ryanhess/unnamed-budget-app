@@ -1,9 +1,12 @@
 import { BudgetItem } from "@/lib/constants/budgetItemType";
+import { z } from "zod";
 
-type BudgetGroup = {
-    id: string;
-    name: string;
-    items: string[];
-};
+const BudgetGroupSchema = z.object({
+    id: z.string(),
+    name: z.string(),
+    items: z.array(z.string()),
+});
 
-export type { BudgetGroup };
+type BudgetGroup = z.infer<typeof BudgetGroupSchema>;
+
+export type { BudgetGroup, BudgetGroupSchema };
