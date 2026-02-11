@@ -2,7 +2,6 @@ import { cn } from "@/components/ui/utils";
 import { ChevronDown, ChevronRight, ChevronLeft } from "lucide-react";
 import { useState } from "react";
 import { ReactNode } from "react";
-import type { BudgetGroup, BudgetItem } from "@/lib/constants";
 import {
     getAllBudgetGroupIds,
     getBudgetGroupById,
