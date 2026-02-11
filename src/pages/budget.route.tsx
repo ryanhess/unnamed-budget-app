@@ -59,7 +59,7 @@ const budgetCategories: BudgetCategory[] = [
     },
 ];
 
-// Pull this whole component out to components/budget
+// Pull the budget view out. Make this file a route handler named Budget
 const BudgetView = ({}): ReactNode => {
     const [monthOffset, setMonthOffset] = useState(0);
 
@@ -104,13 +104,17 @@ const BudgetView = ({}): ReactNode => {
 
     return (
         <div className="flex-1 bg-white overflow-hidden flex flex-col">
+            {/* Begin budget header bar */}
             <div className="flex-shrink-0 w-full">
                 <div className="pt-6 pb-6 px-6 flex items-center justify-between gap-8">
+                    {/* Begin budget Month Display */}
                     <div className="flex-shrink-0 w-[200px]">
                         <h2 className="text-2xl font-semibold text-slate-900 mb-1">{monthName}</h2>
                         <p className="text-slate-400">{year}</p>
                     </div>
+                    {/* End budget month display */}
 
+                    {/* Begin Money Available */}
                     <div className="flex items-center gap-4">
                         <button
                             onClick={goToPreviousMonth}
@@ -144,11 +148,16 @@ const BudgetView = ({}): ReactNode => {
                             <ChevronRight className="size-5 text-slate-600" />
                         </button>
                     </div>
+                    {/* End Money Available */}
 
+                    {/* Begin Symmetry Placeholder` */}
                     <div className="flex-shrink-0 w-[200px]" />
+                    {/* End Symmetry Placeholder */}
                 </div>
             </div>
+            {/* end budget header bar */}
 
+            {/* begin budget body */}
             <div className="flex-1 overflow-auto">
                 <div className="w-full px-6 pb-6">
                     <div className="space-y-4">
@@ -352,6 +361,7 @@ const BudgetView = ({}): ReactNode => {
                     </div>
                 </div>
             </div>
+            {/* end buget body */}
         </div>
     );
 };
