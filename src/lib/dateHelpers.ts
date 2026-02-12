@@ -16,4 +16,13 @@ const formatDate = (dateString: string) => {
     }
 };
 
-export { formatDate };
+const getMonthAndYearFromOffset = (monthOffset: number): { monthName: string; year: number } => {
+    const currentDate = new Date();
+    currentDate.setMonth(currentDate.getMonth() + monthOffset);
+
+    const monthName = currentDate.toLocaleString("en-US", { month: "long" });
+    const year = currentDate.getFullYear();
+    return { monthName, year };
+};
+
+export { formatDate, getMonthAndYearFromOffset };

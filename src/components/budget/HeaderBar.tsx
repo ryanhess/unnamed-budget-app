@@ -1,9 +1,5 @@
 import { ReactNode } from "react";
-import {
-    getMonthAndYearFromState,
-    goToPreviousMonth,
-    goToNextMonth,
-} from "@/lib/budgetMonthStateHelpers";
+import { getMonthAndYearFromOffset } from "@/lib/dateHelpers";
 import { Dispatch, SetStateAction } from "react";
 import { cn } from "@/components/ui/utils";
 import { ChevronRight, ChevronLeft } from "lucide-react";
@@ -25,8 +21,17 @@ const HeaderBar = ({
     monthOffset: number;
     setMonthOffset: Dispatch<SetStateAction<number>>;
 }): ReactNode => {
-    const { monthName, year } = getMonthAndYearFromState(monthOffset);
+    const { monthName, year } = getMonthAndYearFromOffset(monthOffset);
     const moneyAvailable = calcMoneyAvailable();
+
+    const goToPreviousMonth = () => {
+        setMonthOffset((prev) => prev - 1);
+    };
+
+    const goToNextMonth = () => {
+        setMonthOffset((prev) => prev + 1);
+    };
+
     return (
         <div className="flex-shrink-0 w-full">
             <div className="pt-6 pb-6 px-6 flex items-center justify-between gap-8">
@@ -40,7 +45,7 @@ const HeaderBar = ({
                 {/* Begin Money Available */}
                 <div className="flex items-center gap-4">
                     <button
-                        onClick={() => goToPreviousMonth(setMonthOffset)}
+                        onClick={goToPreviousMonth}
                         className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
                     >
                         <ChevronLeft className="size-5 text-slate-600" />
@@ -63,7 +68,7 @@ const HeaderBar = ({
                     </div>
 
                     <button
-                        onClick={() => goToNextMonth(setMonthOffset)}
+                        onClick={goToNextMonth}
                         className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
                     >
                         <ChevronRight className="size-5 text-slate-600" />
