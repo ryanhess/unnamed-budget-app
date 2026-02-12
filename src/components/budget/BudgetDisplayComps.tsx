@@ -1,6 +1,32 @@
 import { ReactNode } from "react";
 import { cn } from "@/components/ui/utils";
 
+const AmountAvailableBadge = ({
+    isOverspent,
+    availableOrOverspent,
+}: {
+    isOverspent: boolean;
+    availableOrOverspent: number;
+}): ReactNode => {
+    return (
+        <div className="text-right">
+            <p
+                className={cn(
+                    "text-base font-semibold",
+                    isOverspent ? "text-red-600" : "text-slate-900"
+                )}
+            >
+                $
+                {Math.abs(availableOrOverspent).toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                })}
+            </p>
+            <p className="text-xs text-slate-500">{isOverspent ? "overspent" : "available"}</p>
+        </div>
+    );
+};
+
 const ThermometerBar = ({
     percent,
     overspent,
@@ -46,4 +72,4 @@ const BudgetDetails = ({ spent, assigned }: { spent: number; assigned: number })
     );
 };
 
-export { ThermometerBar, BudgetDetails };
+export { ThermometerBar, BudgetDetails, AmountAvailableBadge };

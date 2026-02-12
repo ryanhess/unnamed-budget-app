@@ -1,7 +1,11 @@
 import { ReactNode } from "react";
 import { getBudgetItemById } from "@/lib/dummyData/budgetItems";
 import { cn } from "@/components/ui/utils";
-import { ThermometerBar, BudgetDetails } from "@/components/budget/BudgetDisplayComps";
+import {
+    ThermometerBar,
+    BudgetDetails,
+    AmountAvailableBadge,
+} from "@/components/budget/BudgetDisplayComps";
 
 const BudgetItemDisplay = ({ itemId }: { itemId: string }): ReactNode => {
     const item = getBudgetItemById(itemId);

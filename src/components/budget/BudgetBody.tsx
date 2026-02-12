@@ -10,7 +10,13 @@ import {
 import { getBudgetItemById } from "@/lib/dummyData/budgetItems";
 import { BudgetGroup } from "@/lib/constants";
 import { BudgetItemDisplay } from "@/components/budget/BudgetItemDisplay";
-import { ThermometerBar, BudgetDetails } from "@/components/budget/BudgetDisplayComps";
+import {
+    ThermometerBar,
+    BudgetDetails,
+    AmountAvailableBadge,
+} from "@/components/budget/BudgetDisplayComps";
+
+const BudgetGroupHeader = () => {};
 
 const BudgetGroupCard = ({
     group,
@@ -25,7 +31,7 @@ const BudgetGroupCard = ({
     const categoryAvailable = groupTotalAssigned - groupTotalSpent;
     const categoryPercentSpent =
         groupTotalAssigned > 0 ? Math.min((groupTotalSpent / groupTotalAssigned) * 100, 100) : 0;
-    const isCategoryOverspent = groupTotalSpent > groupTotalAssigned;
+    const isGroupOverspent = groupTotalSpent > groupTotalAssigned;
 
     const toggleExpanded = () => {
         setIsExpanded(!isExpanded);
@@ -47,23 +53,10 @@ const BudgetGroupCard = ({
                 </div>
 
                 {!isExpanded && (
-                    <div className="text-right">
-                        <p
-                            className={cn(
-                                "text-base font-semibold",
-                                isCategoryOverspent ? "text-red-600" : "text-slate-900"
-                            )}
-                        >
-                            $
-                            {Math.abs(categoryAvailable).toLocaleString("en-US", {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2,
-                            })}
-                        </p>
-                        <p className="text-xs text-slate-500">
-                            {isCategoryOverspent ? "overspent" : "available"}
-                        </p>
-                    </div>
+                    <AmountAvailableBadge
+                        isOverspent={isGroupOverspent}
+                        availableOrOverspent={categoryAvailable}
+                    />
                 )}
             </button>
 
@@ -71,10 +64,7 @@ const BudgetGroupCard = ({
                 <div className="space-y-4">{children}</div>
             ) : (
                 <div className="space-y-2">
-                    <ThermometerBar
-                        percent={categoryPercentSpent}
-                        overspent={isCategoryOverspent}
-                    />
+                    <ThermometerBar percent={categoryPercentSpent} overspent={isGroupOverspent} />
 
                     <BudgetDetails spent={groupTotalSpent} assigned={groupTotalAssigned} />
                 </div>
