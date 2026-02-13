@@ -12,3 +12,16 @@ const budgetItems: BudgetItem[] = [
     { id: "9", name: "Healthcare", assigned: 200, spent: 75.0 },
     { id: "10", name: "Fitness", assigned: 100, spent: 100.0 },
 ];
+
+const getTotalAssignedForAllBudgetItems = (): number => {
+    return budgetItems.reduce((total, budget) => total + budget.assigned, 0);
+};
+
+const getTotalSpentForAllBudgetItems = (): number => {
+    return budgetItems.reduce((total, budget) => total + budget.spent, 0);
+};
+
+const getBudgetItemById = (id: string | null | undefined): BudgetItem | null =>
+    budgetItems.find((budget) => budget.id === id) || null;
+
+export { getTotalAssignedForAllBudgetItems, getTotalSpentForAllBudgetItems, getBudgetItemById };

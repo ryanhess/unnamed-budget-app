@@ -2,64 +2,18 @@ import { cn } from "@/components/ui/utils";
 import { ChevronDown, ChevronRight, ChevronLeft } from "lucide-react";
 import { useState } from "react";
 import { ReactNode } from "react";
+import {
+    getAllBudgetGroupIds,
+    getBudgetGroupById,
+    getTotalAssignedForGroup,
+    getTotalSpentForGroup,
+} from "@/lib/dummyData/budgetGroups";
+import {
+    getTotalAssignedForAllBudgetItems,
+    getTotalSpentForAllBudgetItems,
+    getBudgetItemById,
+} from "@/lib/dummyData/budgetItems";
 
-interface BudgetItem {
-    id: string;
-    name: string;
-    assigned: number;
-    spent: number;
-}
-
-interface BudgetCategory {
-    id: string;
-    name: string;
-    items: BudgetItem[];
-}
-
-const budgetCategories: BudgetCategory[] = [
-    {
-        id: "1",
-        name: "Food",
-        items: [
-            { id: "1-1", name: "Groceries", assigned: 600, spent: 425.5 },
-            { id: "1-2", name: "Dining Out", assigned: 300, spent: 285.75 },
-        ],
-    },
-    {
-        id: "2",
-        name: "Transportation",
-        items: [
-            { id: "2-1", name: "Gas", assigned: 150, spent: 125.0 },
-            { id: "2-2", name: "Public Transit", assigned: 50, spent: 20.0 },
-        ],
-    },
-    {
-        id: "3",
-        name: "Home",
-        items: [
-            { id: "3-1", name: "Utilities", assigned: 250, spent: 220.0 },
-            { id: "3-2", name: "Insurance", assigned: 350, spent: 350.0 },
-        ],
-    },
-    {
-        id: "4",
-        name: "Lifestyle",
-        items: [
-            { id: "4-1", name: "Entertainment", assigned: 150, spent: 95.5 },
-            { id: "4-2", name: "Shopping", assigned: 400, spent: 520.25 },
-        ],
-    },
-    {
-        id: "5",
-        name: "Health",
-        items: [
-            { id: "5-1", name: "Healthcare", assigned: 200, spent: 75.0 },
-            { id: "5-2", name: "Fitness", assigned: 100, spent: 100.0 },
-        ],
-    },
-];
-
-// Pull the budget view out. Make this file a route handler named Budget
 const BudgetView = ({}): ReactNode => {
     const [monthOffset, setMonthOffset] = useState(0);
 
@@ -68,17 +22,16 @@ const BudgetView = ({}): ReactNode => {
     const monthName = currentDate.toLocaleString("en-US", { month: "long" });
     const year = currentDate.getFullYear();
 
-    const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
-        new Set(budgetCategories.map((cat) => cat.id))
-    );
+    const allBudgetGroupIds = getAllBudgetGroupIds();
+    const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set(allBudgetGroupIds));
 
-    const toggleCategory = (categoryId: string) => {
-        setExpandedCategories((prev) => {
+    const toggleExpandGroup = (budgetGroupId: string) => {
+        setExpandedGroups((prev) => {
             const newSet = new Set(prev);
-            if (newSet.has(categoryId)) {
-                newSet.delete(categoryId);
+            if (newSet.has(budgetGroupId)) {
+                newSet.delete(budgetGroupId);
             } else {
-                newSet.add(categoryId);
+                newSet.add(budgetGroupId);
             }
             return newSet;
         });
@@ -92,14 +45,8 @@ const BudgetView = ({}): ReactNode => {
         setMonthOffset((prev) => prev + 1);
     };
 
-    const totalAssigned = budgetCategories.reduce(
-        (sum, cat) => sum + cat.items.reduce((itemSum, item) => itemSum + item.assigned, 0),
-        0
-    );
-    const totalSpent = budgetCategories.reduce(
-        (sum, cat) => sum + cat.items.reduce((itemSum, item) => itemSum + item.spent, 0),
-        0
-    );
+    const totalAssigned = getTotalAssignedForAllBudgetItems();
+    const totalSpent = getTotalSpentForAllBudgetItems();
     const moneyAvailable = totalAssigned - totalSpent;
 
     return (
@@ -161,33 +108,30 @@ const BudgetView = ({}): ReactNode => {
             <div className="flex-1 overflow-auto">
                 <div className="w-full px-6 pb-6">
                     <div className="space-y-4">
-                        {budgetCategories.map((category) => {
-                            const isExpanded = expandedCategories.has(category.id);
-                            const categoryTotalAssigned = category.items.reduce(
-                                (sum, item) => sum + item.assigned,
-                                0
-                            );
-                            const categoryTotalSpent = category.items.reduce(
-                                (sum, item) => sum + item.spent,
-                                0
-                            );
-                            const categoryAvailable = categoryTotalAssigned - categoryTotalSpent;
+                        {allBudgetGroupIds.map((groupId) => {
+                            const group = getBudgetGroupById(groupId);
+
+                            if (!group) {
+                                return null;
+                            }
+
+                            const isExpanded = expandedGroups.has(group.id);
+                            const groupTotalAssigned = getTotalAssignedForGroup(group.id);
+                            const groupTotalSpent = getTotalSpentForGroup(group.id);
+                            const categoryAvailable = groupTotalAssigned - groupTotalSpent;
                             const categoryPercentSpent =
-                                categoryTotalAssigned > 0
-                                    ? Math.min(
-                                          (categoryTotalSpent / categoryTotalAssigned) * 100,
-                                          100
-                                      )
+                                groupTotalAssigned > 0
+                                    ? Math.min((groupTotalSpent / groupTotalAssigned) * 100, 100)
                                     : 0;
-                            const isCategoryOverspent = categoryTotalSpent > categoryTotalAssigned;
+                            const isCategoryOverspent = groupTotalSpent > groupTotalAssigned;
 
                             return (
                                 <div
-                                    key={category.id}
+                                    key={group.id}
                                     className="bg-white border border-slate-200 rounded-lg p-5"
                                 >
                                     <button
-                                        onClick={() => toggleCategory(category.id)}
+                                        onClick={() => toggleExpandGroup(group.id)}
                                         className="w-full flex items-center justify-between mb-4 text-left hover:opacity-70 transition-opacity"
                                     >
                                         <div className="flex items-center gap-2">
@@ -197,7 +141,7 @@ const BudgetView = ({}): ReactNode => {
                                                 <ChevronRight className="size-5 text-slate-600" />
                                             )}
                                             <h3 className="text-lg font-semibold text-slate-900">
-                                                {category.name}
+                                                {group.name}
                                             </h3>
                                         </div>
 
@@ -231,7 +175,13 @@ const BudgetView = ({}): ReactNode => {
 
                                     {isExpanded ? (
                                         <div className="space-y-4">
-                                            {category.items.map((item) => {
+                                            {group.items.map((itemId) => {
+                                                const item = getBudgetItemById(itemId);
+
+                                                if (!item) {
+                                                    return null;
+                                                }
+
                                                 const available = item.assigned - item.spent;
                                                 const percentSpent =
                                                     item.assigned > 0
@@ -340,14 +290,14 @@ const BudgetView = ({}): ReactNode => {
                                             <div className="flex items-center justify-between text-xs text-slate-600">
                                                 <span>
                                                     Spent: $
-                                                    {categoryTotalSpent.toLocaleString("en-US", {
+                                                    {groupTotalSpent.toLocaleString("en-US", {
                                                         minimumFractionDigits: 2,
                                                         maximumFractionDigits: 2,
                                                     })}
                                                 </span>
                                                 <span>
                                                     Assigned: $
-                                                    {categoryTotalAssigned.toLocaleString("en-US", {
+                                                    {groupTotalAssigned.toLocaleString("en-US", {
                                                         minimumFractionDigits: 2,
                                                         maximumFractionDigits: 2,
                                                     })}
