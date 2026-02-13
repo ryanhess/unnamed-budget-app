@@ -16,7 +16,34 @@ import {
     AmountAvailableBadge,
 } from "@/components/budget/BudgetDisplayComps";
 
-const BudgetGroupHeader = () => {};
+const BudgetGroupHeaderWithButton = ({
+    isExpanded,
+    expandHandler,
+    children,
+    groupName,
+}: {
+    isExpanded: boolean;
+    expandHandler: () => void;
+    children: ReactNode;
+    groupName: string;
+}): ReactNode => {
+    return (
+        <button
+            onClick={expandHandler}
+            className="w-full flex items-center justify-between mb-4 text-left hover:opacity-70 transition-opacity"
+        >
+            <div className="flex items-center gap-2">
+                {isExpanded ? (
+                    <ChevronDown className="size-5 text-slate-600" />
+                ) : (
+                    <ChevronRight className="size-5 text-slate-600" />
+                )}
+                <h3 className="text-lg font-semibold text-slate-900">{groupName}</h3>
+            </div>
+            {children}
+        </button>
+    );
+};
 
 const BudgetGroupCard = ({
     group,
@@ -39,26 +66,18 @@ const BudgetGroupCard = ({
 
     return (
         <div className="bg-white border border-slate-200 rounded-lg p-5">
-            <button
-                onClick={toggleExpanded}
-                className="w-full flex items-center justify-between mb-4 text-left hover:opacity-70 transition-opacity"
+            <BudgetGroupHeaderWithButton
+                isExpanded={isExpanded}
+                expandHandler={toggleExpanded}
+                groupName={group.name}
             >
-                <div className="flex items-center gap-2">
-                    {isExpanded ? (
-                        <ChevronDown className="size-5 text-slate-600" />
-                    ) : (
-                        <ChevronRight className="size-5 text-slate-600" />
-                    )}
-                    <h3 className="text-lg font-semibold text-slate-900">{group.name}</h3>
-                </div>
-
                 {!isExpanded && (
                     <AmountAvailableBadge
                         isOverspent={isGroupOverspent}
                         amountAvailableOrOverspent={categoryAvailable}
                     />
                 )}
-            </button>
+            </BudgetGroupHeaderWithButton>
 
             {isExpanded ? (
                 <div className="space-y-4">{children}</div>

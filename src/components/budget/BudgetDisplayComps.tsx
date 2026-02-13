@@ -28,7 +28,7 @@ const AmountAvailableBadge = ({
 };
 
 const ThermometerBar = ({
-    percentSpent: percent,
+    percentSpent,
     isOverspent,
 }: {
     percentSpent: number;
@@ -43,7 +43,7 @@ const ThermometerBar = ({
                         isOverspent ? "bg-red-500" : "bg-blue-500"
                     )}
                     style={{
-                        width: `${percent}%`,
+                        width: `${percentSpent}%`,
                     }}
                 />
             </div>
