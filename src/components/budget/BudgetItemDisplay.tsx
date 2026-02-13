@@ -33,4 +33,5 @@ const BudgetItemDisplay = ({ itemId }: { itemId: string }): ReactNode => {
         </div>
     );
 };
+
 export { BudgetItemDisplay };
