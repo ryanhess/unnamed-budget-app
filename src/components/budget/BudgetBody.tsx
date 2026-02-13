@@ -55,7 +55,7 @@ const BudgetGroupCard = ({
                 {!isExpanded && (
                     <AmountAvailableBadge
                         isOverspent={isGroupOverspent}
-                        availableOrOverspent={categoryAvailable}
+                        amountAvailableOrOverspent={categoryAvailable}
                     />
                 )}
             </button>
@@ -64,9 +64,15 @@ const BudgetGroupCard = ({
                 <div className="space-y-4">{children}</div>
             ) : (
                 <div className="space-y-2">
-                    <ThermometerBar percent={categoryPercentSpent} overspent={isGroupOverspent} />
+                    <ThermometerBar
+                        percentSpent={categoryPercentSpent}
+                        isOverspent={isGroupOverspent}
+                    />
 
-                    <BudgetDetails spent={groupTotalSpent} assigned={groupTotalAssigned} />
+                    <BudgetDetails
+                        amountSpent={groupTotalSpent}
+                        amountAssigned={groupTotalAssigned}
+                    />
                 </div>
             )}
         </div>

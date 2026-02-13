@@ -3,10 +3,10 @@ import { cn } from "@/components/ui/utils";
 
 const AmountAvailableBadge = ({
     isOverspent,
-    availableOrOverspent,
+    amountAvailableOrOverspent,
 }: {
     isOverspent: boolean;
-    availableOrOverspent: number;
+    amountAvailableOrOverspent: number;
 }): ReactNode => {
     return (
         <div className="text-right">
@@ -17,7 +17,7 @@ const AmountAvailableBadge = ({
                 )}
             >
                 $
-                {Math.abs(availableOrOverspent).toLocaleString("en-US", {
+                {Math.abs(amountAvailableOrOverspent).toLocaleString("en-US", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                 })}
@@ -28,11 +28,11 @@ const AmountAvailableBadge = ({
 };
 
 const ThermometerBar = ({
-    percent,
-    overspent,
+    percentSpent: percent,
+    isOverspent,
 }: {
-    percent: number;
-    overspent: boolean;
+    percentSpent: number;
+    isOverspent: boolean;
 }): ReactNode => {
     return (
         <div className="mb-1">
@@ -40,7 +40,7 @@ const ThermometerBar = ({
                 <div
                     className={cn(
                         "h-full transition-all rounded-full",
-                        overspent ? "bg-red-500" : "bg-blue-500"
+                        isOverspent ? "bg-red-500" : "bg-blue-500"
                     )}
                     style={{
                         width: `${percent}%`,
@@ -51,19 +51,25 @@ const ThermometerBar = ({
     );
 };
 
-const BudgetDetails = ({ spent, assigned }: { spent: number; assigned: number }): ReactNode => {
+const BudgetDetails = ({
+    amountSpent,
+    amountAssigned,
+}: {
+    amountSpent: number;
+    amountAssigned: number;
+}): ReactNode => {
     return (
         <div className="flex items-center justify-between text-xs text-slate-600">
             <span>
                 Spent: $
-                {spent.toLocaleString("en-US", {
+                {amountSpent.toLocaleString("en-US", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                 })}
             </span>
             <span>
                 Assigned: $
-                {assigned.toLocaleString("en-US", {
+                {amountAssigned.toLocaleString("en-US", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                 })}
