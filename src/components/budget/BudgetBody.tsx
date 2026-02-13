@@ -3,7 +3,6 @@ import { cn } from "@/components/ui/utils";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import {
     getAllBudgetGroups,
-    getBudgetGroupById,
     getTotalAssignedForGroup,
     getTotalSpentForGroup,
 } from "@/lib/dummyData/budgetGroups";
@@ -98,7 +97,7 @@ const BudgetGroupCard = ({
     );
 };
 
-const Container = ({ children }: { children: ReactNode }) => {
+const BodyLayoutContainer = ({ children }: { children: ReactNode }) => {
     return (
         <div className="flex-1 overflow-auto">
             <div className="w-full px-6 pb-6">
@@ -115,7 +114,7 @@ const BudgetBody = (): ReactNode => {
     const allBudgetGroups = getAllBudgetGroups();
 
     return (
-        <Container>
+        <BodyLayoutContainer>
             {allBudgetGroups.map((group) => (
                 <BudgetGroupCard key={group.id} group={group}>
                     {group.items.map((itemId) => (
@@ -123,7 +122,7 @@ const BudgetBody = (): ReactNode => {
                     ))}
                 </BudgetGroupCard>
             ))}
-        </Container>
+        </BodyLayoutContainer>
     );
 };
 

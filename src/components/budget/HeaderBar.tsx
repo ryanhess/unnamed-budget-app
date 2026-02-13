@@ -49,7 +49,7 @@ const MoneyAvailableDisplay = ({ moneyAvail }: { moneyAvail: number }): ReactNod
     );
 };
 
-const MoneyAvailableContainer = ({
+const NextPrevMonthButtons = ({
     prevMonHandler,
     nextMonHandler,
     children,
@@ -77,6 +77,17 @@ const MoneyAvailableContainer = ({
     );
 };
 
+const HeaderLayoutContainer = ({ children }: { children: ReactNode }): ReactNode => {
+    return (
+        <div className="flex-shrink-0 w-full">
+            <div className="pt-6 pb-6 px-6 flex items-center justify-between gap-8">
+                {/* prettier-ignore */}
+                {children}
+            </div>
+        </div>
+    );
+};
+
 const HeaderBar = ({
     monthOffset,
     setMonthOffset,
@@ -96,19 +107,14 @@ const HeaderBar = ({
     };
 
     return (
-        <div className="flex-shrink-0 w-full">
-            <div className="pt-6 pb-6 px-6 flex items-center justify-between gap-8">
-                <BudgetMonthDisplay monthName={monthName} year={year} />
-                <MoneyAvailableContainer
-                    prevMonHandler={goToPreviousMonth}
-                    nextMonHandler={goToNextMonth}
-                >
-                    <MoneyAvailableDisplay moneyAvail={moneyAvailable} />
-                </MoneyAvailableContainer>
+        <HeaderLayoutContainer>
+            <BudgetMonthDisplay monthName={monthName} year={year} />
+            <NextPrevMonthButtons prevMonHandler={goToPreviousMonth} nextMonHandler={goToNextMonth}>
+                <MoneyAvailableDisplay moneyAvail={moneyAvailable} />
+            </NextPrevMonthButtons>
 
-                <div className="flex-shrink-0 w-[200px]" />
-            </div>
-        </div>
+            <div className="flex-shrink-0 w-[200px]" />
+        </HeaderLayoutContainer>
     );
 };
 
