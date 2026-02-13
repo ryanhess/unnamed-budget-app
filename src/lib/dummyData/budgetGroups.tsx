@@ -40,6 +40,8 @@ const sumOneAssignedOrSpent = (field: "assigned" | "spent") =>
 const getAllBudgetGroupIds = (): string[] =>
     budgetGroups.map((cat: BudgetGroup) => cat.id);
 
+const getAllBudgetGroups = (): BudgetGroup[] => budgetGroups;
+
 const getBudgetGroupById = (id: string): BudgetGroup | null =>
     budgetGroups.find((group) => group.id === id) || null;
 
@@ -59,4 +61,5 @@ export {
     getBudgetGroupById,
     getTotalAssignedForGroup,
     getTotalSpentForGroup,
+    getAllBudgetGroups,
 };
