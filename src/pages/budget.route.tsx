@@ -14,13 +14,19 @@ import {
     getBudgetItemById,
 } from "@/lib/dummyData/budgetItems";
 
+const getMonthAndYearFromState = (monthOffset: number): { monthName: string; year: number } => {
+    const currentDate = new Date();
+    currentDate.setMonth(currentDate.getMonth() + monthOffset);
+
+    const monthName = currentDate.toLocaleString("en-US", { month: "long" });
+    const year = currentDate.getFullYear();
+    return { monthName, year };
+};
+
 const BudgetView = ({}): ReactNode => {
     const [monthOffset, setMonthOffset] = useState(0);
 
-    const currentDate = new Date();
-    currentDate.setMonth(currentDate.getMonth() + monthOffset);
-    const monthName = currentDate.toLocaleString("en-US", { month: "long" });
-    const year = currentDate.getFullYear();
+    const { monthName, year } = getMonthAndYearFromState(monthOffset);
 
     const allBudgetGroupIds = getAllBudgetGroupIds();
     const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set(allBudgetGroupIds));
