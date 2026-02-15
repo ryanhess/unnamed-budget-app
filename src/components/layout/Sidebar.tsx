@@ -22,14 +22,7 @@ import {
     getBankAccountById,
     getSumOfAllBalances,
 } from "@/lib/dummyData/bankAccounts";
-
-let allAccounts: BankAccount = {
-    id: "all",
-    name: "All Transactions",
-    type: "checking",
-    balance: 0,
-    icon: null,
-};
+import { getBankAccountIdFromRoute } from "@/lib/urlValidation";
 
 const getSidebarViews = (
     selectedView: string
@@ -50,25 +43,25 @@ const getSidebarViews = (
     };
 };
 
-const getAccountButtonPropsArray = (selectedAccount: BankAccount): AccountButtonProps[] =>
+const getAccountButtonPropsArray = (selectedAccountId: string): AccountButtonProps[] =>
     bankAccounts.map((account) => ({
         // needs to be type asserted as Route because the template string
         // cant pass the static type check.
         linkResolvedPath: `/transactions/${account.id}` as Route,
-        isSelected: selectedAccount === account,
+        isSelected: selectedAccountId === account.id,
         accountId: account.id,
         accountName: account.name,
         accountBalance: account.balance,
     }));
 
 const getAllAccountsButtonProps = (
-    selectedAccount: BankAccount,
+    selectedAccountId: string,
     totalBalance: number
 ): AccountButtonProps => ({
     linkResolvedPath: "/transactions",
-    isSelected: selectedAccount === allAccounts,
-    accountId: allAccounts.id,
-    accountName: allAccounts.name,
+    isSelected: selectedAccountId === "all",
+    accountId: "all",
+    accountName: "All Transactions",
     accountBalance: totalBalance,
 });
 
@@ -85,23 +78,22 @@ const SidebarLayoutContainer = ({ children }: { children: ReactNode }): ReactNod
 
 const Sidebar = () => {
     const router = useRouter();
-    const { pathname, query } = useRouter();
+    const { pathname } = router;
 
     // using type assertion here so selectedView stays as View downstream
     // More intensive ways of validating view here would add complexity,
     // and there is already the failsafe of going to a 404 if a bad route is inputted.
     // The file system is the source of truth for routes, and
     const selectedView = pathname.split("/")[1] as View;
-    const bankAccountId = query.bankAccountId as string;
 
-    const selectedAccount = getBankAccountById(bankAccountId) || allAccounts;
+    const selectedAccountId: string = getBankAccountIdFromRoute(router) ?? "all";
 
     const totalBalance = getSumOfAllBalances();
-    allAccounts.balance = totalBalance;
+    // allAccounts.balance = totalBalance;
 
     const sidebarViews = getSidebarViews(selectedView);
-    const accountButtonPropsArray = getAccountButtonPropsArray(selectedAccount);
-    const allAccountsButtonProps = getAllAccountsButtonProps(selectedAccount, totalBalance);
+    const accountButtonPropsArray = getAccountButtonPropsArray(selectedAccountId);
+    const allAccountsButtonProps = getAllAccountsButtonProps(selectedAccountId, totalBalance);
 
     return (
         <SidebarLayoutContainer>
