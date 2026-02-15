@@ -12,7 +12,7 @@ const getBankAccountIdFromRoute = (router: NextRouter): string | null => {
     // so a user could potentially append ?bankAccountId=1 and this
     // could potentially generate an array.
     if (Array.isArray(queryParam)) {
-        return queryParam[0] || null;
+        return null;
     }
     return queryParam;
 };
