@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import {
     Wallet,
     CreditCard,
@@ -30,23 +31,10 @@ let allAccounts: BankAccount = {
     icon: null,
 };
 
-const Sidebar = () => {
-    const router = useRouter();
-    const { pathname, query } = useRouter();
-
-    // using type assertion here so selectedView stays as View downstream
-    // More intensive ways of validating view here would add complexity,
-    // and there is already the failsafe of going to a 404 if a bad route is inputted.
-    // The file system is the source of truth for routes.
-    const selectedView = pathname.split("/")[1] as View;
-    const bankAccountId = query.bankAccountId as string;
-
-    const selectedAccount = getBankAccountById(bankAccountId) || allAccounts;
-
-    const totalBalance = getSumOfAllBalances();
-    allAccounts.balance = totalBalance;
-
-    const sidebarViews: Record<View, Omit<ViewSidebarProps, "children">> = {
+const getSidebarViews = (
+    selectedView: string
+): Record<View, Omit<ViewSidebarProps, "children">> => {
+    return {
         budget: {
             label: "Budget",
             route: "/budget",
@@ -60,40 +48,71 @@ const Sidebar = () => {
             isSelected: selectedView === "transactions",
         },
     };
+};
 
-    const accountButtonPropsArray = bankAccounts.map((account) => {
-        return {
-            // needs to be type asserted as Route because the template string
-            // cant pass the static type check.
-            linkResolvedPath: `/transactions/${account.id}` as Route,
-            isSelected: selectedAccount === account,
-            accountId: account.id,
-            accountName: account.name,
-            accountBalance: account.balance,
-        };
-    });
+const getAccountButtonPropsArray = (selectedAccount: BankAccount): AccountButtonProps[] =>
+    bankAccounts.map((account) => ({
+        // needs to be type asserted as Route because the template string
+        // cant pass the static type check.
+        linkResolvedPath: `/transactions/${account.id}` as Route,
+        isSelected: selectedAccount === account,
+        accountId: account.id,
+        accountName: account.name,
+        accountBalance: account.balance,
+    }));
 
-    const allAccountsButtonProps: AccountButtonProps = {
-        linkResolvedPath: "/transactions",
-        isSelected: selectedAccount === allAccounts,
-        accountId: allAccounts.id,
-        accountName: allAccounts.name,
-        accountBalance: totalBalance,
-    };
+const getAllAccountsButtonProps = (
+    selectedAccount: BankAccount,
+    totalBalance: number
+): AccountButtonProps => ({
+    linkResolvedPath: "/transactions",
+    isSelected: selectedAccount === allAccounts,
+    accountId: allAccounts.id,
+    accountName: allAccounts.name,
+    accountBalance: totalBalance,
+});
 
+const SidebarLayoutContainer = ({ children }: { children: ReactNode }): ReactNode => {
     return (
         <div className="w-64 bg-slate-50 border-r border-slate-200 h-full flex flex-col">
             <div className="flex-1 px-3 pt-6 overflow-auto">
-                <ViewSidebarSection {...sidebarViews.budget} />
-
-                <ViewSidebarSection {...sidebarViews.transactions}>
-                    <AccountButton {...allAccountsButtonProps} />
-                    {accountButtonPropsArray.map((accountButtonProps) => (
-                        <AccountButton {...accountButtonProps} />
-                    ))}
-                </ViewSidebarSection>
+                {/* prettier-ignore */}
+                {children}
             </div>
         </div>
+    );
+};
+
+const Sidebar = () => {
+    const router = useRouter();
+    const { pathname, query } = useRouter();
+
+    // using type assertion here so selectedView stays as View downstream
+    // More intensive ways of validating view here would add complexity,
+    // and there is already the failsafe of going to a 404 if a bad route is inputted.
+    // The file system is the source of truth for routes, and
+    const selectedView = pathname.split("/")[1] as View;
+    const bankAccountId = query.bankAccountId as string;
+
+    const selectedAccount = getBankAccountById(bankAccountId) || allAccounts;
+
+    const totalBalance = getSumOfAllBalances();
+    allAccounts.balance = totalBalance;
+
+    const sidebarViews = getSidebarViews(selectedView);
+    const accountButtonPropsArray = getAccountButtonPropsArray(selectedAccount);
+    const allAccountsButtonProps = getAllAccountsButtonProps(selectedAccount, totalBalance);
+
+    return (
+        <SidebarLayoutContainer>
+            <ViewSidebarSection {...sidebarViews.budget} />
+            <ViewSidebarSection {...sidebarViews.transactions}>
+                <AccountButton {...allAccountsButtonProps} />
+                {accountButtonPropsArray.map((accountButtonProps) => (
+                    <AccountButton key={accountButtonProps.accountId} {...accountButtonProps} />
+                ))}
+            </ViewSidebarSection>
+        </SidebarLayoutContainer>
     );
 };
 
