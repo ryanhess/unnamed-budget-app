@@ -61,9 +61,15 @@ A personal finance / budget tracker app. The frontend is a Next.js prototype wit
 │   ├── eslint.config.mjs        # next/core-web-vitals + typescript
 │   └── postcss.config.mjs       # @tailwindcss/postcss
 │
-├── backend/                     # FastAPI backend (being set up)
-│   ├── main.py                  # Entry point (placeholder)
-│   ├── __init__.py
+├── backend/                     # FastAPI backend
+│   ├── src/
+│   │   ├── main.py              # FastAPI app, CORS config, router registration
+│   │   └── transactions/
+│   │       ├── __init__.py
+│   │       ├── models.py        # Pydantic models (Transaction, TransactionType enum)
+│   │       ├── router.py        # APIRouter with GET routes
+│   │       └── dumbData.py      # Hardcoded transaction data (temporary)
+│   │
 │   ├── pyproject.toml           # uv project config (fastapi, uvicorn)
 │   ├── uv.lock                  # uv lockfile
 │   ├── .python-version          # 3.13
@@ -85,6 +91,9 @@ A personal finance / budget tracker app. The frontend is a Next.js prototype wit
 ### Backend
 - **Package management:** uv (not pip). Dependencies defined in `backend/pyproject.toml`.
 - **Python version:** 3.13 (pinned in `backend/.python-version`).
+- **Routing:** Each domain module (e.g., `transactions/`) has its own `router.py` using `APIRouter`, registered in `main.py` with `include_router`.
+- **Models:** Pydantic `BaseModel` classes for request/response validation. Use relative imports (e.g., `from .models import Transaction`).
+- **CORS:** Enabled for `http://localhost:3000` (frontend dev server).
 
 ## Data Models
 
@@ -93,13 +102,13 @@ A personal finance / budget tracker app. The frontend is a Next.js prototype wit
 | BankAccount  | id, name, type (checking/savings/credit/investment), balance, icon | TypeScript     |
 | BudgetGroup  | id, name, items (array of BudgetItem IDs)               | Zod            |
 | BudgetItem   | id, name, assigned (budgeted $), spent ($)              | Zod            |
-| Transaction  | id, date, merchant, category, amount, accountId, type (income/expense), icon | Zod  |
+| Transaction  | id, date, merchant, category, amount, accountId, type (income/expense), icon | Zod (frontend), Pydantic (backend) |
 
 ## Current State
 
 - **Frontend:** Functional UI for budget view (with month navigation, progress bars) and transactions view (table, per-account filtering). All data is from hardcoded dummy data in `lib/dummyData/`.
 - **State management:** React `useState` only. No Context, Redux, or external state library.
-- **Backend:** Scaffolded with FastAPI + Uvicorn via uv. `main.py` is a placeholder — no routes or models yet.
+- **Backend:** FastAPI app with CORS enabled. Transactions module has Pydantic models, routes (GET all, GET by account), and dummy data. Frontend fetches from backend for transactions.
 - **No persistent storage.** All state resets on refresh.
 
 ## Commands
@@ -124,7 +133,7 @@ npm run lint      # ESLint
 
 ```bash
 uv sync           # Install/sync Python dependencies from pyproject.toml
-uv run uvicorn main:app --reload  # Start FastAPI dev server
+uv run uvicorn src.main:app --reload  # Start FastAPI dev server
 ```
 
 ## Component Hierarchy

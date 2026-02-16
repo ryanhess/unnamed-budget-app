@@ -1,4 +1,5 @@
 import TransactionsView from "@/components/transactions/TransactionsView";
+import { useState, useEffect } from "react";
 import { useRouter, NextRouter } from "next/router";
 import { getBankAccountById } from "@/lib/dummyData/bankAccounts";
 import { Transaction } from "@/lib/constants";
@@ -19,7 +20,14 @@ const SpecificBankTransactions = ({}) => {
         return <>NOPE</>;
     }
 
-    const txns: Transaction[] = selectAllTxnsForAccountId(accountId);
+    const [txns, setTxns] = useState<Transaction[]>([]);
+
+    useEffect(() => {
+        fetch(`http://localhost:8000/transactions/${accountId}`)
+            .then((fetchResult) => fetchResult.json())
+            .then((jsonFromResult) => setTxns(jsonFromResult));
+    }, []);
+
     const bal = sumAllTxnsForAccountId(accountId);
 
     return (
