@@ -1,7 +1,7 @@
 .PHONY: run
 
 run:
-	cd frontend && npm run dev
+	cd frontend && npm run dev & cd backend/src && uv run uvicorn main:app --reload
 
 install:
 	cd frontend && npm install
