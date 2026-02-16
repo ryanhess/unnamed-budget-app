@@ -1,4 +1,4 @@
-from models import Transaction, TransactionType
+from .models import Transaction, TransactionType
 
 transactions: list[Transaction] = [
     Transaction(
