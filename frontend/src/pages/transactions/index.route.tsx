@@ -1,8 +1,17 @@
+import { useState, useEffect } from "react";
+import { Transaction } from "@/lib/constants";
 import TransactionsView from "@/components/transactions/TransactionsView";
 import { selectAllTxnsForUser, sumOfAllTxnsForUser } from "@/lib/dummyData/transactions";
 
 const AllTransactions = () => {
-    const allTxnsForUser = selectAllTxnsForUser();
+    const [allTxnsForUser, setAllTxnsForUser] = useState<Transaction[]>([]);
+
+    useEffect(() => {
+        fetch("http://localhost:8000/transactions/")
+            .then((fetchResult) => fetchResult.json())
+            .then((jsonFromResult) => setAllTxnsForUser(jsonFromResult));
+    }, []);
+
     const balance = sumOfAllTxnsForUser();
 
     return (
