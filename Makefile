@@ -1,6 +1,6 @@
 .PHONY: run
 
-run:
+run: db-start
 	db-start
 	cd frontend && npm run dev & cd backend/src && uv run uvicorn main:app --reload
 
