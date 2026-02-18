@@ -17,7 +17,18 @@ if config.config_file_name is not None:
 # add your model's MetaData object here
 # for 'autogenerate' support
 from src.database import OrmBase
-from src.transactions.models import TransactionOrm # pyright: ignore[reportUnusedImport]
+
+# Auto-discover all `models` modules under `src/` so their ORM classes
+# register on OrmBase.metadata without needing a manual import per module.
+import pkgutil
+import importlib
+import src
+
+for _importer, module_name, _ispkg in pkgutil.walk_packages(
+    src.__path__, prefix="src."
+):
+    if module_name.endswith(".models"):
+        importlib.import_module(module_name)
 
 target_metadata = OrmBase.metadata
 
