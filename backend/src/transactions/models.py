@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from enum import Enum
 from sqlalchemy import String, Enum as SAEnum
 from sqlalchemy.orm import Mapped, mapped_column
-from database import OrmBase
+from src.database import OrmBase
 
 class TransactionType(str, Enum):
     income = "income"
