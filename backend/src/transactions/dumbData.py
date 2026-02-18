@@ -1,7 +1,7 @@
-from .models import Transaction, TransactionType
+from .models import TransactionSchema, TransactionType
 
-transactions: list[Transaction] = [
-    Transaction(
+transactions: list[TransactionSchema] = [
+    TransactionSchema(
         id="1",
         date="2026-02-02",
         merchant="Salary Deposit",
@@ -10,7 +10,7 @@ transactions: list[Transaction] = [
         type=TransactionType.income,
         accountId="1",
     ),
-    Transaction(
+    TransactionSchema(
         id="2",
         date="2026-02-01",
         merchant="Whole Foods Market",
@@ -19,7 +19,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="1",
     ),
-    Transaction(
+    TransactionSchema(
         id="3",
         date="2026-02-01",
         merchant="Shell Gas Station",
@@ -28,7 +28,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="3",
     ),
-    Transaction(
+    TransactionSchema(
         id="4",
         date="2026-01-31",
         merchant="Netflix Subscription",
@@ -37,7 +37,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="3",
     ),
-    Transaction(
+    TransactionSchema(
         id="5",
         date="2026-01-31",
         merchant="Starbucks",
@@ -46,7 +46,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="1",
     ),
-    Transaction(
+    TransactionSchema(
         id="6",
         date="2026-01-30",
         merchant="Electric Company",
@@ -55,7 +55,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="1",
     ),
-    Transaction(
+    TransactionSchema(
         id="7",
         date="2026-01-29",
         merchant="Target",
@@ -64,7 +64,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="3",
     ),
-    Transaction(
+    TransactionSchema(
         id="8",
         date="2026-01-28",
         merchant="Olive Garden",
@@ -73,7 +73,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="1",
     ),
-    Transaction(
+    TransactionSchema(
         id="9",
         date="2026-01-27",
         merchant="Gym Membership",
@@ -82,7 +82,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="1",
     ),
-    Transaction(
+    TransactionSchema(
         id="10",
         date="2026-01-26",
         merchant="Amazon",
@@ -91,7 +91,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="3",
     ),
-    Transaction(
+    TransactionSchema(
         id="11",
         date="2026-01-25",
         merchant="Freelance Project",
@@ -100,7 +100,7 @@ transactions: list[Transaction] = [
         type=TransactionType.income,
         accountId="1",
     ),
-    Transaction(
+    TransactionSchema(
         id="12",
         date="2026-01-24",
         merchant="Delta Airlines",
@@ -109,7 +109,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="3",
     ),
-    Transaction(
+    TransactionSchema(
         id="13",
         date="2026-01-24",
         merchant="Uber",
@@ -118,7 +118,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="1",
     ),
-    Transaction(
+    TransactionSchema(
         id="14",
         date="2026-01-23",
         merchant="Trader Joe's",
@@ -127,7 +127,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="1",
     ),
-    Transaction(
+    TransactionSchema(
         id="15",
         date="2026-01-23",
         merchant="Chipotle",
@@ -136,7 +136,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="3",
     ),
-    Transaction(
+    TransactionSchema(
         id="16",
         date="2026-01-22",
         merchant="Best Buy",
@@ -145,7 +145,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="3",
     ),
-    Transaction(
+    TransactionSchema(
         id="17",
         date="2026-01-22",
         merchant="Spotify Subscription",
@@ -154,7 +154,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="1",
     ),
-    Transaction(
+    TransactionSchema(
         id="18",
         date="2026-01-21",
         merchant="Water Company",
@@ -163,7 +163,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="1",
     ),
-    Transaction(
+    TransactionSchema(
         id="19",
         date="2026-01-20",
         merchant="CVS Pharmacy",
@@ -172,7 +172,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="1",
     ),
-    Transaction(
+    TransactionSchema(
         id="20",
         date="2026-01-20",
         merchant="Panera Bread",
@@ -181,7 +181,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="1",
     ),
-    Transaction(
+    TransactionSchema(
         id="21",
         date="2026-01-19",
         merchant="Shell Gas Station",
@@ -190,7 +190,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="3",
     ),
-    Transaction(
+    TransactionSchema(
         id="22",
         date="2026-01-18",
         merchant="Costco",
@@ -199,7 +199,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="1",
     ),
-    Transaction(
+    TransactionSchema(
         id="23",
         date="2026-01-18",
         merchant="Client Payment",
@@ -208,7 +208,7 @@ transactions: list[Transaction] = [
         type=TransactionType.income,
         accountId="1",
     ),
-    Transaction(
+    TransactionSchema(
         id="24",
         date="2026-01-17",
         merchant="Home Depot",
@@ -217,7 +217,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="3",
     ),
-    Transaction(
+    TransactionSchema(
         id="25",
         date="2026-01-17",
         merchant="Movie Theater",
@@ -226,7 +226,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="1",
     ),
-    Transaction(
+    TransactionSchema(
         id="26",
         date="2026-01-16",
         merchant="Starbucks",
@@ -235,7 +235,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="1",
     ),
-    Transaction(
+    TransactionSchema(
         id="27",
         date="2026-01-15",
         merchant="Internet Service",
@@ -244,7 +244,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="1",
     ),
-    Transaction(
+    TransactionSchema(
         id="28",
         date="2026-01-15",
         merchant="Uber Eats",
@@ -253,7 +253,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="3",
     ),
-    Transaction(
+    TransactionSchema(
         id="29",
         date="2026-01-14",
         merchant="Walgreens",
@@ -262,7 +262,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="1",
     ),
-    Transaction(
+    TransactionSchema(
         id="30",
         date="2026-01-13",
         merchant="Whole Foods Market",
@@ -271,7 +271,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="1",
     ),
-    Transaction(
+    TransactionSchema(
         id="31",
         date="2026-01-12",
         merchant="Lyft",
@@ -280,7 +280,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="1",
     ),
-    Transaction(
+    TransactionSchema(
         id="32",
         date="2026-01-12",
         merchant="Apple Store",
@@ -289,7 +289,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="3",
     ),
-    Transaction(
+    TransactionSchema(
         id="33",
         date="2026-01-11",
         merchant="Dunkin' Donuts",
@@ -298,7 +298,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="1",
     ),
-    Transaction(
+    TransactionSchema(
         id="34",
         date="2026-01-10",
         merchant="Gas Company",
@@ -307,7 +307,7 @@ transactions: list[Transaction] = [
         type=TransactionType.expense,
         accountId="1",
     ),
-    Transaction(
+    TransactionSchema(
         id="35",
         date="2026-01-09",
         merchant="Parking Fee",
