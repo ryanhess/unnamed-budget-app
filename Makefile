@@ -1,6 +1,7 @@
 .PHONY: run
 
 run:
+	db-start
 	cd frontend && npm run dev & cd backend/src && uv run uvicorn main:app --reload
 
 install:
@@ -11,7 +12,7 @@ install:
 	echo 'source backend/.venv/bin/activate' > .envrc
 	direnv allow
 
-db: 
+db-start: 
 	docker compose up -d
 
 db-stop:
