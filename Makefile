@@ -10,3 +10,12 @@ install:
 .envrc:
 	echo 'source backend/.venv/bin/activate' > .envrc
 	direnv allow
+
+db: 
+	docker compose up -d
+
+db-stop:
+	docker compose down
+
+db-delete:
+	docker compose down -v
