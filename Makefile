@@ -22,10 +22,10 @@ stop-delete: stop db-stop-delete
 	@direnv allow
 
 db-start: 
-	@docker compose up -d
+	@docker compose up database -d
 
 db-stop:
-	@docker compose down
+	@docker compose down database
 
-db-stop-delete:
-	@docker compose down -v
+db-stop-delete: db-stop
+	@docker volume rm unnamed-budget-app_pgdata
