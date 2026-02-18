@@ -19,7 +19,7 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # from models import Base
 from src.database import OrmBase
-from src.transactions.models import TransactionOrm
+from src.transactions.models import TransactionOrm # pyright: ignore[reportUnusedImport]
 
 # target_metadata = mymodel.Base.metadata
 # target_metadata = Base.metadata
