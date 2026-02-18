@@ -17,8 +17,13 @@ if config.config_file_name is not None:
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel
+# from models import Base
+from src.database import OrmBase
+from src.transactions.models import TransactionOrm
+
 # target_metadata = mymodel.Base.metadata
-target_metadata = None
+# target_metadata = Base.metadata
+target_metadata = OrmBase.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
