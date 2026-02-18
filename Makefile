@@ -17,5 +17,5 @@ db:
 db-stop:
 	docker compose down
 
-db-delete:
+db-stop-and-delete:
 	docker compose down -v
