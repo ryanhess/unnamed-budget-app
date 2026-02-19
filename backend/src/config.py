@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 # .env file is .parent.parent.parent -> project_root/
 root_directory = Path(__file__).resolve().parent.parent.parent
 
-class Settings(BaseSettings):
+class Env_Vars(BaseSettings):
     DATABASE_URL: str
 
     model_config = SettingsConfigDict(
@@ -15,4 +15,4 @@ class Settings(BaseSettings):
     )
 
 # Pydantic ensures this is instantiated correctly at runtime
-settings = Settings() # type: ignore
+env_vars = Env_Vars() # type: ignore

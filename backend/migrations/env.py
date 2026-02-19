@@ -15,7 +15,7 @@ backend_directory = Path(__file__).resolve().parent.parent
 # Add the backend directory to system path to enable importing from within src
 sys.path.insert(0, str(backend_directory))
 
-from src.config import settings
+from src.config import env_vars
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -63,7 +63,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = settings.DATABASE_URL
+    url = env_vars.DATABASE_URL
     print(url)
     context.configure(
         url=url,
