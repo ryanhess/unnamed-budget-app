@@ -8,7 +8,7 @@ transactions: list[TransactionSchema] = [
         category="Income",
         amount=5000,
         type=TransactionType.income,
-        accountId="1",
+        account_id="1",
     ),
     TransactionSchema(
         id="2",
@@ -17,7 +17,7 @@ transactions: list[TransactionSchema] = [
         category="Groceries",
         amount=-125.43,
         type=TransactionType.expense,
-        accountId="1",
+        account_id="1",
     ),
     TransactionSchema(
         id="3",
@@ -26,7 +26,7 @@ transactions: list[TransactionSchema] = [
         category="Transportation",
         amount=-52.0,
         type=TransactionType.expense,
-        accountId="3",
+        account_id="3",
     ),
     TransactionSchema(
         id="4",
@@ -35,7 +35,7 @@ transactions: list[TransactionSchema] = [
         category="Entertainment",
         amount=-15.99,
         type=TransactionType.expense,
-        accountId="3",
+        account_id="3",
     ),
     TransactionSchema(
         id="5",
@@ -44,7 +44,7 @@ transactions: list[TransactionSchema] = [
         category="Food & Dining",
         amount=-8.75,
         type=TransactionType.expense,
-        accountId="1",
+        account_id="1",
     ),
     TransactionSchema(
         id="6",
@@ -53,7 +53,7 @@ transactions: list[TransactionSchema] = [
         category="Utilities",
         amount=-145.0,
         type=TransactionType.expense,
-        accountId="1",
+        account_id="1",
     ),
     TransactionSchema(
         id="7",
@@ -62,7 +62,7 @@ transactions: list[TransactionSchema] = [
         category="Shopping",
         amount=-87.34,
         type=TransactionType.expense,
-        accountId="3",
+        account_id="3",
     ),
     TransactionSchema(
         id="8",
@@ -71,7 +71,7 @@ transactions: list[TransactionSchema] = [
         category="Food & Dining",
         amount=-65.5,
         type=TransactionType.expense,
-        accountId="1",
+        account_id="1",
     ),
     TransactionSchema(
         id="9",
@@ -80,7 +80,7 @@ transactions: list[TransactionSchema] = [
         category="Health",
         amount=-50.0,
         type=TransactionType.expense,
-        accountId="1",
+        account_id="1",
     ),
     TransactionSchema(
         id="10",
@@ -89,7 +89,7 @@ transactions: list[TransactionSchema] = [
         category="Shopping",
         amount=-234.99,
         type=TransactionType.expense,
-        accountId="3",
+        account_id="3",
     ),
     TransactionSchema(
         id="11",
@@ -98,7 +98,7 @@ transactions: list[TransactionSchema] = [
         category="Income",
         amount=1250,
         type=TransactionType.income,
-        accountId="1",
+        account_id="1",
     ),
     TransactionSchema(
         id="12",
@@ -107,7 +107,7 @@ transactions: list[TransactionSchema] = [
         category="Travel",
         amount=-450.0,
         type=TransactionType.expense,
-        accountId="3",
+        account_id="3",
     ),
     TransactionSchema(
         id="13",
@@ -116,7 +116,7 @@ transactions: list[TransactionSchema] = [
         category="Transportation",
         amount=-28.5,
         type=TransactionType.expense,
-        accountId="1",
+        account_id="1",
     ),
     TransactionSchema(
         id="14",
@@ -125,7 +125,7 @@ transactions: list[TransactionSchema] = [
         category="Groceries",
         amount=-89.23,
         type=TransactionType.expense,
-        accountId="1",
+        account_id="1",
     ),
     TransactionSchema(
         id="15",
@@ -134,7 +134,7 @@ transactions: list[TransactionSchema] = [
         category="Food & Dining",
         amount=-12.45,
         type=TransactionType.expense,
-        accountId="3",
+        account_id="3",
     ),
     TransactionSchema(
         id="16",
@@ -143,7 +143,7 @@ transactions: list[TransactionSchema] = [
         category="Shopping",
         amount=-399.99,
         type=TransactionType.expense,
-        accountId="3",
+        account_id="3",
     ),
     TransactionSchema(
         id="17",
@@ -152,7 +152,7 @@ transactions: list[TransactionSchema] = [
         category="Entertainment",
         amount=-10.99,
         type=TransactionType.expense,
-        accountId="1",
+        account_id="1",
     ),
     TransactionSchema(
         id="18",
@@ -161,7 +161,7 @@ transactions: list[TransactionSchema] = [
         category="Utilities",
         amount=-65.0,
         type=TransactionType.expense,
-        accountId="1",
+        account_id="1",
     ),
     TransactionSchema(
         id="19",
@@ -170,7 +170,7 @@ transactions: list[TransactionSchema] = [
         category="Health",
         amount=-45.67,
         type=TransactionType.expense,
-        accountId="1",
+        account_id="1",
     ),
     TransactionSchema(
         id="20",
@@ -179,7 +179,7 @@ transactions: list[TransactionSchema] = [
         category="Food & Dining",
         amount=-18.9,
         type=TransactionType.expense,
-        accountId="1",
+        account_id="1",
     ),
     TransactionSchema(
         id="21",
@@ -188,7 +188,7 @@ transactions: list[TransactionSchema] = [
         category="Transportation",
         amount=-48.0,
         type=TransactionType.expense,
-        accountId="3",
+        account_id="3",
     ),
     TransactionSchema(
         id="22",
@@ -197,7 +197,7 @@ transactions: list[TransactionSchema] = [
         category="Groceries",
         amount=-156.78,
         type=TransactionType.expense,
-        accountId="1",
+        account_id="1",
     ),
     TransactionSchema(
         id="23",
@@ -206,7 +206,7 @@ transactions: list[TransactionSchema] = [
         category="Income",
         amount=800,
         type=TransactionType.income,
-        accountId="1",
+        account_id="1",
     ),
     TransactionSchema(
         id="24",
@@ -215,7 +215,7 @@ transactions: list[TransactionSchema] = [
         category="Shopping",
         amount=-178.45,
         type=TransactionType.expense,
-        accountId="3",
+        account_id="3",
     ),
     TransactionSchema(
         id="25",
@@ -224,7 +224,7 @@ transactions: list[TransactionSchema] = [
         category="Entertainment",
         amount=-35.0,
         type=TransactionType.expense,
-        accountId="1",
+        account_id="1",
     ),
     TransactionSchema(
         id="26",
@@ -233,7 +233,7 @@ transactions: list[TransactionSchema] = [
         category="Food & Dining",
         amount=-6.85,
         type=TransactionType.expense,
-        accountId="1",
+        account_id="1",
     ),
     TransactionSchema(
         id="27",
@@ -242,7 +242,7 @@ transactions: list[TransactionSchema] = [
         category="Utilities",
         amount=-89.99,
         type=TransactionType.expense,
-        accountId="1",
+        account_id="1",
     ),
     TransactionSchema(
         id="28",
@@ -251,7 +251,7 @@ transactions: list[TransactionSchema] = [
         category="Food & Dining",
         amount=-32.5,
         type=TransactionType.expense,
-        accountId="3",
+        account_id="3",
     ),
     TransactionSchema(
         id="29",
@@ -260,7 +260,7 @@ transactions: list[TransactionSchema] = [
         category="Health",
         amount=-23.45,
         type=TransactionType.expense,
-        accountId="1",
+        account_id="1",
     ),
     TransactionSchema(
         id="30",
@@ -269,7 +269,7 @@ transactions: list[TransactionSchema] = [
         category="Groceries",
         amount=-98.67,
         type=TransactionType.expense,
-        accountId="1",
+        account_id="1",
     ),
     TransactionSchema(
         id="31",
@@ -278,7 +278,7 @@ transactions: list[TransactionSchema] = [
         category="Transportation",
         amount=-19.75,
         type=TransactionType.expense,
-        accountId="1",
+        account_id="1",
     ),
     TransactionSchema(
         id="32",
@@ -287,7 +287,7 @@ transactions: list[TransactionSchema] = [
         category="Shopping",
         amount=-129.0,
         type=TransactionType.expense,
-        accountId="3",
+        account_id="3",
     ),
     TransactionSchema(
         id="33",
@@ -296,7 +296,7 @@ transactions: list[TransactionSchema] = [
         category="Food & Dining",
         amount=-9.25,
         type=TransactionType.expense,
-        accountId="1",
+        account_id="1",
     ),
     TransactionSchema(
         id="34",
@@ -305,7 +305,7 @@ transactions: list[TransactionSchema] = [
         category="Utilities",
         amount=-112.0,
         type=TransactionType.expense,
-        accountId="1",
+        account_id="1",
     ),
     TransactionSchema(
         id="35",
@@ -314,6 +314,6 @@ transactions: list[TransactionSchema] = [
         category="Transportation",
         amount=-15.0,
         type=TransactionType.expense,
-        accountId="1",
+        account_id="1",
     ),
 ]
