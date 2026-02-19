@@ -1,7 +1,7 @@
 .PHONY: run install db-start db-stop db-stop-delete
 
 run: db-start
-	@cd frontend && npm run dev -- -p 3000 & cd backend/src && uv run uvicorn main:app --reload --port 8000
+	@cd frontend && npm run dev -- -p 3000 & cd backend && uv run uvicorn src.main:app --reload --port 8000
 
 stop:
 	@lsof -ti :3000 | xargs kill -9 2>/dev/null || true           
