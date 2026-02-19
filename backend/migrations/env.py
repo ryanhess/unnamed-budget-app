@@ -5,6 +5,18 @@ from sqlalchemy import pool
 
 from alembic import context
 
+import sys
+from pathlib import Path
+
+# find the backend directory, which is the parent of the parent
+# of this file.
+backend_directory = Path(__file__).resolve().parent.parent
+
+# Add the backend directory to system path to enable importing from within src
+sys.path.insert(0, str(backend_directory))
+
+from src.config import settings
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -38,6 +50,7 @@ target_metadata = OrmBase.metadata
 # ... etc.
 
 
+
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
 
@@ -50,7 +63,8 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    url = settings.DATABASE_URL
+    print(url)
     context.configure(
         url=url,
         target_metadata=target_metadata,

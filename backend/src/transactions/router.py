@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from .models import TransactionSchema
-from .dumbData import transactions
+from src.transactions.models import TransactionSchema
+from src.transactions.dumbData import transactions
 
 router = APIRouter()
 

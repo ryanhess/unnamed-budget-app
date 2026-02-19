@@ -25,3 +25,6 @@ Do one or the other, they kind of conflict with each other.
 
 `npm run dev`
 starts the frontend server.
+
+connect to the dev database in a shell:
+`docker compose exec database psql -U postgres -d budget_app`

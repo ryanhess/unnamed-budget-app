@@ -27,5 +27,6 @@ db-start:
 db-stop:
 	@docker compose down database
 
-db-stop-delete: db-stop
-	@docker volume rm unnamed-budget-app_pgdata
+db-delete: db-stop
+	@docker volume rm -f unnamed-budget-app_pgdata > /dev/null || true
+	@echo "database container stopped, volume deleted"
