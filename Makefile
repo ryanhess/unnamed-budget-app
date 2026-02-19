@@ -22,11 +22,18 @@ stop-delete: stop db-stop-delete
 	@direnv allow
 
 db-start: 
-	@docker compose up database -d
+	docker compose up database -d
+	@until docker compose exec database pg_isready -U postgres; do sleep 0.5; done  
 
 db-stop:
-	@docker compose down database
+	docker compose down database
 
-db-delete: db-stop
-	@docker volume rm -f unnamed-budget-app_pgdata > /dev/null || true
+db-drop: db-stop
+	docker volume rm -f unnamed-budget-app_pgdata > /dev/null || true
 	@echo "database container stopped, volume deleted"
+
+db-migrate: db-start
+	@cd backend && uv run alembic upgrade head
+
+db-seed: db-migrate
+	@cd backend && uv run python -m scripts.seed
