@@ -12,7 +12,7 @@ class Budget(BaseModel):
         from_attributes = True
     
 # SQLAlchemy model for DB layer
-class TransactionOrm(OrmBase):
+class BudgetOrm(OrmBase):
     __tablename__ = "budgets"
 
     id: Mapped[str] = mapped_column(String, primary_key=True)
