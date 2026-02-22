@@ -7,7 +7,6 @@ from src.database import OrmBase
 class BudgetGroup(BaseModel):
     id: str
     name: str
-    budget_items: list["BudgetItem"] # type: ignore
 
     class Config:
         from_attributes = True

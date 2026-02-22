@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.database import OrmBase
-from src.budgets.groups.models import BudgetGroup, BudgetGroupOrm
+from src.budgets.groups.models import BudgetGroupOrm
 
 # Pydantic Schema for API layer
 class BudgetItem(BaseModel):
@@ -10,7 +10,6 @@ class BudgetItem(BaseModel):
     name: str
     assigned: float
     spent: float
-    budget_group: BudgetGroup
 
 
     class Config:
