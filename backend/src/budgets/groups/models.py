@@ -7,6 +7,8 @@ from src.database import OrmBase
 class BudgetGroup(BaseModel):
     id: str
     name: str
+    # forward-import to avoid circular dependency
+    budget_items: list["BudgetItem"] # type: ignore
 
     class Config:
         from_attributes = True
@@ -17,4 +19,5 @@ class BudgetGroupOrm(OrmBase):
 
     id: Mapped[str] = mapped_column(String, primary_key=True)
     name: Mapped[str]
+    # forward-import to avoid circular dependency
     budget_items: Mapped[list["BudgetItemOrm"]] = relationship(back_populates="budget_group") # type: ignore
