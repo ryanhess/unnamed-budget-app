@@ -43,7 +43,6 @@ class BudgetGroupOrm(OrmBase):
 
 
 class BudgetItemBase(BaseModel):
-    budget_group: BudgetGroup | None = None
     budget_group_id: str | None = None
 
 
@@ -58,13 +57,6 @@ class BudgetItemUpdate(BudgetItemBase):
     name: str | None = None
     assigned: float | None = None
     spent: float | None = None
-
-# Specifically used for updating the group assignmnet from the update group endpoint
-class BudgetItemUpdateGroup(BudgetItemBase):
-    id: str
-    
-    class Config:
-        extra="forbid"  # raises ValidationError on extra fields
 
 
 class BudgetItemResponse(BudgetItemBase):
