@@ -1,7 +1,12 @@
-.PHONY: run install db-start db-stop db-stop-delete
+# If a file is in root with the same name as a target
+# the target will not run unless you put it after .PHONY:
+.PHONY: run
 
-run: db-start
-	@cd frontend && npm run dev -- -p 3000 & cd backend && uv run uvicorn src.main:app --reload --port 8000
+run: db-start db-migrate server-start
+
+clean: stop-delete db-start db-migrate db-seed server-start
+
+empty: stop-delete db-start db-migrate server-start
 
 stop:
 	@lsof -ti :3000 | xargs kill -9 2>/dev/null || true           
@@ -13,7 +18,11 @@ install:
 	@cd frontend && npm install
 	@cd backend && uv sync
 
-stop-delete: stop db-stop-delete
+server-start:
+	@cd frontend && npm run dev -- -p 3000 & cd backend && uv run uvicorn src.main:app --reload --port 8000
+
+
+stop-delete: stop db-drop
 	@echo "Servers stopped, database container stopped, volume erased."
 
 
