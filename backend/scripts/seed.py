@@ -6,6 +6,8 @@
 import asyncio
 from src.database import async_session
 from src.transactions.models import TransactionOrm, TransactionType
+from src.budgets.groups.models import BudgetGroupOrm
+from src.budgets.items.models import BudgetItemOrm
 from sqlalchemy import select
 
 transactions: list[TransactionOrm] = [
@@ -326,9 +328,47 @@ transactions: list[TransactionOrm] = [
     ),
 ]
 
+budget_groups: list[BudgetGroupOrm] = [
+    BudgetGroupOrm(
+        id="1",
+        name="Food",
+    ),
+    BudgetGroupOrm(
+        id="2",
+        name="Transportation",
+    ),
+    BudgetGroupOrm(
+        id="3",
+        name="Home",
+    ),
+    BudgetGroupOrm(
+        id="4",
+        name="Lifestyle",
+    ),
+    BudgetGroupOrm(
+        id="5",
+        name="Health",    
+    ),
+]
+
+budget_items: list[BudgetItemOrm] = [
+    BudgetItemOrm( id="1", name="Groceries", assigned=600, spent=425.5, budget_group=budget_groups[0] ),
+    BudgetItemOrm( id="2", name="Dining Out", assigned=300, spent=285.75, budget_group=budget_groups[0] ),
+    BudgetItemOrm( id="3", name="Gas", assigned=150, spent=125.0, budget_group=budget_groups[1] ),
+    BudgetItemOrm( id="4", name="Public Transit", assigned=50, spent=20.0, budget_group=budget_groups[1] ),
+    BudgetItemOrm( id="5", name="Utilities", assigned=250, spent=220.0, budget_group=budget_groups[2] ),
+    BudgetItemOrm( id="6", name="Insurance", assigned=350, spent=350.0, budget_group=budget_groups[2] ),
+    BudgetItemOrm( id="7", name="Entertainment", assigned=150, spent=95.5, budget_group=budget_groups[3] ),
+    BudgetItemOrm( id="8", name="Shopping", assigned=400, spent=520.25, budget_group=budget_groups[3] ),
+    BudgetItemOrm( id="9", name="Healthcare", assigned=200, spent=75.0, budget_group=budget_groups[4] ),
+    BudgetItemOrm( id="10", name="Fitness", assigned=100, spent=100.0, budget_group=budget_groups[4] ),  
+]
+
 async def seed():
     async with async_session() as session:
         session.add_all(transactions)
+        session.add_all(budget_groups)
+        session.add_all(budget_items)
         await session.commit()
 
 async def check_already_seeded():

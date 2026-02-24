@@ -9,7 +9,7 @@ class TransactionType(str, Enum):
     expense = "expense"
 
 # Pydantic Schema for API layer
-class TransactionSchema(BaseModel):
+class Transaction(BaseModel):
     id: str
     date: str
     merchant: str
