@@ -10,11 +10,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 router = APIRouter()
 
 
-# Leaving this option out would result in many queries being run at serialization time
-# in order to fill out the items for each group. This causes only one additional
-# query to run so that everything is filled out. Anyway, the async engine would have
-# resulted in runtime errors when those serialization queries run, so this option
-# solves two problems: efficiency, and runtime error for async.
+# The query here includes an option for selectinload. By default, BudgetGroupOrm
+# does not load all data from db inside this function, but does a lazy load instead.
+# Leaving this option out would result in many queries being run at serialization time.
+# selectinload causes only one additional query to run so that everything is filled out.
+# Anyway, the async engine would have resulted in runtime errors when those serialization
+# queries run, so this option solves two problems: query efficiency, and avoid runtime
+# error for async.
 @router.get("/groups/getall", response_model=list[BudgetGroup])
 async def get_all_groups_for_user_budget(db: AsyncSession=Depends(get_db)):
     query = select(BudgetGroupOrm).options(selectinload(BudgetGroupOrm.budget_items))
