@@ -53,8 +53,18 @@ class BudgetItemCreate(BudgetItemBase):
     spent: float = 0.0
 
 
+class BudgetItemUpdate(BudgetItemBase):
+    id: str
+    name: str | None = None
+    assigned: float | None = None
+    spent: float | None = None
+
+# Specifically used for updating the group assignmnet from the update group endpoint
 class BudgetItemUpdateGroup(BudgetItemBase):
     id: str
+    
+    class Config:
+        extra="forbid"  # raises ValidationError on extra fields
 
 
 class BudgetItemResponse(BudgetItemBase):

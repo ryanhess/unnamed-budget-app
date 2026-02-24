@@ -1,6 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
-from src.budgets.models import BudgetGroup, BudgetGroupOrm
-from src.budgets.models import BudgetItemResponse, BudgetItemOrm
+from src.budgets.models import (
+    BudgetGroup,
+    BudgetGroupOrm,
+    BudgetItemCreate,
+	BudgetItemUpdate,
+    BudgetItemUpdateGroup,
+    BudgetItemResponse,
+    BudgetItemOrm
+)
 from src.database import get_db
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
@@ -58,3 +65,29 @@ async def get_budget_item(budget_item_id: str, db: AsyncSession=Depends(get_db))
     if buget_item is None:
         raise HTTPException(status_code=404, detail="Budget item not found")
     return buget_item
+
+
+# use POST because this is not idempotent. Will create a new item every valid request
+@router.post("/items/new")
+async def create_new_budget_item(
+    new_budget_item: BudgetItemCreate,
+    db: AsyncSession=Depends(get_db)
+):
+	return
+
+
+@router.post("/items/{budget_item_id}/update")
+async def update_budget_item(
+    new_budget_item: BudgetItemUpdate,
+    db: AsyncSession=Depends(get_db)
+):
+	return
+
+
+
+@router.delete("/items/{budget_item_id}/delete")
+async def delete_budget_item(
+    budget_item_id: str,
+    db: AsyncSession=Depends(get_db)
+):
+	return
