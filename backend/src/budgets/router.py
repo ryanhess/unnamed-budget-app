@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from src.budgets.models import BudgetGroup, BudgetGroupOrm
-from src.budgets.models import BudgetItem, BudgetItemOrm
+from src.budgets.models import BudgetItemResponse, BudgetItemOrm
 from src.database import get_db
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
@@ -49,7 +49,7 @@ async def delete_budget_group(
 	return
 
 
-@router.get("/items/{budget_item_id}", response_model=BudgetItem)
+@router.get("/items/{budget_item_id}", response_model=BudgetItemResponse)
 async def get_budget_item(budget_item_id: str, db: AsyncSession=Depends(get_db)):
     query = select(BudgetItemOrm).where(BudgetItemOrm.id == budget_item_id)
     query_result = await db.execute(query)
