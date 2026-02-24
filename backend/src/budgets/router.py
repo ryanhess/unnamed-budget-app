@@ -24,6 +24,31 @@ async def get_all_groups_for_user_budget(db: AsyncSession=Depends(get_db)):
     return result.scalars().all()
 
 
+@router.post("/groups/{budget_group_id}")
+async def update_budget_group(
+    budget_group_id: str,
+    new_fields: BudgetGroup,
+    db: AsyncSession=Depends(get_db)
+):
+    return
+
+
+@router.post("/groups/new")
+async def create_new_budget_group(
+    new_budget_group: BudgetGroup,
+    db: AsyncSession=Depends(get_db)
+):
+	return
+
+
+@router.delete("/groups/delete")
+async def delete_budget_group(
+    budget_group_id: str,
+    db: AsyncSession=Depends(get_db)
+):
+	return
+
+
 @router.get("/items/{budget_item_id}", response_model=BudgetItem)
 async def get_budget_item(budget_item_id: str, db: AsyncSession=Depends(get_db)):
     query = select(BudgetItemOrm).where(BudgetItemOrm.id == budget_item_id)
