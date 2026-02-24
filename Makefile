@@ -1,7 +1,7 @@
 .PHONY: run install db-start db-stop db-stop-delete
 
 run: db-start
-	@cd frontend && npm run dev -- -p 3000 & cd backend/src && uv run uvicorn main:app --reload --port 8000
+	@cd frontend && npm run dev -- -p 3000 & cd backend && uv run uvicorn src.main:app --reload --port 8000
 
 stop:
 	@lsof -ti :3000 | xargs kill -9 2>/dev/null || true           
@@ -22,10 +22,11 @@ stop-delete: stop db-stop-delete
 	@direnv allow
 
 db-start: 
-	@docker compose up -d
+	@docker compose up database -d
 
 db-stop:
-	@docker compose down
+	@docker compose down database
 
-db-stop-delete:
-	@docker compose down -v
+db-delete: db-stop
+	@docker volume rm -f unnamed-budget-app_pgdata > /dev/null || true
+	@echo "database container stopped, volume deleted"
