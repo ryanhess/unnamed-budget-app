@@ -6,8 +6,7 @@
 import asyncio
 from src.database import async_session
 from src.transactions.models import TransactionOrm, TransactionType
-from src.budgets.groups.models import BudgetGroupOrm
-from src.budgets.items.models import BudgetItemOrm
+from src.budgets.models import BudgetGroupOrm, BudgetItemOrm
 from sqlalchemy import select
 
 transactions: list[TransactionOrm] = [
