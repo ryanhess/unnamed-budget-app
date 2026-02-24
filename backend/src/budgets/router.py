@@ -85,6 +85,7 @@ async def update_budget_item(
 
 
 
+# deletes the item at the id, or returns 404 if not found.
 @router.delete("/items/{budget_item_id}/delete")
 async def delete_budget_item(
     budget_item_id: str,
