@@ -33,6 +33,7 @@ async def update_budget_group(
     return
 
 
+# use POST because this is not idempotent. Will create a new item every valid request
 @router.post("/groups/new")
 async def create_new_budget_group(
     new_budget_group: BudgetGroup,
