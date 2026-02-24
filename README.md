@@ -18,6 +18,9 @@
 
 `make .envrc`
 
+7. Setup the env file.
+   For now, it is as simple as copying the contents of .env.example into a new .env file. In the future, this is where you can get API key access from Ryan, and update the missing variables with the right secrets.
+
 # Standing up the app:
 
 Run:
