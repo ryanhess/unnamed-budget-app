@@ -1,9 +1,12 @@
+## seed.py ##
+# this script assumes that the db is initialized and fully migrated
+# add to it as needed for both manual and automated tests as the app grows.
+# uses asyncio to wrap the async db calls.
+
 import asyncio
 from src.database import async_session
 from src.transactions.models import TransactionOrm, TransactionType
 from sqlalchemy import select
-# this script assumes that the db is initialized to the fairly recent migrated state.
-# add to it as needed for both manual and automated tests as the app grows.
 
 transactions: list[TransactionOrm] = [
     TransactionOrm(
