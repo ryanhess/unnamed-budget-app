@@ -46,3 +46,6 @@ db-migrate: db-start
 
 db-seed: db-migrate
 	@cd backend && uv run python -m scripts.seed
+
+db-sh:
+	@docker compose exec database psql -U postgres -d budget_app

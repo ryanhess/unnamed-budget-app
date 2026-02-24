@@ -8,7 +8,7 @@ router = APIRouter()
 def get_all_transactions() -> list[Transaction]:
     return transactions
 
-@router.get("/{bankAccountId}")
-def get_specific_account_transactions(bankAccountId: str) -> list[Transaction]:
-    result = [trans for trans in transactions if trans.account_id == bankAccountId]
+@router.get("/{bank_account_id}")
+def get_specific_account_transactions(bank_account_id: str) -> list[Transaction]:
+    result = [trans for trans in transactions if trans.account_id == bank_account_id]
     return result
