@@ -1,7 +1,12 @@
+## src/config.py ##
+# creates a Pydantic class containing environment variables
+# does all the work to pull the environment variables from a .env
+# file located at the app's root directory
+
 from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-# .env file is .parent.parent.parent -> project_root/
+# .env file is .parent.parent.parent -> project_root/ (sibling to frontend and backend)
 root_directory = Path(__file__).resolve().parent.parent.parent
 
 class Env_Vars(BaseSettings):
