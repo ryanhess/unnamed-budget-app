@@ -1,12 +1,12 @@
 from pydantic import BaseModel
-from sqlalchemy import String, ForeignKey
+from sqlalchemy import ForeignKey, Identity
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.database import OrmBase
 
 
 # Pydantic Schema for API layer
 class Budget(BaseModel):
-    id: str
+    id: int
     name: str
 
     class Config:
@@ -17,13 +17,13 @@ class Budget(BaseModel):
 class BudgetOrm(OrmBase):
     __tablename__ = "budgets"
 
-    id: Mapped[str] = mapped_column(String, primary_key=True)
+    id: Mapped[int] = mapped_column(Identity(always=True), primary_key=True)
     name: Mapped[str]
 
 
 # Pydantic Schema for API layer
 class BudgetGroup(BaseModel):
-    id: str
+    id: int
     name: str
     # forward-import to avoid circular dependency
     budget_items: list["BudgetItemResponse"] # type: ignore
@@ -36,14 +36,14 @@ class BudgetGroup(BaseModel):
 class BudgetGroupOrm(OrmBase):
     __tablename__ = "budget_groups"
 
-    id: Mapped[str] = mapped_column(String, primary_key=True)
+    id: Mapped[int] = mapped_column(Identity(always=True), primary_key=True)
     name: Mapped[str]
     # forward-import to avoid circular dependency
     budget_items: Mapped[list["BudgetItemOrm"]] = relationship(back_populates="budget_group") # type: ignore
 
 
 class BudgetItemBase(BaseModel):
-    budget_group_id: str | None = None
+    budget_group_id: int | None = None
 
 
 class BudgetItemCreate(BudgetItemBase):
@@ -53,14 +53,14 @@ class BudgetItemCreate(BudgetItemBase):
 
 
 class BudgetItemUpdate(BudgetItemBase):
-    id: str
+    id: int
     name: str | None = None
     assigned: float | None = None
     spent: float | None = None
 
 
 class BudgetItemResponse(BudgetItemBase):
-    id: str
+    id: int
     name: str
     assigned: float
     spent: float
@@ -73,9 +73,9 @@ class BudgetItemResponse(BudgetItemBase):
 class BudgetItemOrm(OrmBase):
     __tablename__ = "budget_items"
 
-    id: Mapped[str] = mapped_column(String, primary_key=True)
+    id: Mapped[int] = mapped_column(Identity(always=True), primary_key=True)
     name: Mapped[str]
     assigned: Mapped[float]
     spent: Mapped[float]
-    budget_group_id: Mapped[str | None] = mapped_column(ForeignKey("budget_groups.id"), nullable=True)
+    budget_group_id: Mapped[int | None] = mapped_column(ForeignKey("budget_groups.id"), nullable=True)
     budget_group: Mapped[BudgetGroupOrm | None] = relationship(back_populates="budget_items")
