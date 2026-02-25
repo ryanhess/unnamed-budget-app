@@ -68,9 +68,7 @@ async def create_new_budget_item(
         db.add(new_item_orm)
         await db.flush()
 
-    async def check_group_id_in_db(proposed_item: BudgetItemCreate):
-        group_id = proposed_item.budget_group_id
-        
+    async def validate_group_id_in_db(budget_group_id: int | None):
         # specifying no group is a valid request.
         if group_id is None:
              return
@@ -81,7 +79,8 @@ async def create_new_budget_item(
         
         return group
 
-    await check_group_id_in_db(new_budget_item)
+    group_id = new_budget_item.budget_group_id
+    await validate_group_id_in_db(group_id)
 
     new_item_orm = BudgetItemOrm(
         name = new_budget_item.name,
@@ -107,10 +106,21 @@ async def get_budget_item(budget_item_id: int, db: AsyncSession=Depends(get_db))
 
 @router.post("/items/{budget_item_id}/update")
 async def update_budget_item(
-    new_budget_item: BudgetItemUpdate,
+    budget_item_id: int,
+    updated_budget_item: BudgetItemUpdate,
     db: AsyncSession=Depends(get_db)
 ):
-	return
+    item_orm = await db.get(BudgetItemOrm, budget_item_id)
+    if item_orm is None:
+        raise HTTPException(status_code=404, detail="Budget item not found")
+    
+    updated_fields = updated_budget_item.model_dump(exclude_unset=True).items()
+
+    for field, value in updated_fields:
+        setattr(item_orm, field, value)
+
+    await db.commit()
+    return item_orm
 
 
 # deletes the item at the id, or returns 404 if not found.
