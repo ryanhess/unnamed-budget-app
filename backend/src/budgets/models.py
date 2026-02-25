@@ -21,8 +21,11 @@ class BudgetOrm(OrmBase):
     name: Mapped[str]
 
 
+class BudgetGroupBase(BaseModel):
+    pass
+
 # Pydantic Schema for API layer
-class BudgetGroup(BaseModel):
+class BudgetGroup(BudgetGroupBase):
     id: int
     name: str
     # forward-import to avoid circular dependency
