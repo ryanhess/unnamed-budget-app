@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from src.budgets.models import (
-    BudgetGroup,
+    BudgetGroupCreate,
+    BudgetGroupResponse,
     BudgetGroupOrm,
     BudgetItemCreate,
 	BudgetItemUpdate,
@@ -18,12 +19,12 @@ router = APIRouter()
 
 
 # use POST because this is not idempotent. Will create a new item every valid request
-@router.post("/groups/new")
+@router.post("/groups/new", response_model=BudgetGroupResponse)
 async def create_new_budget_group(
-    new_budget_group: BudgetGroup,
+    new_budget_group: BudgetGroupCreate,
     db: AsyncSession=Depends(get_db)
 ):
-	return
+	new_group_orm = BudgetItemOrm(**new_budget_group)
 
 
 # The query here includes an option for selectinload. By default, BudgetGroupOrm
@@ -33,7 +34,7 @@ async def create_new_budget_group(
 # Anyway, the async engine would have resulted in runtime errors when those serialization
 # queries run, so this option solves two problems: query efficiency, and avoid runtime
 # error for async.
-@router.get("/groups/getall", response_model=list[BudgetGroup])
+@router.get("/groups/getall", response_model=list[BudgetGroupResponse])
 async def get_all_groups_for_user_budget(db: AsyncSession=Depends(get_db)):
     query = select(BudgetGroupOrm).options(selectinload(BudgetGroupOrm.budget_items))
     result = await db.execute(query)
@@ -43,7 +44,7 @@ async def get_all_groups_for_user_budget(db: AsyncSession=Depends(get_db)):
 @router.post("/groups/{budget_group_id}")
 async def update_budget_group(
     budget_group_id: int,
-    new_fields: BudgetGroup,
+    new_fields: BudgetGroupResponse,
     db: AsyncSession=Depends(get_db)
 ):
     return
@@ -58,7 +59,7 @@ async def delete_budget_group(
 
 
 # use POST because this is not idempotent. Will create a new item every valid request
-@router.post("/items/newitem")
+@router.post("/items/newitem", response_model=BudgetItemResponse)
 async def create_new_budget_item(
     new_budget_item: BudgetItemCreate,
     db: AsyncSession=Depends(get_db)
@@ -105,7 +106,7 @@ async def get_budget_item(budget_item_id: int, db: AsyncSession=Depends(get_db))
     return buget_item
 
 
-@router.post("/items/{budget_item_id}/update")
+@router.post("/items/{budget_item_id}/update", response_model=BudgetItemResponse)
 async def update_budget_item(
     budget_item_id: int,
     updated_budget_item: BudgetItemUpdate,
