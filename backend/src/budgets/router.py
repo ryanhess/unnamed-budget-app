@@ -118,6 +118,7 @@ async def update_budget_item(
     group_id = updated_budget_item.budget_group_id
     await validate_group_id_in_db(group_id, db)
     
+    # get update only the fields given in the request
     updated_fields = updated_budget_item.model_dump(exclude_unset=True).items()
 
     for field, value in updated_fields:
