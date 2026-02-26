@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from src.budgets.models import (
     BudgetGroupCreate,
+    BudgetGroupUpdate,
     BudgetGroupResponse,
     BudgetGroupOrm,
     BudgetItemCreate,
@@ -49,13 +50,44 @@ async def get_all_groups_for_user_budget(db: AsyncSession=Depends(get_db)):
     return result.scalars().all()
 
 
-@router.post("/groups/{budget_group_id}")
+@router.post(
+    "/groups/{budget_group_id}/update",
+    response_model=BudgetGroupResponse
+)
 async def update_budget_group(
     budget_group_id: int,
-    new_fields: BudgetGroupResponse,
+    new_fields: BudgetGroupUpdate,
     db: AsyncSession=Depends(get_db)
 ):
-    return
+    group_updated_orm = await db.get(
+        BudgetGroupOrm, budget_group_id,
+        options=[selectinload(BudgetGroupOrm.budget_items)]
+    )
+    if group_updated_orm is None:
+        raise HTTPException(status_code=404, detail="Budget group not found")
+    
+    group_updated_orm.name = new_fields.name
+    
+    # this is the least complicated, easiest to maintain way.
+    # if it becomes a performance issue, diff the changes
+    # only change the necessary items. most of the time it
+    # is probably zero or 1 item that changes for each group update
+    # (add item to group, take it away, change group name)
+    # except when groups have just been created of many items.
+    group_updated_orm.budget_items = []
+    
+    new_item_ids = new_fields.budget_item_ids
+    for item_id in new_item_ids:
+        item_orm = await db.get(BudgetItemOrm, item_id)
+        
+        if item_orm is None:
+            raise HTTPException(status_code=422, detail="Bad request: budget item doesnt exist.")
+        
+        group_updated_orm.budget_items.append(item_orm)
+
+    await db.commit()
+    await db.refresh(group_updated_orm, attribute_names=["budget_items"])
+    return group_updated_orm
 
 
 @router.delete("/groups/delete")
