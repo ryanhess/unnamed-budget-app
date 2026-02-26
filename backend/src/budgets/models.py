@@ -32,8 +32,7 @@ class BudgetGroupCreate(BudgetGroupBase):
 # Pydantic Schema for API layer
 class BudgetGroupResponse(BudgetGroupBase):
     id: int
-    # forward-import to avoid circular dependency
-    budget_items: list["BudgetItemResponse"] # type: ignore
+    budget_items: list["BudgetItemResponse"]
 
     class Config:
         from_attributes = True
