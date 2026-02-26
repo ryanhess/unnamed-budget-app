@@ -21,12 +21,8 @@ class BudgetOrm(OrmBase):
     name: Mapped[str]
 
 
-class BudgetGroupBase(BaseModel):
+class BudgetGroupCreate(BaseModel):
     name: str
-
-
-class BudgetGroupCreate(BudgetGroupBase):
-    pass
 
 
 class BudgetGroupUpdate(BaseModel):
@@ -39,8 +35,9 @@ class BudgetGroupUpdate(BaseModel):
 
 
 # Pydantic Schema for API layer
-class BudgetGroupResponse(BudgetGroupBase):
+class BudgetGroupResponse(BaseModel):
     id: int
+    name: str
 
     # Defined below, so forward import
     budget_items: list["BudgetItemResponse"]
@@ -59,28 +56,27 @@ class BudgetGroupOrm(OrmBase):
     budget_items: Mapped[list["BudgetItemOrm"]] = relationship(back_populates="budget_group") # type: ignore
 
 
-class BudgetItemBase(BaseModel):
-    budget_group_id: int | None = None
-
-
-class BudgetItemCreate(BudgetItemBase):
+class BudgetItemCreate(BaseModel):
     name: str
     assigned: float = 0.0
     spent: float = 0.0
+    budget_group_id: int | None = None
 
 
-class BudgetItemUpdate(BudgetItemBase):
+class BudgetItemUpdate(BaseModel):
     id: int
     name: str | None = None
     assigned: float | None = None
     spent: float | None = None
+    budget_group_id: int | None = None
 
 
-class BudgetItemResponse(BudgetItemBase):
+class BudgetItemResponse(BaseModel):
     id: int
     name: str
     assigned: float
     spent: float
+    budget_group_id: int | None = None
 
     class Config:
         from_attributes = True
