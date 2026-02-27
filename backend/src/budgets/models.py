@@ -64,7 +64,6 @@ class BudgetItemCreate(BaseModel):
 
 
 class BudgetItemUpdate(BaseModel):
-    id: int
     name: str | None = None
     assigned: float | None = None
     spent: float | None = None
