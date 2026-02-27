@@ -9,7 +9,7 @@ from src.budgets.models import (
     BudgetItemResponse,
     BudgetItemOrm
 )
-from src.budgets.utils import validate_group_id_in_db
+from src.budgets.utils import validate_group_id_return_group
 from src.database import get_db
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
@@ -107,18 +107,15 @@ async def create_new_budget_item(
     new_budget_item: BudgetItemCreate,
     db: AsyncSession=Depends(get_db)
 ) -> BudgetItemOrm:
-    async def populate_item_id(orm: BudgetItemOrm) -> None:
-        # start tracking the new item orm and have Postgres assign an id to it.
-        # the transaction has been entered, but the db is not written yet.
-        db.add(new_item_orm)
-        await db.flush()
-
-    group_id = new_budget_item.budget_group_id
-    await validate_group_id_in_db(group_id, db)
+    await validate_group_id_return_group(new_budget_item.budget_group_id, db)
 
     new_item_orm = BudgetItemOrm(**new_budget_item.model_dump())
-
-    await populate_item_id(new_item_orm)
+    
+    # SqlAlchemy is now tracking the new item for changes
+    db.add(new_item_orm)
+    
+    # Runs the query, makes the transaction pending, sets the id to the postgres-generated id
+    await db.flush()
     await db.commit()
     return new_item_orm
 
@@ -142,7 +139,7 @@ async def update_budget_item(
         raise HTTPException(status_code=404, detail="Budget item not found")
     
     group_id = updated_budget_item.budget_group_id
-    await validate_group_id_in_db(group_id, db)
+    await validate_group_id_return_group(group_id, db)
     
     # get update only the fields given in the request
     updated_fields = updated_budget_item.model_dump(exclude_unset=True).items()
