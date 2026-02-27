@@ -29,9 +29,20 @@ class BudgetGroupCreate(BudgetGroupBase):
     pass
 
 
+class BudgetGroupUpdate(BaseModel):
+    name: str
+
+    # just a list of ids that have to be manually checked
+    # for existence in the db.
+    budget_item_ids: list[int]
+
+
+
 # Pydantic Schema for API layer
 class BudgetGroupResponse(BudgetGroupBase):
     id: int
+
+    # Defined below, so forward import
     budget_items: list["BudgetItemResponse"]
 
     class Config:
