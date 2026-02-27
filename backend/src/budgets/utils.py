@@ -3,7 +3,7 @@ from src.budgets.models import BudgetGroupOrm
 from fastapi import HTTPException
 
 
-async def get_valid_group_by_id(group_id: int | None, db: AsyncSession) -> BudgetGroupOrm | None:
+async def validate_group_id_return_group(group_id: int | None, db: AsyncSession) -> BudgetGroupOrm | None:
     # specifying no group is a valid request.
     if group_id is None:
         return None

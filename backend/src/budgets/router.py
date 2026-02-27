@@ -9,7 +9,7 @@ from src.budgets.models import (
     BudgetItemResponse,
     BudgetItemOrm
 )
-from src.budgets.utils import get_valid_group_by_id
+from src.budgets.utils import validate_group_id_return_group
 from src.database import get_db
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
@@ -107,7 +107,7 @@ async def create_new_budget_item(
     new_budget_item: BudgetItemCreate,
     db: AsyncSession=Depends(get_db)
 ) -> BudgetItemOrm:
-    await get_valid_group_by_id(new_budget_item.budget_group_id, db)
+    await validate_group_id_return_group(new_budget_item.budget_group_id, db)
 
     new_item_orm = BudgetItemOrm(**new_budget_item.model_dump())
     
@@ -139,7 +139,7 @@ async def update_budget_item(
         raise HTTPException(status_code=404, detail="Budget item not found")
     
     group_id = updated_budget_item.budget_group_id
-    await get_valid_group_by_id(group_id, db)
+    await validate_group_id_return_group(group_id, db)
     
     # get update only the fields given in the request
     updated_fields = updated_budget_item.model_dump(exclude_unset=True).items()
