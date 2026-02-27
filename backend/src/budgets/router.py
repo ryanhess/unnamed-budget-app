@@ -178,4 +178,9 @@ async def delete_budget_item(
     budget_item_id: int,
     db: AsyncSession=Depends(get_db)
 ):
-	return
+    item_to_delete = await db.get(BudgetItemOrm, budget_item_id)
+    if item_to_delete is None:
+        raise HTTPException(status_code=404, detail="Budget item not found")
+    
+    await db.delete(item_to_delete)
+    await db.commit()
