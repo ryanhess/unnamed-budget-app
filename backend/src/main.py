@@ -16,5 +16,5 @@ app.add_middleware(
 app.include_router(budgets_routes, prefix="/budgets")
 
 @app.get("/")
-async def serve_root():
+async def serve_root() -> dict[str, str]:
     return {"message": "TEST! Hello World"}
