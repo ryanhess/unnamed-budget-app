@@ -113,26 +113,10 @@ async def create_new_budget_item(
         db.add(new_item_orm)
         await db.flush()
 
-    async def validate_group_id_in_db(group_id: int | None) -> BudgetGroupOrm | None:
-        # specifying no group is a valid request.
-        if group_id is None:
-             return None
-        
-        group = await db.get(entity=BudgetGroupOrm, ident=group_id)
-        if group is None:
-             raise HTTPException(status_code=422, detail="Bad request: specified a nonexistent budget group")
-        
-        return group
-
     group_id = new_budget_item.budget_group_id
-    await validate_group_id_in_db(group_id)
+    await validate_group_id_in_db(group_id, db)
 
-    new_item_orm = BudgetItemOrm(
-        name = new_budget_item.name,
-        assigned = new_budget_item.assigned,
-        spent = new_budget_item.spent,
-        budget_group_id = new_budget_item.budget_group_id
-    )
+    new_item_orm = BudgetItemOrm(**new_budget_item.model_dump())
 
     await populate_item_id(new_item_orm)
     await db.commit()
