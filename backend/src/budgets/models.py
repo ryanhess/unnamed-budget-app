@@ -52,8 +52,8 @@ class BudgetGroupOrm(OrmBase):
 
     id: Mapped[int] = mapped_column(Identity(always=True), primary_key=True)
     name: Mapped[str]
-    # forward-import to avoid circular dependency
-    budget_items: Mapped[list["BudgetItemOrm"]] = relationship(back_populates="budget_group") # type: ignore
+    # passive_deletes overrides SqlAlchemy behavior, so deleteion is handled by postgres as defined in BudgetItemOrm
+    budget_items: Mapped[list["BudgetItemOrm"]] = relationship(back_populates="budget_group", passive_deletes=True)
 
 
 class BudgetItemCreate(BaseModel):
@@ -89,5 +89,7 @@ class BudgetItemOrm(OrmBase):
     name: Mapped[str]
     assigned: Mapped[float]
     spent: Mapped[float]
-    budget_group_id: Mapped[int | None] = mapped_column(ForeignKey("budget_groups.id"), nullable=True)
+    
+    # when the group is deleted, the foreign key here is set to NULL
+    budget_group_id: Mapped[int | None] = mapped_column(ForeignKey("budget_groups.id", ondelete="SET NULL"), nullable=True)
     budget_group: Mapped[BudgetGroupOrm | None] = relationship(back_populates="budget_items")

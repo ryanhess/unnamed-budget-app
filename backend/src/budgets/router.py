@@ -90,13 +90,16 @@ async def update_budget_group(
     return group_updated_orm
 
 
-@router.delete("/groups/delete")
+@router.delete("/groups/{budget_group_id}/delete")
 async def delete_budget_group(
     budget_group_id: int,
     db: AsyncSession=Depends(get_db)
 ):
-	return
-
+    group_to_delete = await db.get(BudgetGroupOrm, budget_group_id)
+    if group_to_delete is None:
+        raise HTTPException(status_code=404, detail="Budget group not found")
+    await db.delete(group_to_delete)
+    await db.commit()
 
 # use POST because this is not idempotent. Will create a new item every valid request
 @router.post("/items/newitem", response_model=BudgetItemResponse)
