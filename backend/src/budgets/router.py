@@ -14,7 +14,7 @@ from src.database import get_db
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from collections.abc import Sequence
 
 router = APIRouter()
 
@@ -24,7 +24,7 @@ router = APIRouter()
 async def create_new_budget_group(
     new_budget_group: BudgetGroupCreate,
     db: AsyncSession=Depends(get_db)
-):
+) -> BudgetGroupOrm:
     new_group_orm = BudgetGroupOrm(**new_budget_group.model_dump())
     db.add(new_group_orm)
     await db.commit()
@@ -44,7 +44,7 @@ async def create_new_budget_group(
 # queries run, so this option solves two problems: query efficiency, and avoid runtime
 # error for async.
 @router.get("/groups/getall", response_model=list[BudgetGroupResponse])
-async def get_all_groups_for_user_budget(db: AsyncSession=Depends(get_db)):
+async def get_all_groups_for_user_budget(db: AsyncSession=Depends(get_db)) -> Sequence[BudgetGroupOrm]:
     query = select(BudgetGroupOrm).options(selectinload(BudgetGroupOrm.budget_items))
     result = await db.execute(query)
     return result.scalars().all()
@@ -58,9 +58,9 @@ async def update_budget_group(
     budget_group_id: int,
     new_fields: BudgetGroupUpdate,
     db: AsyncSession=Depends(get_db)
-):
+) -> BudgetGroupOrm:
     group_updated_orm = await db.get(
-        BudgetGroupOrm, budget_group_id,
+        entity=BudgetGroupOrm, ident=budget_group_id,
         options=[selectinload(BudgetGroupOrm.budget_items)]
     )
     if group_updated_orm is None:
@@ -78,7 +78,7 @@ async def update_budget_group(
     
     new_item_ids = new_fields.budget_item_ids
     for item_id in new_item_ids:
-        item_orm = await db.get(BudgetItemOrm, item_id)
+        item_orm = await db.get(entity=BudgetItemOrm, ident=item_id)
         
         if item_orm is None:
             raise HTTPException(status_code=422, detail="Bad request: budget item doesnt exist.")
@@ -90,12 +90,12 @@ async def update_budget_group(
     return group_updated_orm
 
 
-@router.delete("/groups/{budget_group_id}/delete")
+@router.delete("/groups/{budget_group_id}/delete", status_code=204)
 async def delete_budget_group(
     budget_group_id: int,
     db: AsyncSession=Depends(get_db)
-):
-    group_to_delete = await db.get(BudgetGroupOrm, budget_group_id)
+) -> None:
+    group_to_delete = await db.get(entity=BudgetGroupOrm, ident=budget_group_id)
     if group_to_delete is None:
         raise HTTPException(status_code=404, detail="Budget group not found")
     await db.delete(group_to_delete)
@@ -118,7 +118,7 @@ async def create_new_budget_item(
         if group_id is None:
              return
         
-        group = await db.get(BudgetGroupOrm, group_id)
+        group = await db.get(entity=BudgetGroupOrm, ident=group_id)
         if group is None:
              raise HTTPException(status_code=422, detail="Bad request: specified a nonexistent budget group")
         
@@ -141,12 +141,10 @@ async def create_new_budget_item(
 
 @router.get("/items/{budget_item_id}", response_model=BudgetItemResponse)
 async def get_budget_item(budget_item_id: int, db: AsyncSession=Depends(get_db)):
-    query = select(BudgetItemOrm).where(BudgetItemOrm.id == budget_item_id)
-    query_result = await db.execute(query)
-    buget_item = query_result.scalars().one_or_none()
-    if buget_item is None:
+    budget_item = await db.get(entity=BudgetItemOrm, ident=budget_item_id)
+    if budget_item is None:
         raise HTTPException(status_code=404, detail="Budget item not found")
-    return buget_item
+    return budget_item
 
 
 @router.post("/items/{budget_item_id}/update", response_model=BudgetItemResponse)
@@ -155,7 +153,7 @@ async def update_budget_item(
     updated_budget_item: BudgetItemUpdate,
     db: AsyncSession=Depends(get_db)
 ):
-    item_orm = await db.get(BudgetItemOrm, budget_item_id)
+    item_orm = await db.get(entity=BudgetItemOrm, ident=budget_item_id)
     if item_orm is None:
         raise HTTPException(status_code=404, detail="Budget item not found")
     
@@ -173,12 +171,12 @@ async def update_budget_item(
 
 
 # deletes the item at the id, or returns 404 if not found.
-@router.delete("/items/{budget_item_id}/delete")
+@router.delete("/items/{budget_item_id}/delete", status_code=204)
 async def delete_budget_item(
     budget_item_id: int,
     db: AsyncSession=Depends(get_db)
 ):
-    item_to_delete = await db.get(BudgetItemOrm, budget_item_id)
+    item_to_delete = await db.get(entity=BudgetItemOrm, ident=budget_item_id)
     if item_to_delete is None:
         raise HTTPException(status_code=404, detail="Budget item not found")
     
