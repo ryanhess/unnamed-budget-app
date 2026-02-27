@@ -3,10 +3,10 @@ from src.budgets.models import BudgetGroupOrm
 from fastapi import HTTPException
 
 
-async def validate_group_id_in_db(group_id: int | None, db: AsyncSession):
+async def validate_group_id_in_db(group_id: int | None, db: AsyncSession) -> BudgetGroupOrm | None:
     # specifying no group is a valid request.
     if group_id is None:
-            return
+        return None
     
     group = await db.get(BudgetGroupOrm, group_id)
     if group is None:

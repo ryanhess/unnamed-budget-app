@@ -106,17 +106,17 @@ async def delete_budget_group(
 async def create_new_budget_item(
     new_budget_item: BudgetItemCreate,
     db: AsyncSession=Depends(get_db)
-):
-    async def populate_item_id(orm: BudgetItemOrm):
+) -> BudgetItemOrm:
+    async def populate_item_id(orm: BudgetItemOrm) -> None:
         # start tracking the new item orm and have Postgres assign an id to it.
         # the transaction has been entered, but the db is not written yet.
         db.add(new_item_orm)
         await db.flush()
 
-    async def validate_group_id_in_db(group_id: int | None):
+    async def validate_group_id_in_db(group_id: int | None) -> BudgetGroupOrm | None:
         # specifying no group is a valid request.
         if group_id is None:
-             return
+             return None
         
         group = await db.get(entity=BudgetGroupOrm, ident=group_id)
         if group is None:
@@ -140,7 +140,7 @@ async def create_new_budget_item(
 
 
 @router.get("/items/{budget_item_id}", response_model=BudgetItemResponse)
-async def get_budget_item(budget_item_id: int, db: AsyncSession=Depends(get_db)):
+async def get_budget_item(budget_item_id: int, db: AsyncSession=Depends(get_db)) -> BudgetItemOrm:
     budget_item = await db.get(entity=BudgetItemOrm, ident=budget_item_id)
     if budget_item is None:
         raise HTTPException(status_code=404, detail="Budget item not found")
@@ -152,7 +152,7 @@ async def update_budget_item(
     budget_item_id: int,
     updated_budget_item: BudgetItemUpdate,
     db: AsyncSession=Depends(get_db)
-):
+) -> BudgetItemOrm:
     item_orm = await db.get(entity=BudgetItemOrm, ident=budget_item_id)
     if item_orm is None:
         raise HTTPException(status_code=404, detail="Budget item not found")
@@ -175,7 +175,7 @@ async def update_budget_item(
 async def delete_budget_item(
     budget_item_id: int,
     db: AsyncSession=Depends(get_db)
-):
+) -> None:
     item_to_delete = await db.get(entity=BudgetItemOrm, ident=budget_item_id)
     if item_to_delete is None:
         raise HTTPException(status_code=404, detail="Budget item not found")

@@ -310,7 +310,7 @@ budget_groups: list[BudgetGroupOrm] = [
     ),
 ]
 
-async def seed():
+async def seed() -> None:
     async with async_session() as session:
         session.add_all(transactions)
         session.add_all(budget_groups)
@@ -334,7 +334,7 @@ async def seed():
         session.add_all(budget_items)
         await session.commit()
 
-async def check_already_seeded():
+async def check_already_seeded() -> bool:
     async with async_session() as session:
         res = await session.execute(select(TransactionOrm).where(TransactionOrm.id == 30))
         txn = res.scalars().first()
