@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from enum import Enum
-from sqlalchemy import String, Enum as SAEnum
+from sqlalchemy import Enum as SAEnum, Identity
 from sqlalchemy.orm import Mapped, mapped_column
 from src.database import OrmBase
 
@@ -10,12 +10,12 @@ class TransactionType(str, Enum):
 
 # Pydantic Schema for API layer
 class Transaction(BaseModel):
-    id: str
+    id: int
     date: str
     merchant: str
     category: str
     amount: float
-    account_id: str
+    account_id: int
     type: TransactionType
 
     class Config:
@@ -25,10 +25,10 @@ class Transaction(BaseModel):
 class TransactionOrm(OrmBase):
     __tablename__ = "transactions"
 
-    id: Mapped[str] = mapped_column(String, primary_key=True)
+    id: Mapped[int] = mapped_column(Identity(always=True), primary_key=True)
     date: Mapped[str]
     merchant: Mapped[str]
     category: Mapped[str]
     amount: Mapped[float]
-    account_id: Mapped[str]
+    account_id: Mapped[int]
     type: Mapped[TransactionType] = mapped_column(SAEnum(TransactionType))

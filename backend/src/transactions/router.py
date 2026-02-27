@@ -9,6 +9,6 @@ def get_all_transactions() -> list[Transaction]:
     return transactions
 
 @router.get("/{bank_account_id}")
-def get_specific_account_transactions(bank_account_id: str) -> list[Transaction]:
+def get_specific_account_transactions(bank_account_id: int) -> list[Transaction]:
     result = [trans for trans in transactions if trans.account_id == bank_account_id]
     return result
