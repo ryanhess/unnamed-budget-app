@@ -43,3 +43,10 @@ make db-start
 cd backend
 uv run alembic revision --autogenerate -m "message"
 ```
+
+# Code Patterns:
+
+## Route return types:
+
+- Take the fullest advantage of params in FastApi route decorators, such as `response_model`. FastApi will automaticlaly serialize and validate to that model.
+- Use Python return type hints everywhere, and here is no exception. This stacks Python type safety on FastApi benefits. Cleanest code, type safety, and full use of tooling.
