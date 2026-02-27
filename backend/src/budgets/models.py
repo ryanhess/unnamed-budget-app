@@ -26,7 +26,7 @@ class BudgetGroup(BaseModel):
     id: str
     name: str
     # forward-import to avoid circular dependency
-    budget_items: list["BudgetItem"] # type: ignore
+    budget_items: list["BudgetItemResponse"] # type: ignore
 
     class Config:
         from_attributes = True
@@ -42,8 +42,24 @@ class BudgetGroupOrm(OrmBase):
     budget_items: Mapped[list["BudgetItemOrm"]] = relationship(back_populates="budget_group") # type: ignore
 
 
-# Pydantic Schema for API layer
-class BudgetItem(BaseModel):
+class BudgetItemBase(BaseModel):
+    budget_group_id: str | None = None
+
+
+class BudgetItemCreate(BudgetItemBase):
+    name: str
+    assigned: float = 0.0
+    spent: float = 0.0
+
+
+class BudgetItemUpdate(BudgetItemBase):
+    id: str
+    name: str | None = None
+    assigned: float | None = None
+    spent: float | None = None
+
+
+class BudgetItemResponse(BudgetItemBase):
     id: str
     name: str
     assigned: float
@@ -61,5 +77,5 @@ class BudgetItemOrm(OrmBase):
     name: Mapped[str]
     assigned: Mapped[float]
     spent: Mapped[float]
-    budget_group_id: Mapped[str] = mapped_column(ForeignKey("budget_groups.id"))
-    budget_group: Mapped[BudgetGroupOrm] = relationship(back_populates="budget_items")
+    budget_group_id: Mapped[str | None] = mapped_column(ForeignKey("budget_groups.id"), nullable=True)
+    budget_group: Mapped[BudgetGroupOrm | None] = relationship(back_populates="budget_items")
