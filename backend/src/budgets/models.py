@@ -21,12 +21,18 @@ class BudgetOrm(OrmBase):
     name: Mapped[str]
 
 
-# Pydantic Schema for API layer
-class BudgetGroup(BaseModel):
-    id: int
+class BudgetGroupBase(BaseModel):
     name: str
-    # forward-import to avoid circular dependency
-    budget_items: list["BudgetItemResponse"] # type: ignore
+
+
+class BudgetGroupCreate(BudgetGroupBase):
+    pass
+
+
+# Pydantic Schema for API layer
+class BudgetGroupResponse(BudgetGroupBase):
+    id: int
+    budget_items: list["BudgetItemResponse"]
 
     class Config:
         from_attributes = True
