@@ -9,6 +9,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 # .env file is .parent.parent.parent -> project_root/ (sibling to frontend and backend)
 root_directory = Path(__file__).resolve().parent.parent.parent
 
+
 class Env_Vars(BaseSettings):
     DATABASE_URL: str
 
@@ -16,8 +17,9 @@ class Env_Vars(BaseSettings):
         # Points specifically to root/.env
         env_file=root_directory / ".env",
         env_file_encoding="utf-8",
-        extra="ignore"
+        extra="ignore",
     )
 
+
 # Pydantic ensures this is instantiated correctly at runtime
-env_vars = Env_Vars() # type: ignore
+env_vars = Env_Vars()  # type: ignore
