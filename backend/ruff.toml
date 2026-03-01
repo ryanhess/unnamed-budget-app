@@ -1,4 +1,4 @@
 extend-exclude = ["migrations/"]
 
 [lint]
-select = ["ANN201"]
+extend-select = ["FAST", "ANN2"]

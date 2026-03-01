@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, HTTPException
 from src.budgets.models import (
     BudgetGroupCreate,
     BudgetGroupUpdate,
@@ -10,11 +10,11 @@ from src.budgets.models import (
     BudgetItemOrm
 )
 from src.budgets.utils import validate_group_id_return_group
-from src.database import get_db
+from src.database import AsyncDb
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
-from sqlalchemy.ext.asyncio import AsyncSession
 from collections.abc import Sequence
+
 
 router = APIRouter()
 
@@ -23,7 +23,7 @@ router = APIRouter()
 @router.post("/groups/new", response_model=BudgetGroupResponse)
 async def create_new_budget_group(
     new_budget_group: BudgetGroupCreate,
-    db: AsyncSession=Depends(get_db)
+    db: AsyncDb
 ) -> BudgetGroupOrm:
     new_group_orm = BudgetGroupOrm(**new_budget_group.model_dump())
     db.add(new_group_orm)
@@ -44,7 +44,7 @@ async def create_new_budget_group(
 # queries run, so this option solves two problems: query efficiency, and avoid runtime
 # error for async.
 @router.get("/groups/getall", response_model=list[BudgetGroupResponse])
-async def get_all_groups_for_user_budget(db: AsyncSession=Depends(get_db)) -> Sequence[BudgetGroupOrm]:
+async def get_all_groups_for_user_budget(db: AsyncDb) -> Sequence[BudgetGroupOrm]:
     query = select(BudgetGroupOrm).options(selectinload(BudgetGroupOrm.budget_items))
     result = await db.execute(query)
     return result.scalars().all()
@@ -57,7 +57,7 @@ async def get_all_groups_for_user_budget(db: AsyncSession=Depends(get_db)) -> Se
 async def update_budget_group(
     budget_group_id: int,
     new_fields: BudgetGroupUpdate,
-    db: AsyncSession=Depends(get_db)
+    db: AsyncDb
 ) -> BudgetGroupOrm:
     group_updated_orm = await db.get(
         entity=BudgetGroupOrm, ident=budget_group_id,
@@ -93,7 +93,7 @@ async def update_budget_group(
 @router.delete("/groups/{budget_group_id}/delete", status_code=204)
 async def delete_budget_group(
     budget_group_id: int,
-    db: AsyncSession=Depends(get_db)
+    db: AsyncDb
 ) -> None:
     group_to_delete = await db.get(entity=BudgetGroupOrm, ident=budget_group_id)
     if group_to_delete is None:
@@ -105,7 +105,7 @@ async def delete_budget_group(
 @router.post("/items/newitem", response_model=BudgetItemResponse)
 async def create_new_budget_item(
     new_budget_item: BudgetItemCreate,
-    db: AsyncSession=Depends(get_db)
+    db: AsyncDb
 ) -> BudgetItemOrm:
     await validate_group_id_return_group(new_budget_item.budget_group_id, db)
 
@@ -121,7 +121,7 @@ async def create_new_budget_item(
 
 
 @router.get("/items/{budget_item_id}", response_model=BudgetItemResponse)
-async def get_budget_item(budget_item_id: int, db: AsyncSession=Depends(get_db)) -> BudgetItemOrm:
+async def get_budget_item(budget_item_id: int, db: AsyncDb) -> BudgetItemOrm:
     budget_item = await db.get(entity=BudgetItemOrm, ident=budget_item_id)
     if budget_item is None:
         raise HTTPException(status_code=404, detail="Budget item not found")
@@ -132,7 +132,7 @@ async def get_budget_item(budget_item_id: int, db: AsyncSession=Depends(get_db))
 async def update_budget_item(
     budget_item_id: int,
     updated_budget_item: BudgetItemUpdate,
-    db: AsyncSession=Depends(get_db)
+    db: AsyncDb
 ) -> BudgetItemOrm:
     item_orm = await db.get(entity=BudgetItemOrm, ident=budget_item_id)
     if item_orm is None:
@@ -155,7 +155,7 @@ async def update_budget_item(
 @router.delete("/items/{budget_item_id}/delete", status_code=204)
 async def delete_budget_item(
     budget_item_id: int,
-    db: AsyncSession=Depends(get_db)
+    db: AsyncDb
 ) -> None:
     item_to_delete = await db.get(entity=BudgetItemOrm, ident=budget_item_id)
     if item_to_delete is None:
