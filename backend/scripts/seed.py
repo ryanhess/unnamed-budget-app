@@ -310,6 +310,7 @@ budget_groups: list[BudgetGroupOrm] = [
     ),
 ]
 
+
 async def seed() -> None:
     async with async_session() as session:
         session.add_all(transactions)
@@ -319,26 +320,56 @@ async def seed() -> None:
         food, transportation, home, lifestyle, health = [g.id for g in budget_groups]
 
         budget_items = [
-            BudgetItemOrm( name="Groceries", assigned=600, spent=425.5, budget_group_id=food ),
-            BudgetItemOrm( name="Dining Out", assigned=300, spent=285.75, budget_group_id=food ),
-            BudgetItemOrm( name="Gas", assigned=150, spent=125.0, budget_group_id=transportation ),
-            BudgetItemOrm( name="Public Transit", assigned=50, spent=20.0, budget_group_id=transportation ),
-            BudgetItemOrm( name="Utilities", assigned=250, spent=220.0, budget_group_id=home ),
-            BudgetItemOrm( name="Insurance", assigned=350, spent=350.0, budget_group_id=home ),
-            BudgetItemOrm( name="Entertainment", assigned=150, spent=95.5, budget_group_id=lifestyle ),
-            BudgetItemOrm( name="Shopping", assigned=400, spent=520.25, budget_group_id=lifestyle ),
-            BudgetItemOrm( name="Healthcare", assigned=200, spent=75.0, budget_group_id=health ),
-            BudgetItemOrm( name="Fitness", assigned=100, spent=100.0, budget_group_id=health ),
+            BudgetItemOrm(
+                name="Groceries", assigned=600, spent=425.5, budget_group_id=food
+            ),
+            BudgetItemOrm(
+                name="Dining Out", assigned=300, spent=285.75, budget_group_id=food
+            ),
+            BudgetItemOrm(
+                name="Gas", assigned=150, spent=125.0, budget_group_id=transportation
+            ),
+            BudgetItemOrm(
+                name="Public Transit",
+                assigned=50,
+                spent=20.0,
+                budget_group_id=transportation,
+            ),
+            BudgetItemOrm(
+                name="Utilities", assigned=250, spent=220.0, budget_group_id=home
+            ),
+            BudgetItemOrm(
+                name="Insurance", assigned=350, spent=350.0, budget_group_id=home
+            ),
+            BudgetItemOrm(
+                name="Entertainment",
+                assigned=150,
+                spent=95.5,
+                budget_group_id=lifestyle,
+            ),
+            BudgetItemOrm(
+                name="Shopping", assigned=400, spent=520.25, budget_group_id=lifestyle
+            ),
+            BudgetItemOrm(
+                name="Healthcare", assigned=200, spent=75.0, budget_group_id=health
+            ),
+            BudgetItemOrm(
+                name="Fitness", assigned=100, spent=100.0, budget_group_id=health
+            ),
         ]
 
         session.add_all(budget_items)
         await session.commit()
 
+
 async def check_already_seeded() -> bool:
     async with async_session() as session:
-        res = await session.execute(select(TransactionOrm).where(TransactionOrm.id == 30))
+        res = await session.execute(
+            select(TransactionOrm).where(TransactionOrm.id == 30)
+        )
         txn = res.scalars().first()
         return bool(txn)
+
 
 already_seeded = asyncio.run(check_already_seeded())
 

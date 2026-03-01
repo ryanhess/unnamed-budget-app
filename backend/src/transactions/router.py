@@ -4,9 +4,11 @@ from src.transactions.dumbData import transactions
 
 router = APIRouter()
 
+
 @router.get("/")
 def get_all_transactions() -> list[Transaction]:
     return transactions
+
 
 @router.get("/{bank_account_id}")
 def get_specific_account_transactions(bank_account_id: int) -> list[Transaction]:

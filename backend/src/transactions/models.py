@@ -4,9 +4,11 @@ from sqlalchemy import Enum as SAEnum, Identity
 from sqlalchemy.orm import Mapped, mapped_column
 from src.database import OrmBase
 
+
 class TransactionType(str, Enum):
     income = "income"
     expense = "expense"
+
 
 # Pydantic Schema for API layer
 class Transaction(BaseModel):
@@ -20,7 +22,8 @@ class Transaction(BaseModel):
 
     class Config:
         from_attributes = True
-    
+
+
 # SQLAlchemy model for DB layer
 class TransactionOrm(OrmBase):
     __tablename__ = "transactions"

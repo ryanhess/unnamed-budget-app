@@ -33,7 +33,6 @@ class BudgetGroupUpdate(BaseModel):
     budget_item_ids: list[int]
 
 
-
 # Pydantic Schema for API layer
 class BudgetGroupResponse(BaseModel):
     id: int
@@ -52,8 +51,11 @@ class BudgetGroupOrm(OrmBase):
 
     id: Mapped[int] = mapped_column(Identity(always=True), primary_key=True)
     name: Mapped[str]
-    # passive_deletes overrides SqlAlchemy behavior, so deleteion is handled by postgres as defined in BudgetItemOrm
-    budget_items: Mapped[list["BudgetItemOrm"]] = relationship(back_populates="budget_group", passive_deletes=True)
+    # passive_deletes overrides SqlAlchemy behavior, so deleteion is handled by
+    # postgres as defined in BudgetItemOrm
+    budget_items: Mapped[list["BudgetItemOrm"]] = relationship(
+        back_populates="budget_group", passive_deletes=True
+    )
 
 
 class BudgetItemCreate(BaseModel):
@@ -80,7 +82,7 @@ class BudgetItemResponse(BaseModel):
     class Config:
         from_attributes = True
 
- 
+
 # SQLAlchemy model for DB layer
 class BudgetItemOrm(OrmBase):
     __tablename__ = "budget_items"
@@ -89,7 +91,11 @@ class BudgetItemOrm(OrmBase):
     name: Mapped[str]
     assigned: Mapped[float]
     spent: Mapped[float]
-    
+
     # when the group is deleted, the foreign key here is set to NULL
-    budget_group_id: Mapped[int | None] = mapped_column(ForeignKey("budget_groups.id", ondelete="SET NULL"), nullable=True)
-    budget_group: Mapped[BudgetGroupOrm | None] = relationship(back_populates="budget_items")
+    budget_group_id: Mapped[int | None] = mapped_column(
+        ForeignKey("budget_groups.id", ondelete="SET NULL"), nullable=True
+    )
+    budget_group: Mapped[BudgetGroupOrm | None] = relationship(
+        back_populates="budget_items"
+    )
