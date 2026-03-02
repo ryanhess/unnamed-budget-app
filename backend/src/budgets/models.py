@@ -4,7 +4,6 @@ from sqlalchemy import (
     Identity,
     CheckConstraint,
     UniqueConstraint,
-    Enum as SqlAlcEnum,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.database import OrmBase
@@ -123,7 +122,8 @@ class BudgetItemResponse(BaseModel):
     name: str
     budget_group_id: int | None = None
 
-    # The Budget Item response only wants one envelope, the envelope for the given month.
+    # The Budget Item response only wants one envelope,
+    # the envelope for the given month.
     envelope: EnvelopeResponse
 
     class Config:
@@ -136,8 +136,6 @@ class BudgetItemOrm(OrmBase):
 
     id: Mapped[int] = mapped_column(Identity(always=True), primary_key=True)
     name: Mapped[str]
-    assigned: Mapped[float]
-    spent: Mapped[float]
 
     # when the group is deleted, the foreign key here is set to NULL
     budget_group_id: Mapped[int | None] = mapped_column(
@@ -147,7 +145,8 @@ class BudgetItemOrm(OrmBase):
         back_populates="budget_items"
     )
 
-    #
+    # allows for accessing .envelopes in routes via eager load to build responses
+    # Remember that the actual table needs nothing for envelope due to FK
     envelopes: Mapped[list[EnvelopeOrm]] = relationship(
         back_populates="budget_item",
         passive_deletes=True,
