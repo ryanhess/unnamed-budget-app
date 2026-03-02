@@ -112,7 +112,12 @@ def _generate_transactions(count: int) -> list[TransactionOrm]:
     for _ in range(count):
         category = random.choices(CATEGORIES, weights=WEIGHTS, k=1)[0]
         merchant, min_amt, max_amt = random.choice(MERCHANTS_BY_CATEGORY[category])
-        bank_account_id = random.choices([1, 2, 3, 4, 5], weights=ACCOUNT_WEIGHTS, k=1)[0]
+        bank_account_id = random.choices(
+            [1, 2, 3, 4, 5],
+            weights=ACCOUNT_WEIGHTS,
+            k=1,
+        )[0]
+
         txn_date = START_DATE + timedelta(days=random.randint(0, DATE_RANGE_DAYS))
 
         if category == "Income":

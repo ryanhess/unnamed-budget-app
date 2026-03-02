@@ -1,9 +1,8 @@
 from pydantic import BaseModel
 from enum import Enum
 from sqlalchemy import Enum as SqlAlchEnum, ForeignKey, Identity
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 from src.database import OrmBase
-from src.bank_accounts.models import BankAccountOrm
 
 
 class TransactionType(str, Enum):

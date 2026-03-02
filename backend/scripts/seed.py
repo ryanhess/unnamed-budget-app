@@ -40,61 +40,25 @@ budget_groups: list[BudgetGroupOrm] = [
 ]
 
 
-def get_budget_items(
-    food: int, transportation: int, home: int, lifestyle: int, health: int
-) -> list[BudgetItemOrm]:
-    return [
-        BudgetItemOrm(
-            name="Groceries", assigned=600, spent=425.5, budget_group_id=food
-        ),
-        BudgetItemOrm(
-            name="Dining Out", assigned=300, spent=285.75, budget_group_id=food
-        ),
-        BudgetItemOrm(
-            name="Gas", assigned=150, spent=125.0, budget_group_id=transportation
-        ),
-        BudgetItemOrm(
-            name="Public Transit",
-            assigned=50,
-            spent=20.0,
-            budget_group_id=transportation,
-        ),
-        BudgetItemOrm(
-            name="Utilities", assigned=250, spent=220.0, budget_group_id=home
-        ),
-        BudgetItemOrm(
-            name="Insurance", assigned=350, spent=350.0, budget_group_id=home
-        ),
-        BudgetItemOrm(
-            name="Entertainment",
-            assigned=150,
-            spent=95.5,
-            budget_group_id=lifestyle,
-        ),
-        BudgetItemOrm(
-            name="Shopping", assigned=400, spent=520.25, budget_group_id=lifestyle
-        ),
-        BudgetItemOrm(
-            name="Healthcare", assigned=200, spent=75.0, budget_group_id=health
-        ),
-        BudgetItemOrm(
-            name="Fitness", assigned=100, spent=100.0, budget_group_id=health
-        ),
-    ]
+budget_items: list[BudgetItemOrm] = [
+    BudgetItemOrm(name="Groceries", assigned=600, spent=425.5, budget_group_id=1),
+    BudgetItemOrm(name="Dining Out", assigned=300, spent=285.75, budget_group_id=1),
+    BudgetItemOrm(name="Gas", assigned=150, spent=125.0, budget_group_id=2),
+    BudgetItemOrm(name="Public Transit", assigned=50, spent=20.0, budget_group_id=2),
+    BudgetItemOrm(name="Utilities", assigned=250, spent=220.0, budget_group_id=3),
+    BudgetItemOrm(name="Insurance", assigned=350, spent=350.0, budget_group_id=3),
+    BudgetItemOrm(name="Entertainment", assigned=150, spent=95.5, budget_group_id=4),
+    BudgetItemOrm(name="Shopping", assigned=400, spent=520.25, budget_group_id=4),
+    BudgetItemOrm(name="Healthcare", assigned=200, spent=75.0, budget_group_id=5),
+    BudgetItemOrm(name="Fitness", assigned=100, spent=100.0, budget_group_id=5),
+]
 
 
 async def seed() -> None:
     async with async_session() as session:
         session.add_all(bank_accounts)
         session.add_all(transactions)
-
         session.add_all(budget_groups)
-        await session.flush()  # groups now have their Postgres-assigned IDs
-
-        food, transportation, home, lifestyle, health = [g.id for g in budget_groups]
-
-        budget_items = get_budget_items(food, transportation, home, lifestyle, health)
-
         session.add_all(budget_items)
         await session.commit()
 
