@@ -27,7 +27,12 @@ def create_new_transaction(
 
 
 @router.get("/{bank_account_id}", response_model=list[TransactionResponse])
-def get_specific_account_transactions(
+async def get_specific_account_transactions(
     bank_account_id: int,
-) -> list[TransactionOrm]:
-    return []
+    db: AsyncDb,
+) -> Sequence[TransactionOrm]:
+    query = select(TransactionOrm).where(
+        TransactionOrm.bank_account_id == bank_account_id
+    )
+    result = await db.execute(query)
+    return result.scalars().all()
