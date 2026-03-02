@@ -11,7 +11,9 @@
 1. Clone the repo
 2. In the root directory for the project, run:
 
-`make install`
+```bash
+make install
+```
 
 - This sets up all frontend and backend deps, sets up the backend venv as well
 
@@ -19,20 +21,35 @@
 
 - Makefile has support to build an .envrc that activates the venv upon entering the dir if you have direnv installed.
 
-`make .envrc`
+```bash
+make .envrc
+```
 
 4. Setup the env file.
-   For now, it is as simple as copying the contents of .env.example into a new .env file. In the future, this is where you can get API key access from Ryan, and update the missing variables with the right secrets.
+   1. At root:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   2. For now, that's it. As integrations are added, Ryan will provide the missing secrets.
 
 # Standing up the app:
 
 Run:
-`make clean`
 
-- This runs any migrations, starts the db container, and starts the front and backend servers.
+```bash
+make clean
+```
+
+- This runs any migrations, starts the db container, seeds the database, and starts the front and backend servers.
+- `make` will do all of the above, but without trying to seed.
 
 connect to the dev database in a shell if necessary:
-`make db-sh`
+
+```bash
+make db-sh
+```
 
 # Migrations:
 
