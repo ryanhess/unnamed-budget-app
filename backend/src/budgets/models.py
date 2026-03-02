@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field, computed_field
-from sqlalchemy import ForeignKey, Identity, CheckConstraint
+from sqlalchemy import ForeignKey, Identity, CheckConstraint, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.database import OrmBase
 
@@ -30,12 +30,16 @@ class EnvelopeResponse(BaseModel):
 
 class EnvelopeOrm(OrmBase):
     __tablename__ = "envelopes"
+    __table_args__ = (
+        UniqueConstraint("id", "year", "month", name="unique_id-year-month"),
+        CheckConstraint("year > 0", name="year_greater_than_zero"),
+        CheckConstraint("month >= 1 AND month <= 12", name="month_in_range"),
+        CheckConstraint("assigned >= 0", name="assigned_zero_or_greater"),
+    )
 
     id: Mapped[int] = mapped_column(Identity(always=True), primary_key=True)
-    year: Mapped[int] = mapped_column(CheckConstraint("year > 0"))
-    month: Mapped[int] = mapped_column(
-        CheckConstraint("month >= 1 AND month <= 12", name="month_in_range")
-    )
+    year: Mapped[int]
+    month: Mapped[int]
     assigned: Mapped[float]
     budget_item_id: Mapped[int] = mapped_column(
         ForeignKey("budget_items.id", ondelete="CASCADE")
