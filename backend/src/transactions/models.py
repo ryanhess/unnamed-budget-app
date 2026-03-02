@@ -10,8 +10,17 @@ class TransactionType(str, Enum):
     expense = "expense"
 
 
+class TransactionCreate(BaseModel):
+    date: str
+    merchant: str
+    category: str
+    amount: float
+    bank_account_id: int
+    type: TransactionType
+
+
 # Pydantic Schema for API layer
-class Transaction(BaseModel):
+class TransactionResponse(BaseModel):
     id: int
     date: str
     merchant: str
@@ -34,7 +43,7 @@ class TransactionOrm(OrmBase):
     category: Mapped[str]
     amount: Mapped[float]
     type: Mapped[TransactionType] = mapped_column(SqlAlchEnum(TransactionType))
-    
+
     # when the bank account is deleted, the transaction should be deleted.
     bank_account_id: Mapped[int] = mapped_column(
         ForeignKey("bank_accounts.id", ondelete="CASCADE")
