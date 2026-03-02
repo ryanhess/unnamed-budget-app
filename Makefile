@@ -49,3 +49,6 @@ db-seed: db-migrate
 
 db-sh:
 	@docker compose exec database psql -U postgres -d budget_app
+
+db-migrate-gen: db-start
+	@cd backend && uv run alembic revision --autogenerate -m "$(m)"
