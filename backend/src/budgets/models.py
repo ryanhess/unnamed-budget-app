@@ -1,7 +1,24 @@
 from pydantic import BaseModel, Field, computed_field
-from sqlalchemy import ForeignKey, Identity, CheckConstraint, UniqueConstraint
+from sqlalchemy import (
+    ForeignKey,
+    Identity,
+    CheckConstraint,
+    UniqueConstraint,
+    Enum as SqlAlcEnum,
+)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.database import OrmBase
+from enum import Enum
+
+
+class BudgetEntryType(str, Enum):
+    group = "group"
+    item = "item"
+
+
+class BudgetEntry(BaseModel):
+    type: BudgetEntryType
+    content: "BudgetGroupResponse | BudgetItemResponse"
 
 
 class EnvelopeCreate(BaseModel):
@@ -31,7 +48,9 @@ class EnvelopeResponse(BaseModel):
 class EnvelopeOrm(OrmBase):
     __tablename__ = "envelopes"
     __table_args__ = (
-        UniqueConstraint("id", "year", "month", name="unique_id-year-month"),
+        UniqueConstraint(
+            "budget_item_id", "year", "month", name="unique_budget_item-year-month"
+        ),
         CheckConstraint("year > 0", name="year_greater_than_zero"),
         CheckConstraint("month >= 1 AND month <= 12", name="month_in_range"),
         CheckConstraint("assigned >= 0", name="assigned_zero_or_greater"),
@@ -44,6 +63,8 @@ class EnvelopeOrm(OrmBase):
     budget_item_id: Mapped[int] = mapped_column(
         ForeignKey("budget_items.id", ondelete="CASCADE")
     )
+    # not in the table, just used for SqlAlchemy
+    budget_item: Mapped["BudgetItemOrm"] = relationship(back_populates="envelopes")
 
 
 class BudgetGroupCreate(BaseModel):
@@ -100,9 +121,10 @@ class BudgetItemUpdate(BaseModel):
 class BudgetItemResponse(BaseModel):
     id: int
     name: str
-    assigned: float
-    spent: float
     budget_group_id: int | None = None
+
+    # The Budget Item response only wants one envelope, the envelope for the given month.
+    envelope: EnvelopeResponse
 
     class Config:
         from_attributes = True
@@ -123,4 +145,10 @@ class BudgetItemOrm(OrmBase):
     )
     budget_group: Mapped[BudgetGroupOrm | None] = relationship(
         back_populates="budget_items"
+    )
+
+    #
+    envelopes: Mapped[list[EnvelopeOrm]] = relationship(
+        back_populates="budget_item",
+        passive_deletes=True,
     )
