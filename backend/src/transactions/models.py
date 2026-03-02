@@ -1,8 +1,9 @@
 from pydantic import BaseModel
 from enum import Enum
-from sqlalchemy import Enum as SAEnum, Identity
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import Enum as SqlAlchEnum, ForeignKey, Identity
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.database import OrmBase
+from src.bank_accounts.models import BankAccountOrm
 
 
 class TransactionType(str, Enum):
@@ -17,7 +18,7 @@ class Transaction(BaseModel):
     merchant: str
     category: str
     amount: float
-    account_id: int
+    bank_account_id: int
     type: TransactionType
 
     class Config:
@@ -33,5 +34,9 @@ class TransactionOrm(OrmBase):
     merchant: Mapped[str]
     category: Mapped[str]
     amount: Mapped[float]
-    account_id: Mapped[int]
-    type: Mapped[TransactionType] = mapped_column(SAEnum(TransactionType))
+    type: Mapped[TransactionType] = mapped_column(SqlAlchEnum(TransactionType))
+    
+    # when the bank account is deleted, the transaction should be deleted.
+    bank_account_id: Mapped[int] = mapped_column(
+        ForeignKey("bank_accounts.id", ondelete="CASCADE")
+    )

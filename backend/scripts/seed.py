@@ -5,292 +5,21 @@
 
 import asyncio
 from src.database import async_session
-from src.transactions.models import TransactionOrm, TransactionType
+from src.transactions.models import TransactionOrm
 from src.budgets.models import BudgetGroupOrm, BudgetItemOrm
+from src.bank_accounts.models import BankAccountOrm
+from scripts.seed_data.transactions import transactions
 from sqlalchemy import select
 
-transactions: list[TransactionOrm] = [
-    TransactionOrm(
-        date="2026-02-02",
-        merchant="Salary Deposit",
-        category="Income",
-        amount=5000,
-        type=TransactionType.income,
-        account_id=1,
-    ),
-    TransactionOrm(
-        date="2026-02-01",
-        merchant="Whole Foods Market",
-        category="Groceries",
-        amount=-125.43,
-        type=TransactionType.expense,
-        account_id=1,
-    ),
-    TransactionOrm(
-        date="2026-02-01",
-        merchant="Shell Gas Station",
-        category="Transportation",
-        amount=-52.0,
-        type=TransactionType.expense,
-        account_id=3,
-    ),
-    TransactionOrm(
-        date="2026-01-31",
-        merchant="Netflix Subscription",
-        category="Entertainment",
-        amount=-15.99,
-        type=TransactionType.expense,
-        account_id=3,
-    ),
-    TransactionOrm(
-        date="2026-01-31",
-        merchant="Starbucks",
-        category="Food & Dining",
-        amount=-8.75,
-        type=TransactionType.expense,
-        account_id=1,
-    ),
-    TransactionOrm(
-        date="2026-01-30",
-        merchant="Electric Company",
-        category="Utilities",
-        amount=-145.0,
-        type=TransactionType.expense,
-        account_id=1,
-    ),
-    TransactionOrm(
-        date="2026-01-29",
-        merchant="Target",
-        category="Shopping",
-        amount=-87.34,
-        type=TransactionType.expense,
-        account_id=3,
-    ),
-    TransactionOrm(
-        date="2026-01-28",
-        merchant="Olive Garden",
-        category="Food & Dining",
-        amount=-65.5,
-        type=TransactionType.expense,
-        account_id=1,
-    ),
-    TransactionOrm(
-        date="2026-01-27",
-        merchant="Gym Membership",
-        category="Health",
-        amount=-50.0,
-        type=TransactionType.expense,
-        account_id=1,
-    ),
-    TransactionOrm(
-        date="2026-01-26",
-        merchant="Amazon",
-        category="Shopping",
-        amount=-234.99,
-        type=TransactionType.expense,
-        account_id=3,
-    ),
-    TransactionOrm(
-        date="2026-01-25",
-        merchant="Freelance Project",
-        category="Income",
-        amount=1250,
-        type=TransactionType.income,
-        account_id=1,
-    ),
-    TransactionOrm(
-        date="2026-01-24",
-        merchant="Delta Airlines",
-        category="Travel",
-        amount=-450.0,
-        type=TransactionType.expense,
-        account_id=3,
-    ),
-    TransactionOrm(
-        date="2026-01-24",
-        merchant="Uber",
-        category="Transportation",
-        amount=-28.5,
-        type=TransactionType.expense,
-        account_id=1,
-    ),
-    TransactionOrm(
-        date="2026-01-23",
-        merchant="Trader Joe's",
-        category="Groceries",
-        amount=-89.23,
-        type=TransactionType.expense,
-        account_id=1,
-    ),
-    TransactionOrm(
-        date="2026-01-23",
-        merchant="Chipotle",
-        category="Food & Dining",
-        amount=-12.45,
-        type=TransactionType.expense,
-        account_id=3,
-    ),
-    TransactionOrm(
-        date="2026-01-22",
-        merchant="Best Buy",
-        category="Shopping",
-        amount=-399.99,
-        type=TransactionType.expense,
-        account_id=3,
-    ),
-    TransactionOrm(
-        date="2026-01-22",
-        merchant="Spotify Subscription",
-        category="Entertainment",
-        amount=-10.99,
-        type=TransactionType.expense,
-        account_id=1,
-    ),
-    TransactionOrm(
-        date="2026-01-21",
-        merchant="Water Company",
-        category="Utilities",
-        amount=-65.0,
-        type=TransactionType.expense,
-        account_id=1,
-    ),
-    TransactionOrm(
-        date="2026-01-20",
-        merchant="CVS Pharmacy",
-        category="Health",
-        amount=-45.67,
-        type=TransactionType.expense,
-        account_id=1,
-    ),
-    TransactionOrm(
-        date="2026-01-20",
-        merchant="Panera Bread",
-        category="Food & Dining",
-        amount=-18.9,
-        type=TransactionType.expense,
-        account_id=1,
-    ),
-    TransactionOrm(
-        date="2026-01-19",
-        merchant="Shell Gas Station",
-        category="Transportation",
-        amount=-48.0,
-        type=TransactionType.expense,
-        account_id=3,
-    ),
-    TransactionOrm(
-        date="2026-01-18",
-        merchant="Costco",
-        category="Groceries",
-        amount=-156.78,
-        type=TransactionType.expense,
-        account_id=1,
-    ),
-    TransactionOrm(
-        date="2026-01-18",
-        merchant="Client Payment",
-        category="Income",
-        amount=800,
-        type=TransactionType.income,
-        account_id=1,
-    ),
-    TransactionOrm(
-        date="2026-01-17",
-        merchant="Home Depot",
-        category="Shopping",
-        amount=-178.45,
-        type=TransactionType.expense,
-        account_id=3,
-    ),
-    TransactionOrm(
-        date="2026-01-17",
-        merchant="Movie Theater",
-        category="Entertainment",
-        amount=-35.0,
-        type=TransactionType.expense,
-        account_id=1,
-    ),
-    TransactionOrm(
-        date="2026-01-16",
-        merchant="Starbucks",
-        category="Food & Dining",
-        amount=-6.85,
-        type=TransactionType.expense,
-        account_id=1,
-    ),
-    TransactionOrm(
-        date="2026-01-15",
-        merchant="Internet Service",
-        category="Utilities",
-        amount=-89.99,
-        type=TransactionType.expense,
-        account_id=1,
-    ),
-    TransactionOrm(
-        date="2026-01-15",
-        merchant="Uber Eats",
-        category="Food & Dining",
-        amount=-32.5,
-        type=TransactionType.expense,
-        account_id=3,
-    ),
-    TransactionOrm(
-        date="2026-01-14",
-        merchant="Walgreens",
-        category="Health",
-        amount=-23.45,
-        type=TransactionType.expense,
-        account_id=1,
-    ),
-    TransactionOrm(
-        date="2026-01-13",
-        merchant="Whole Foods Market",
-        category="Groceries",
-        amount=-98.67,
-        type=TransactionType.expense,
-        account_id=1,
-    ),
-    TransactionOrm(
-        date="2026-01-12",
-        merchant="Lyft",
-        category="Transportation",
-        amount=-19.75,
-        type=TransactionType.expense,
-        account_id=1,
-    ),
-    TransactionOrm(
-        date="2026-01-12",
-        merchant="Apple Store",
-        category="Shopping",
-        amount=-129.0,
-        type=TransactionType.expense,
-        account_id=3,
-    ),
-    TransactionOrm(
-        date="2026-01-11",
-        merchant="Dunkin' Donuts",
-        category="Food & Dining",
-        amount=-9.25,
-        type=TransactionType.expense,
-        account_id=1,
-    ),
-    TransactionOrm(
-        date="2026-01-10",
-        merchant="Gas Company",
-        category="Utilities",
-        amount=-112.0,
-        type=TransactionType.expense,
-        account_id=1,
-    ),
-    TransactionOrm(
-        date="2026-01-09",
-        merchant="Parking Fee",
-        category="Transportation",
-        amount=-15.0,
-        type=TransactionType.expense,
-        account_id=1,
-    ),
+
+bank_accounts: list[BankAccountOrm] = [
+    BankAccountOrm(),
+    BankAccountOrm(),
+    BankAccountOrm(),
+    BankAccountOrm(),
+    BankAccountOrm(),
 ]
+
 
 budget_groups: list[BudgetGroupOrm] = [
     BudgetGroupOrm(
@@ -311,52 +40,60 @@ budget_groups: list[BudgetGroupOrm] = [
 ]
 
 
+def get_budget_items(
+    food: int, transportation: int, home: int, lifestyle: int, health: int
+) -> list[BudgetItemOrm]:
+    return [
+        BudgetItemOrm(
+            name="Groceries", assigned=600, spent=425.5, budget_group_id=food
+        ),
+        BudgetItemOrm(
+            name="Dining Out", assigned=300, spent=285.75, budget_group_id=food
+        ),
+        BudgetItemOrm(
+            name="Gas", assigned=150, spent=125.0, budget_group_id=transportation
+        ),
+        BudgetItemOrm(
+            name="Public Transit",
+            assigned=50,
+            spent=20.0,
+            budget_group_id=transportation,
+        ),
+        BudgetItemOrm(
+            name="Utilities", assigned=250, spent=220.0, budget_group_id=home
+        ),
+        BudgetItemOrm(
+            name="Insurance", assigned=350, spent=350.0, budget_group_id=home
+        ),
+        BudgetItemOrm(
+            name="Entertainment",
+            assigned=150,
+            spent=95.5,
+            budget_group_id=lifestyle,
+        ),
+        BudgetItemOrm(
+            name="Shopping", assigned=400, spent=520.25, budget_group_id=lifestyle
+        ),
+        BudgetItemOrm(
+            name="Healthcare", assigned=200, spent=75.0, budget_group_id=health
+        ),
+        BudgetItemOrm(
+            name="Fitness", assigned=100, spent=100.0, budget_group_id=health
+        ),
+    ]
+
+
 async def seed() -> None:
     async with async_session() as session:
+        session.add_all(bank_accounts)
         session.add_all(transactions)
+
         session.add_all(budget_groups)
         await session.flush()  # groups now have their Postgres-assigned IDs
 
         food, transportation, home, lifestyle, health = [g.id for g in budget_groups]
 
-        budget_items = [
-            BudgetItemOrm(
-                name="Groceries", assigned=600, spent=425.5, budget_group_id=food
-            ),
-            BudgetItemOrm(
-                name="Dining Out", assigned=300, spent=285.75, budget_group_id=food
-            ),
-            BudgetItemOrm(
-                name="Gas", assigned=150, spent=125.0, budget_group_id=transportation
-            ),
-            BudgetItemOrm(
-                name="Public Transit",
-                assigned=50,
-                spent=20.0,
-                budget_group_id=transportation,
-            ),
-            BudgetItemOrm(
-                name="Utilities", assigned=250, spent=220.0, budget_group_id=home
-            ),
-            BudgetItemOrm(
-                name="Insurance", assigned=350, spent=350.0, budget_group_id=home
-            ),
-            BudgetItemOrm(
-                name="Entertainment",
-                assigned=150,
-                spent=95.5,
-                budget_group_id=lifestyle,
-            ),
-            BudgetItemOrm(
-                name="Shopping", assigned=400, spent=520.25, budget_group_id=lifestyle
-            ),
-            BudgetItemOrm(
-                name="Healthcare", assigned=200, spent=75.0, budget_group_id=health
-            ),
-            BudgetItemOrm(
-                name="Fitness", assigned=100, spent=100.0, budget_group_id=health
-            ),
-        ]
+        budget_items = get_budget_items(food, transportation, home, lifestyle, health)
 
         session.add_all(budget_items)
         await session.commit()
@@ -365,7 +102,7 @@ async def seed() -> None:
 async def check_already_seeded() -> bool:
     async with async_session() as session:
         res = await session.execute(
-            select(TransactionOrm).where(TransactionOrm.id == 30)
+            select(TransactionOrm).where(TransactionOrm.id == 2000)
         )
         txn = res.scalars().first()
         return bool(txn)
