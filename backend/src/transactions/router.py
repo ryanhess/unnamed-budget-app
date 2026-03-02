@@ -4,14 +4,19 @@ from src.transactions.models import (
     TransactionOrm,
     TransactionCreate,
 )
+from src.database import AsyncDb
+from sqlalchemy import select
+from typing import Sequence
 
 
 router = APIRouter()
 
 
 @router.get("/", response_model=list[TransactionResponse])
-def get_all_transactions_for_user() -> list[TransactionOrm]:
-    return []
+async def get_all_transactions_for_user(db: AsyncDb) -> Sequence[TransactionOrm]:
+    query = select(TransactionOrm)
+    result = await db.execute(query)
+    return result.scalars().all()
 
 
 @router.get("/new-transaction", response_model=TransactionResponse)
