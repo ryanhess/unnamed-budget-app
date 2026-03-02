@@ -20,8 +20,9 @@ async def get_all_transactions_for_user(db: AsyncDb) -> Sequence[TransactionOrm]
 
 
 @router.get("/new-transaction", response_model=TransactionResponse)
-def create_new_transaction(
+async def create_new_transaction(
     new_txn_fields: TransactionCreate,
+    db: AsyncDb,
 ) -> TransactionOrm:
     return TransactionOrm()
 
