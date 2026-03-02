@@ -4,23 +4,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.database import OrmBase
 
 
-# Pydantic Schema for API layer
-class Budget(BaseModel):
-    id: int
-    name: str
-
-    class Config:
-        from_attributes = True
-
-
-# SQLAlchemy model for DB layer
-class BudgetOrm(OrmBase):
-    __tablename__ = "budgets"
-
-    id: Mapped[int] = mapped_column(Identity(always=True), primary_key=True)
-    name: Mapped[str]
-
-
 class BudgetGroupCreate(BaseModel):
     name: str
 
