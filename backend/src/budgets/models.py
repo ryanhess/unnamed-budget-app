@@ -105,15 +105,11 @@ class BudgetGroupOrm(OrmBase):
 
 class BudgetItemCreate(BaseModel):
     name: str
-    assigned: float = 0.0
-    spent: float = 0.0
     budget_group_id: int | None = None
 
 
 class BudgetItemUpdate(BaseModel):
     name: str | None = None
-    assigned: float | None = None
-    spent: float | None = None
     budget_group_id: int | None = None
 
 
