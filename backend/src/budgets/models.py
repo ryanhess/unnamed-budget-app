@@ -4,19 +4,15 @@ from sqlalchemy import (
     Identity,
     CheckConstraint,
     UniqueConstraint,
+    literal,
 )
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property
 from src.database import OrmBase
-from enum import Enum
-
-
-class BudgetEntryType(str, Enum):
-    group = "group"
-    item = "item"
+from typing import Literal
 
 
 class BudgetEntry(BaseModel):
-    type: BudgetEntryType
+    type: Literal["group", "item"]
     content: "BudgetGroupResponse | BudgetItemResponse"
 
 
@@ -62,8 +58,11 @@ class EnvelopeOrm(OrmBase):
     budget_item_id: Mapped[int] = mapped_column(
         ForeignKey("budget_items.id", ondelete="CASCADE")
     )
-    # not in the table, just used for SqlAlchemy
+
+    # not in the table, just used for SqlAlchemy's object oriented relationship
     budget_item: Mapped["BudgetItemOrm"] = relationship(back_populates="envelopes")
+
+    spent = column_property(literal(42))  # temporarily 42.
 
 
 class BudgetGroupCreate(BaseModel):
@@ -147,3 +146,10 @@ class BudgetItemOrm(OrmBase):
         back_populates="budget_item",
         passive_deletes=True,
     )
+
+    @property
+    def envelope(self) -> EnvelopeOrm | None:
+        if self.envelopes is not None:
+            return self.envelopes[0]
+        else:
+            return None
