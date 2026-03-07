@@ -9,4 +9,5 @@ const BudgetItemSchema = z.object({
 
 type BudgetItem = z.infer<typeof BudgetItemSchema>;
 
-export type { BudgetItemSchema, BudgetItem };
+export type { BudgetItem };
+export { BudgetItemSchema };

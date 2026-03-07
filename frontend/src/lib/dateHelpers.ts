@@ -16,13 +16,44 @@ const formatDate = (dateString: string) => {
     }
 };
 
-const getMonthAndYearFromOffset = (monthOffset: number): { monthName: string; year: number } => {
+function getMonthAndYearFromOffset(
+    asType: "string",
+    monthOffset: number
+): { month: string; year: number };
+
+function getMonthAndYearFromOffset(
+    asType: "number",
+    monthOffset: number
+): { month: number; year: number };
+
+function getMonthAndYearFromOffset(
+    asType: "number" | "string",
+    monthOffset: number
+): { month: string | number; year: number } {
     const currentDate = new Date();
     currentDate.setMonth(currentDate.getMonth() + monthOffset);
 
-    const monthName = currentDate.toLocaleString("en-US", { month: "long" });
+    let month;
+    if (asType === "number") {
+        month = currentDate.toLocaleString("en-US", { month: "long" });
+    } else {
+        month = currentDate.toLocaleString("en-US", { month: "numeric" });
+    }
     const year = currentDate.getFullYear();
+    return { month, year };
+}
+
+const getMonthAsNumberAndYearFromOffset = (
+    monthOffset: number
+): { month: number; year: number } => {
+    return getMonthAndYearFromOffset("number", monthOffset);
+};
+
+const getMonthNameAndYearFromOffset = (
+    monthOffset: number
+): { monthName: string; year: number } => {
+    const { month: monthName, year } = getMonthAndYearFromOffset("string", monthOffset);
     return { monthName, year };
 };
 
-export { formatDate, getMonthAndYearFromOffset };
+export { formatDate, getMonthNameAndYearFromOffset, getMonthAsNumberAndYearFromOffset };

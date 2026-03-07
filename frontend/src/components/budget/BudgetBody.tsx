@@ -7,7 +7,7 @@ import {
     getTotalSpentForGroup,
 } from "@/lib/dummyData/budgetGroups";
 import { getBudgetItemById } from "@/lib/dummyData/budgetItems";
-import { BudgetGroup } from "@/lib/constants";
+import { BudgetGroup, BudgetItem } from "@/lib/constants";
 import { BudgetItemDisplay } from "@/components/budget/BudgetItemDisplay";
 import {
     ThermometerBar,
@@ -51,11 +51,22 @@ const BudgetGroupCard = ({
     group: BudgetGroup;
     children: ReactNode;
 }): ReactNode => {
+    const getTotalAssignedForGroup = (): number => {
+        return group.budget_items.reduce(
+            (totalAssigned, item) => totalAssigned + item.envelope.assigned,
+            0
+        );
+    };
+
+    const getTotalSpentForGroup = (): number => {
+        return group.budget_items.reduce((totalSpent, item) => totalSpent + item.envelope.spent, 0);
+    };
+
     const [isExpanded, setIsExpanded] = useState(true);
-    const groupTotalAssigned = getTotalAssignedForGroup(group.id);
-    const groupTotalSpent = getTotalSpentForGroup(group.id);
-    const categoryAvailable = groupTotalAssigned - groupTotalSpent;
-    const categoryPercentSpent =
+    const groupTotalAssigned = getTotalAssignedForGroup();
+    const groupTotalSpent = getTotalSpentForGroup();
+    const groupAvailable = groupTotalAssigned - groupTotalSpent;
+    const groupPercentSpent =
         groupTotalAssigned > 0 ? Math.min((groupTotalSpent / groupTotalAssigned) * 100, 100) : 0;
     const isGroupOverspent = groupTotalSpent > groupTotalAssigned;
 
@@ -73,7 +84,7 @@ const BudgetGroupCard = ({
                 {!isExpanded && (
                     <AmountAvailableBadge
                         isOverspent={isGroupOverspent}
-                        amountAvailableOrOverspent={categoryAvailable}
+                        amountAvailableOrOverspent={groupAvailable}
                     />
                 )}
             </BudgetGroupHeaderWithButton>
@@ -83,7 +94,7 @@ const BudgetGroupCard = ({
             ) : (
                 <div className="space-y-2">
                     <ThermometerBar
-                        percentSpent={categoryPercentSpent}
+                        percentSpent={groupPercentSpent}
                         isOverspent={isGroupOverspent}
                     />
 
@@ -110,15 +121,14 @@ const BodyLayoutContainer = ({ children }: { children: ReactNode }) => {
     );
 };
 
-const BudgetBody = (): ReactNode => {
-    const allBudgetGroups = getAllBudgetGroups();
-
+const BudgetBody = ({ budgetEntries }: { budgetEntries: any }): ReactNode => {
     return (
         <BodyLayoutContainer>
-            {allBudgetGroups.map((group) => (
-                <BudgetGroupCard key={group.id} group={group}>
-                    {group.items.map((itemId) => (
-                        <BudgetItemDisplay key={itemId} itemId={itemId} />
+            {/* For now assume everything is a group */}
+            {budgetEntries.map((entry) => (
+                <BudgetGroupCard key={entry.id} group={entry.content}>
+                    {entry.content.budget_items.map((item) => (
+                        <BudgetItemDisplay key={item.id} item={item} />
                     ))}
                 </BudgetGroupCard>
             ))}

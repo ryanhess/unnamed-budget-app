@@ -6,18 +6,19 @@ import {
     BudgetDetails,
     AmountAvailableBadge,
 } from "@/components/budget/BudgetDisplayComps";
+import { BudgetItem } from "@/lib/constants";
 
-const BudgetItemDisplay = ({ itemId }: { itemId: string }): ReactNode => {
-    const item = getBudgetItemById(itemId);
-
+const BudgetItemDisplay = ({ item }: { item: BudgetItem }): ReactNode => {
     if (!item) {
         return null;
     }
 
-    const available = item.assigned - item.spent;
+    const available = item.envelope.available;
     const itemPercentSpent =
-        item.assigned > 0 ? Math.min((item.spent / item.assigned) * 100, 100) : 0;
-    const itemIsOverspent = item.spent > item.assigned;
+        item.envelope.assigned > 0
+            ? Math.min((item.envelope.spent / item.envelope.assigned) * 100, 100)
+            : 0;
+    const itemIsOverspent = item.envelope.spent > item.envelope.assigned;
 
     return (
         <div className="space-y-2">
@@ -29,7 +30,10 @@ const BudgetItemDisplay = ({ itemId }: { itemId: string }): ReactNode => {
                 />
             </div>
             <ThermometerBar percentSpent={itemPercentSpent} isOverspent={itemIsOverspent} />
-            <BudgetDetails amountSpent={item.spent} amountAssigned={item.assigned} />
+            <BudgetDetails
+                amountSpent={item.envelope.spent}
+                amountAssigned={item.envelope.assigned}
+            />
         </div>
     );
 };

@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { getMonthAndYearFromOffset } from "@/lib/dateHelpers";
+import { getMonthNameAndYearFromOffset } from "@/lib/dateHelpers";
 import { Dispatch, SetStateAction } from "react";
 import { cn } from "@/components/ui/utils";
 import { ChevronRight, ChevronLeft } from "lucide-react";
@@ -95,7 +95,7 @@ const HeaderBar = ({
     monthOffset: number;
     setMonthOffset: Dispatch<SetStateAction<number>>;
 }): ReactNode => {
-    const { monthName, year } = getMonthAndYearFromOffset(monthOffset);
+    const { monthName, year } = getMonthNameAndYearFromOffset(monthOffset);
     const moneyAvailable = calcMoneyAvailable();
 
     const goToPreviousMonth = () => {
