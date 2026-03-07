@@ -1,10 +1,11 @@
 import { z } from "zod";
+import { EnvelopeSchema } from "@/lib/data-schemas";
 
 const BudgetItemSchema = z.object({
-    id: z.string(),
+    id: z.int(),
     name: z.string(),
-    assigned: z.number(),
-    spent: z.number(),
+    budget_group_id: z.int(),
+    envelope: EnvelopeSchema,
 });
 
 type BudgetItem = z.infer<typeof BudgetItemSchema>;

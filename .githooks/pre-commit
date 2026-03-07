@@ -1,4 +1,10 @@
 #!/bin/bash
+if [ -n "$(git diff --name-only)" ]; then                                                    
+    echo "Warning: you have unstaged changes"           
+    git diff --name-only                                                                     
+    exit 1                                                                                   
+fi
+
 cd backend
 ruff format --check .
 ruff check --fix .
