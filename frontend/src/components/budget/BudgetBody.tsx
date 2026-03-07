@@ -1,13 +1,6 @@
 import { ReactNode, useState } from "react";
-import { cn } from "@/components/ui/utils";
 import { ChevronDown, ChevronRight } from "lucide-react";
-import {
-    getAllBudgetGroups,
-    getTotalAssignedForGroup,
-    getTotalSpentForGroup,
-} from "@/lib/dummyData/budgetGroups";
-import { getBudgetItemById } from "@/lib/dummyData/budgetItems";
-import { BudgetGroup, BudgetItem } from "@/lib/constants";
+import { BudgetGroup } from "@/lib/data-schemas";
 import { BudgetItemDisplay } from "@/components/budget/BudgetItemDisplay";
 import {
     ThermometerBar,

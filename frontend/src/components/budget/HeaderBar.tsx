@@ -3,14 +3,10 @@ import { getMonthNameAndYearFromOffset } from "@/lib/dateHelpers";
 import { Dispatch, SetStateAction } from "react";
 import { cn } from "@/components/ui/utils";
 import { ChevronRight, ChevronLeft } from "lucide-react";
-import {
-    getTotalAssignedForAllBudgetItems,
-    getTotalSpentForAllBudgetItems,
-} from "@/lib/dummyData/budgetItems";
 
 const calcMoneyAvailable = (): number => {
-    const totalAssigned = getTotalAssignedForAllBudgetItems();
-    const totalSpent = getTotalSpentForAllBudgetItems();
+    const totalAssigned = 0;
+    const totalSpent = 0;
     return totalAssigned - totalSpent;
 };
 

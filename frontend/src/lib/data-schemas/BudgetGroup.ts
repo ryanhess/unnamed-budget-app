@@ -1,4 +1,4 @@
-import { BudgetItem, BudgetItemSchema } from "@/lib/constants/budgetItemType";
+import { BudgetItemSchema } from "@/lib/data-schemas";
 import { z } from "zod";
 
 const BudgetGroupSchema = z.object({

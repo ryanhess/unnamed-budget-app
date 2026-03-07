@@ -9,7 +9,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/components/ui/utils";
-import type { Transaction } from "@/lib/constants/transactionType";
+import type { Transaction } from "@/lib/data-schemas";
 import { formatDate } from "@/lib/dateHelpers";
 
 const TransactionsTable = ({

@@ -9,7 +9,7 @@ import {
     selectAllTxnsForUser,
 } from "@/lib/dummyData/transactions";
 import TransactionsTable from "@/components/transactions/TransactionsTable";
-import { Transaction } from "@/lib/constants";
+import { Transaction } from "@/lib/data-schemas";
 
 const AddTransactionButton = (): ReactNode => {
     return (

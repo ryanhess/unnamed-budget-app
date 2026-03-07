@@ -1,12 +1,10 @@
 import { ReactNode } from "react";
-import { getBudgetItemById } from "@/lib/dummyData/budgetItems";
-import { cn } from "@/components/ui/utils";
 import {
     ThermometerBar,
     BudgetDetails,
     AmountAvailableBadge,
 } from "@/components/budget/BudgetDisplayComps";
-import { BudgetItem } from "@/lib/constants";
+import { BudgetItem } from "@/lib/data-schemas";
 
 const BudgetItemDisplay = ({ item }: { item: BudgetItem }): ReactNode => {
     if (!item) {

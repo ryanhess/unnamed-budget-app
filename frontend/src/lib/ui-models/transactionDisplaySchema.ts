@@ -1,7 +1,7 @@
 // Beginnings of a custom table schema tool for UI.
 // This code isn't in use yet, and the current table is static
 
-import { TransactionSchema, type Transaction } from "@/lib/constants";
+import { type Transaction } from "@/lib/data-schemas";
 
 const txnWhatFieldsToDisplay = {
     date: "Date",
