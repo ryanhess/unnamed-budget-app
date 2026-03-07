@@ -3,10 +3,11 @@ import { ReactNode } from "react";
 import HeaderBar from "@/components/budget/HeaderBar";
 import BudgetBody from "@/components/budget/BudgetBody";
 import { getMonthAsNumberAndYearFromOffset } from "@/lib/dateHelpers";
+import { BudgetEntry } from "@/lib/data-schemas";
 
 const BudgetView = ({}): ReactNode => {
     const [monthOffset, setMonthOffset] = useState(0);
-    const [budgetEntries, setBudgetEntries] = useState([]);
+    const [budgetEntries, setBudgetEntries] = useState<BudgetEntry[]>([]);
 
     // use monthOffset to form the api call. if zero, call current.
     const { month, year } = getMonthAsNumberAndYearFromOffset(monthOffset);

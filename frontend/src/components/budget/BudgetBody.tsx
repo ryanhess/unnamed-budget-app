@@ -1,6 +1,6 @@
 import { ReactNode, useState } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
-import { BudgetGroup } from "@/lib/data-schemas";
+import { BudgetGroup, BudgetEntry } from "@/lib/data-schemas";
 import { BudgetItemDisplay } from "@/components/budget/BudgetItemDisplay";
 import {
     ThermometerBar,
@@ -114,12 +114,14 @@ const BodyLayoutContainer = ({ children }: { children: ReactNode }) => {
     );
 };
 
-const BudgetBody = ({ budgetEntries }: { budgetEntries: any }): ReactNode => {
+const BudgetBody = ({ budgetEntries }: { budgetEntries: BudgetEntry[] }): ReactNode => {
     return (
         <BodyLayoutContainer>
             {/* For now assume everything is a group */}
-            {budgetEntries.map((entry) => (
-                <BudgetGroupCard key={entry.id} group={entry.content}>
+            {budgetEntries.map((entry, index) => (
+                // @ts-expect-error for now assume every entry is for a group
+                <BudgetGroupCard key={index} group={entry.content}>
+                    {/* @ts-expect-error assume group*/}
                     {entry.content.budget_items.map((item) => (
                         <BudgetItemDisplay key={item.id} item={item} />
                     ))}
