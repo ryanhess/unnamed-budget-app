@@ -24,6 +24,7 @@ envelopes: list[EnvelopeOrm] = [
     EnvelopeOrm(year=2025, month=11, assigned=450, budget_item_id=8),
     EnvelopeOrm(year=2025, month=11, assigned=180, budget_item_id=9),
     EnvelopeOrm(year=2025, month=11, assigned=100, budget_item_id=10),
+    EnvelopeOrm(year=2025, month=11, assigned=256, budget_item_id=12),  # Ungrouped
     # Dec 2025
     EnvelopeOrm(year=2025, month=12, assigned=650, budget_item_id=1),
     EnvelopeOrm(year=2025, month=12, assigned=400, budget_item_id=2),
@@ -35,6 +36,7 @@ envelopes: list[EnvelopeOrm] = [
     EnvelopeOrm(year=2025, month=12, assigned=500, budget_item_id=8),
     EnvelopeOrm(year=2025, month=12, assigned=200, budget_item_id=9),
     EnvelopeOrm(year=2025, month=12, assigned=90, budget_item_id=10),
+    EnvelopeOrm(year=2025, month=12, assigned=256, budget_item_id=12),  # Ungrouped
     # Jan 2026
     EnvelopeOrm(year=2026, month=1, assigned=600, budget_item_id=1),
     EnvelopeOrm(year=2026, month=1, assigned=280, budget_item_id=2),
@@ -46,6 +48,7 @@ envelopes: list[EnvelopeOrm] = [
     EnvelopeOrm(year=2026, month=1, assigned=350, budget_item_id=8),
     EnvelopeOrm(year=2026, month=1, assigned=220, budget_item_id=9),
     EnvelopeOrm(year=2026, month=1, assigned=110, budget_item_id=10),
+    EnvelopeOrm(year=2026, month=1, assigned=256, budget_item_id=12),  # Ungrouped
     # Feb 2026
     EnvelopeOrm(year=2026, month=2, assigned=590, budget_item_id=1),
     EnvelopeOrm(year=2026, month=2, assigned=300, budget_item_id=2),
@@ -57,6 +60,7 @@ envelopes: list[EnvelopeOrm] = [
     EnvelopeOrm(year=2026, month=2, assigned=380, budget_item_id=8),
     EnvelopeOrm(year=2026, month=2, assigned=190, budget_item_id=9),
     EnvelopeOrm(year=2026, month=2, assigned=105, budget_item_id=10),
+    EnvelopeOrm(year=2026, month=2, assigned=256, budget_item_id=12),  # Ungrouped
     # Mar 2026
     EnvelopeOrm(year=2026, month=3, assigned=610, budget_item_id=1),
     EnvelopeOrm(year=2026, month=3, assigned=320, budget_item_id=2),
@@ -76,4 +80,5 @@ envelopes: list[EnvelopeOrm] = [
     EnvelopeOrm(year=2026, month=4, assigned=420, budget_item_id=8),  # Entertainment
     EnvelopeOrm(year=2026, month=4, assigned=210, budget_item_id=9),  # Healthcare Back
     EnvelopeOrm(year=2026, month=4, assigned=100, budget_item_id=10),
+    EnvelopeOrm(year=2026, month=4, assigned=256, budget_item_id=12),  # Ungrouped
 ]

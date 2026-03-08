@@ -1,6 +1,6 @@
 import { ReactNode, useState } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
-import { BudgetGroup, BudgetEntry } from "@/lib/data-schemas";
+import { BudgetGroup, BudgetEntry, BudgetItem } from "@/lib/data-schemas";
 import { BudgetItemDisplay } from "@/components/budget/BudgetItemDisplay";
 import {
     ThermometerBar,
@@ -101,7 +101,37 @@ const BudgetGroupCard = ({
     );
 };
 
-const BodyLayoutContainer = ({ children }: { children: ReactNode }) => {
+const BudgetItemCard = ({ budgetItem }: { budgetItem: BudgetItem }): ReactNode => {
+    const itemPercentSpent =
+        budgetItem.envelope.assigned > 0
+            ? Math.min((budgetItem.envelope.spent / budgetItem.envelope.assigned) * 100, 100)
+            : 0;
+    const itemIsOverspent = budgetItem.envelope.spent > budgetItem.envelope.assigned;
+
+    return (
+        <div className="bg-white border border-slate-200 rounded-lg p-5">
+            <div className="w-full flex items-center justify-between mb-4 text-left hover:opacity-70 transition-opacity">
+                <div className="flex items-center gap-2">
+                    <h3 className="text-lg font-semibold text-slate-900">{budgetItem.name}</h3>
+                </div>
+                <AmountAvailableBadge
+                    isOverspent={itemIsOverspent}
+                    amountAvailableOrOverspent={budgetItem.envelope.available}
+                />
+            </div>
+            <div className="space-y-2">
+                <ThermometerBar percentSpent={itemPercentSpent} isOverspent={itemIsOverspent} />
+
+                <BudgetDetails
+                    amountSpent={budgetItem.envelope.spent}
+                    amountAssigned={budgetItem.envelope.assigned}
+                />
+            </div>
+        </div>
+    );
+};
+
+const BodyLayoutContainer = ({ children }: { children: ReactNode }): ReactNode => {
     return (
         <div className="flex-1 overflow-auto">
             <div className="w-full px-6 pb-6">
@@ -118,15 +148,19 @@ const BudgetBody = ({ budgetEntries }: { budgetEntries: BudgetEntry[] }): ReactN
     return (
         <BodyLayoutContainer>
             {/* For now assume everything is a group */}
-            {budgetEntries.map((entry, index) => (
-                // @ts-expect-error for now assume every entry is for a group
-                <BudgetGroupCard key={index} group={entry.content}>
-                    {/* @ts-expect-error assume group*/}
-                    {entry.content.budget_items.map((item) => (
-                        <BudgetItemDisplay key={item.id} item={item} />
-                    ))}
-                </BudgetGroupCard>
-            ))}
+            {budgetEntries.map((entry, index) =>
+                entry.type === "group" ? (
+                    // @ts-expect-error for now assume every entry is for a group
+                    <BudgetGroupCard key={index} group={entry.content}>
+                        {/* @ts-expect-error assume group*/}
+                        {entry.content.budget_items.map((item) => (
+                            <BudgetItemDisplay key={item.id} item={item} />
+                        ))}
+                    </BudgetGroupCard>
+                ) : (
+                    <BudgetItemCard key={index} budgetItem={entry.content} />
+                )
+            )}
         </BodyLayoutContainer>
     );
 };
