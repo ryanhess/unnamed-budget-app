@@ -1,7 +1,49 @@
-from pydantic import BaseModel
-from sqlalchemy import ForeignKey, Identity
+from pydantic import BaseModel, Field, computed_field
+from sqlalchemy import ForeignKey, Identity, CheckConstraint, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.database import OrmBase
+
+
+class EnvelopeCreate(BaseModel):
+    year: int = Field(ge=1)
+    month: int = Field(ge=1, le=12)
+    assigned: float = Field(ge=0)
+    budget_item_id: int
+
+
+class EnvelopeResponse(BaseModel):
+    id: int
+    year: int
+    month: int
+    assigned: float
+    budget_item_id: int
+    spent: float
+
+    @computed_field
+    @property
+    def available(self) -> float:
+        return self.assigned - self.spent
+
+    class Config:
+        from_attributes = True
+
+
+class EnvelopeOrm(OrmBase):
+    __tablename__ = "envelopes"
+    __table_args__ = (
+        UniqueConstraint("id", "year", "month", name="unique_id-year-month"),
+        CheckConstraint("year > 0", name="year_greater_than_zero"),
+        CheckConstraint("month >= 1 AND month <= 12", name="month_in_range"),
+        CheckConstraint("assigned >= 0", name="assigned_zero_or_greater"),
+    )
+
+    id: Mapped[int] = mapped_column(Identity(always=True), primary_key=True)
+    year: Mapped[int]
+    month: Mapped[int]
+    assigned: Mapped[float]
+    budget_item_id: Mapped[int] = mapped_column(
+        ForeignKey("budget_items.id", ondelete="CASCADE")
+    )
 
 
 class BudgetGroupCreate(BaseModel):
