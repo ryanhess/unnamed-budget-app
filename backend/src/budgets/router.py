@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from src.budgets.models import (
+    BudgetEntry,
     BudgetGroupCreate,
     BudgetGroupUpdate,
     BudgetGroupResponse,
@@ -9,7 +10,7 @@ from src.budgets.models import (
     BudgetItemResponse,
     BudgetItemOrm,
 )
-from src.budgets.utils import validate_group_id_return_group
+from src.budgets.utils import validate_group_id_return_group, get_monthly_budget
 from src.database import AsyncDb
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
@@ -17,6 +18,13 @@ from collections.abc import Sequence
 
 
 router = APIRouter()
+
+
+@router.get("/{year}/{month}")
+async def get_selected_month_budget(
+    year: int, month: int, db: AsyncDb
+) -> list[BudgetEntry]:
+    return await get_monthly_budget(year, month, db)
 
 
 # use POST because this is not idempotent. Will create a new item every valid request

@@ -4,19 +4,15 @@ from sqlalchemy import (
     Identity,
     CheckConstraint,
     UniqueConstraint,
+    literal,
 )
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property
 from src.database import OrmBase
-from enum import Enum
-
-
-class BudgetEntryType(str, Enum):
-    group = "group"
-    item = "item"
+from typing import Literal
 
 
 class BudgetEntry(BaseModel):
-    type: BudgetEntryType
+    type: Literal["group", "item"]
     content: "BudgetGroupResponse | BudgetItemResponse"
 
 
@@ -62,8 +58,11 @@ class EnvelopeOrm(OrmBase):
     budget_item_id: Mapped[int] = mapped_column(
         ForeignKey("budget_items.id", ondelete="CASCADE")
     )
-    # not in the table, just used for SqlAlchemy
+
+    # not in the table, just used for SqlAlchemy's object oriented relationship
     budget_item: Mapped["BudgetItemOrm"] = relationship(back_populates="envelopes")
+
+    spent = column_property(literal(42))  # temporarily 42.
 
 
 class BudgetGroupCreate(BaseModel):
@@ -118,9 +117,7 @@ class BudgetItemResponse(BaseModel):
     name: str
     budget_group_id: int | None = None
 
-    # The Budget Item response only wants one envelope,
-    # the envelope for the given month.
-    envelope: EnvelopeResponse
+    selected_month_envelope: EnvelopeResponse
 
     class Config:
         from_attributes = True
@@ -141,9 +138,12 @@ class BudgetItemOrm(OrmBase):
         back_populates="budget_items"
     )
 
-    # allows for accessing .envelopes in routes via eager load to build responses
-    # Remember that the actual table needs nothing for envelope due to FK
+    # not a column in DB, enables leveraging relationship in routes.
     envelopes: Mapped[list[EnvelopeOrm]] = relationship(
         back_populates="budget_item",
         passive_deletes=True,
     )
+
+    # must be set in code, is not loaded from db. This is basically to prevent having
+    # the schema return an array of always one item when getting a monthly budget.
+    selected_month_envelope: EnvelopeOrm | None = None
