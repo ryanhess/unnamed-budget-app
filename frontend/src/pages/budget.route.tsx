@@ -3,7 +3,8 @@ import { ReactNode } from "react";
 import HeaderBar from "@/components/budget/HeaderBar";
 import BudgetBody from "@/components/budget/BudgetBody";
 import { getMonthAsNumberAndYearFromOffset } from "@/lib/dateHelpers";
-import { BudgetEntry } from "@/lib/data-schemas";
+import { BudgetEntry, BudgetEntrySchema } from "@/lib/data-schemas";
+import { z } from "zod";
 
 const BudgetView = ({}): ReactNode => {
     const [monthOffset, setMonthOffset] = useState(0);
@@ -15,7 +16,10 @@ const BudgetView = ({}): ReactNode => {
     useEffect(() => {
         fetch(`http://localhost:8000/budgets/2026/3`)
             .then((fetchResult) => fetchResult.json())
-            .then((jsonFromResult) => setBudgetEntries(jsonFromResult));
+            .then((jsonFromResult) => {
+                const parsedBudgetData = z.array(BudgetEntrySchema).parse(jsonFromResult);
+                setBudgetEntries(parsedBudgetData);
+            });
     }, []);
 
     return (
