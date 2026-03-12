@@ -81,11 +81,19 @@ async def get_monthly_budget(
     budget_entries: list[BudgetEntry] = []
 
     for group_orm in this_month_group_orms:
+        for grouped_item in group_orm.budget_items:
+            # the selected envelope must be set manually from the
+            # eagerly loaded envelope
+            grouped_item.selected_month_envelope = grouped_item.envelopes[0]
+
         group = BudgetGroupResponse.model_validate(group_orm)
         new_entry = BudgetEntry(type="group", content=group)
         budget_entries.append(new_entry)
 
     for item_orm in this_month_ungrouped_item_orms:
+        # the selected envelope must be set manually from the
+        # eagerly loaded envelope
+        item_orm.selected_month_envelope = item_orm.envelopes[0]
         item = BudgetItemResponse.model_validate(item_orm)
         new_entry = BudgetEntry(type="item", content=item)
         budget_entries.append(new_entry)

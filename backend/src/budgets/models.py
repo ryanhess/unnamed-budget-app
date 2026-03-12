@@ -117,9 +117,7 @@ class BudgetItemResponse(BaseModel):
     name: str
     budget_group_id: int | None = None
 
-    # The Budget Item response only wants one envelope,
-    # the envelope for the given month.
-    envelope: EnvelopeResponse
+    selected_month_envelope: EnvelopeResponse
 
     class Config:
         from_attributes = True
@@ -140,16 +138,12 @@ class BudgetItemOrm(OrmBase):
         back_populates="budget_items"
     )
 
-    # allows for accessing .envelopes in routes via eager load to build responses
-    # Remember that the actual table needs nothing for envelope due to FK
+    # not a column in DB, enables leveraging relationship in routes.
     envelopes: Mapped[list[EnvelopeOrm]] = relationship(
         back_populates="budget_item",
         passive_deletes=True,
     )
 
-    @property
-    def envelope(self) -> EnvelopeOrm | None:
-        if self.envelopes is not None:
-            return self.envelopes[0]
-        else:
-            return None
+    # must be set in code, is not loaded from db. This is basically to prevent having
+    # the schema return an array of always one item when getting a monthly budget.
+    selected_month_envelope: EnvelopeOrm | None = None
