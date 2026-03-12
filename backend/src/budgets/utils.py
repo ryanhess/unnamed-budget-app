@@ -35,7 +35,7 @@ def _envelope_is_for_month(year: int, month: int):  # noqa ANN202
 
 
 def _budget_item_has_envelope_for_month(year: int, month: int):  # noqa ANN202
-    return BudgetItemOrm.envelopes.any(_envelope_is_for_month(year, month))
+    return BudgetItemOrm.all_envelopes.any(_envelope_is_for_month(year, month))
 
 
 def _get_ungrouped_budget_items_query_for_month(year: int, month: int):  # noqa ANN202
@@ -47,7 +47,7 @@ def _get_ungrouped_budget_items_query_for_month(year: int, month: int):  # noqa 
         )
         .options(
             selectinload(
-                BudgetItemOrm.envelopes.and_(_envelope_is_for_month(year, month))
+                BudgetItemOrm.all_envelopes.and_(_envelope_is_for_month(year, month))
             )
         )
     )
@@ -67,7 +67,7 @@ def _get_budget_groups_query_for_month(year: int, month: int):  # noqa ANN202
                     _budget_item_has_envelope_for_month(year, month)
                 )
             ).selectinload(
-                BudgetItemOrm.envelopes.and_(_envelope_is_for_month(year, month))
+                BudgetItemOrm.all_envelopes.and_(_envelope_is_for_month(year, month))
             )
         )
     )
@@ -94,7 +94,7 @@ async def get_monthly_budget(
         for grouped_item in group_orm.budget_items:
             # the selected envelope must be set manually from the
             # eagerly loaded envelope
-            grouped_item.selected_month_envelope = grouped_item.envelopes[0]
+            grouped_item.envelope = grouped_item.all_envelopes[0]
 
         group = BudgetGroupResponse.model_validate(group_orm)
         new_entry = BudgetEntry(type="group", content=group)
@@ -103,7 +103,7 @@ async def get_monthly_budget(
     for item_orm in this_month_ungrouped_item_orms:
         # the selected envelope must be set manually from the
         # eagerly loaded envelope
-        item_orm.selected_month_envelope = item_orm.envelopes[0]
+        item_orm.envelope = item_orm.all_envelopes[0]
         item = BudgetItemResponse.model_validate(item_orm)
         new_entry = BudgetEntry(type="item", content=item)
         budget_entries.append(new_entry)
