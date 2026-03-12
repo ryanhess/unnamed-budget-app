@@ -9,7 +9,7 @@ import {
     Heart,
     Plane,
 } from "lucide-react";
-import { type Transaction } from "@/lib/constants/transactionType";
+import { type Transaction } from "@/lib/data-schemas";
 
 const transactions: Transaction[] = [
     {

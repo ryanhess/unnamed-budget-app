@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { Transaction } from "@/lib/constants";
+import { Transaction } from "@/lib/data-schemas";
 import TransactionsView from "@/components/transactions/TransactionsView";
-import { selectAllTxnsForUser, sumOfAllTxnsForUser } from "@/lib/dummyData/transactions";
+import { sumOfAllTxnsForUser } from "@/lib/dummyData/transactions";
 
 const AllTransactions = () => {
     const [allTxnsForUser, setAllTxnsForUser] = useState<Transaction[]>([]);

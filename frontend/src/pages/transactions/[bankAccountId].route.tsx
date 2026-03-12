@@ -1,9 +1,9 @@
 import TransactionsView from "@/components/transactions/TransactionsView";
 import { useState, useEffect } from "react";
-import { useRouter, NextRouter } from "next/router";
+import { useRouter } from "next/router";
 import { getBankAccountById } from "@/lib/dummyData/bankAccounts";
-import { Transaction } from "@/lib/constants";
-import { selectAllTxnsForAccountId, sumAllTxnsForAccountId } from "@/lib/dummyData/transactions";
+import { Transaction } from "@/lib/data-schemas";
+import { sumAllTxnsForAccountId } from "@/lib/dummyData/transactions";
 import { getBankAccountIdFromRoute } from "@/lib/urlValidation";
 
 const SpecificBankTransactions = ({}) => {
