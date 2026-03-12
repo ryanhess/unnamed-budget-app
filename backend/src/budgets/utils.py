@@ -1,4 +1,6 @@
-from sqlalchemy import select
+from sqlalchemy import (
+    select,
+)
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.budgets.models import (
@@ -28,55 +30,63 @@ async def validate_group_id_return_group(
     return group
 
 
-async def get_monthly_budget(
-    year: int, month: int, db: AsyncSession
-) -> list[BudgetEntry]:
-    # fmt: off
-    envelope_is_for_this_month = (
-        (EnvelopeOrm.year == year) & (EnvelopeOrm.month == month)
-    )
+def _envelope_is_for_month(year: int, month: int):  # noqa ANN202
+    return (EnvelopeOrm.year == year) & (EnvelopeOrm.month == month)
 
-    budget_item_has_envelope_for_month = (
-        BudgetItemOrm.envelopes.any(
-            envelope_is_for_this_month
-        )
-    )
 
-    this_month_ungrouped_items_query = (
+def _budget_item_has_envelope_for_month(year: int, month: int):  # noqa ANN202
+    return BudgetItemOrm.envelopes.any(_envelope_is_for_month(year, month))
+
+
+def _get_ungrouped_budget_items_query_for_month(year: int, month: int):  # noqa ANN202
+    return (
         select(BudgetItemOrm)
         .where(
-            budget_item_has_envelope_for_month,
+            _budget_item_has_envelope_for_month(year, month),
             BudgetItemOrm.budget_group_id.is_(None),
         )
         .options(
             selectinload(
-                BudgetItemOrm.envelopes.and_(envelope_is_for_this_month)
+                BudgetItemOrm.envelopes.and_(_envelope_is_for_month(year, month))
             )
         )
     )
 
-    this_month_groups_query = (
+
+def _get_budget_groups_query_for_month(year: int, month: int):  # noqa ANN202
+    return (
         select(BudgetGroupOrm)
-        .where(BudgetGroupOrm.budget_items.any(budget_item_has_envelope_for_month))
+        .where(
+            BudgetGroupOrm.budget_items.any(
+                _budget_item_has_envelope_for_month(year, month)
+            )
+        )
         .options(
             selectinload(
-                BudgetGroupOrm.budget_items.and_(budget_item_has_envelope_for_month)
-            )
-            .selectinload(
-                BudgetItemOrm.envelopes.and_(envelope_is_for_this_month)
+                BudgetGroupOrm.budget_items.and_(
+                    _budget_item_has_envelope_for_month(year, month)
+                )
+            ).selectinload(
+                BudgetItemOrm.envelopes.and_(_envelope_is_for_month(year, month))
             )
         )
     )
 
+
+async def get_monthly_budget(
+    year: int, month: int, db: AsyncSession
+) -> list[BudgetEntry]:
     this_month_ungrouped_item_orms = (
-        await db.execute(this_month_ungrouped_items_query)
-    ).scalars().all()
+        (await db.execute(_get_ungrouped_budget_items_query_for_month(year, month)))
+        .scalars()
+        .all()
+    )
 
     this_month_group_orms = (
-        await db.execute(this_month_groups_query)
-    ).scalars().all()
-
-    # fmt: on
+        (await db.execute(_get_budget_groups_query_for_month(year, month)))
+        .scalars()
+        .all()
+    )
 
     budget_entries: list[BudgetEntry] = []
 
