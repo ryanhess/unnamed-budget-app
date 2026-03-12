@@ -60,7 +60,7 @@ class EnvelopeOrm(OrmBase):
     )
 
     # not in the table, just used for SqlAlchemy's object oriented relationship
-    budget_item: Mapped["BudgetItemOrm"] = relationship(back_populates="envelopes")
+    budget_item: Mapped["BudgetItemOrm"] = relationship(back_populates="all_envelopes")
 
     spent = column_property(literal(42))  # temporarily 42.
 
@@ -117,7 +117,7 @@ class BudgetItemResponse(BaseModel):
     name: str
     budget_group_id: int | None = None
 
-    selected_month_envelope: EnvelopeResponse
+    envelope: EnvelopeResponse
 
     class Config:
         from_attributes = True
@@ -126,6 +126,7 @@ class BudgetItemResponse(BaseModel):
 # SQLAlchemy model for DB layer
 class BudgetItemOrm(OrmBase):
     __tablename__ = "budget_items"
+    __allow_unmapped__ = True
 
     id: Mapped[int] = mapped_column(Identity(always=True), primary_key=True)
     name: Mapped[str]
@@ -139,11 +140,11 @@ class BudgetItemOrm(OrmBase):
     )
 
     # not a column in DB, enables leveraging relationship in routes.
-    envelopes: Mapped[list[EnvelopeOrm]] = relationship(
+    all_envelopes: Mapped[list[EnvelopeOrm]] = relationship(
         back_populates="budget_item",
         passive_deletes=True,
     )
 
     # must be set in code, is not loaded from db. This is basically to prevent having
     # the schema return an array of always one item when getting a monthly budget.
-    selected_month_envelope: EnvelopeOrm | None = None
+    envelope: EnvelopeOrm | None = None
