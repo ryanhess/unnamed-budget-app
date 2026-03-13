@@ -158,6 +158,7 @@ const BudgetBody = ({ budgetEntries }: { budgetEntries: BudgetEntry[] }): ReactN
                         ))}
                     </BudgetGroupCard>
                 ) : (
+                    //@ts-expect-error
                     <BudgetItemCard key={index} budgetItem={entry.content} />
                 )
             )}
