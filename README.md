@@ -67,3 +67,21 @@ uv run alembic revision --autogenerate -m "message"
 
 - Take the fullest advantage of params in FastApi route decorators, such as `response_model`. FastApi will automaticlaly serialize and validate to that model.
 - Use Python return type hints everywhere, and here is no exception. This stacks Python type safety on FastApi benefits. Cleanest code, type safety, and full use of tooling.
+
+## Git practices:
+
+A template is already programmed for PRs. use it.
+
+When doing a project:
+
+- use stacked PRs.
+  1.  checkout a branch from main
+  2.  do minimal changes. This branch should be one small step in the project.
+  3.  push the commits
+  4.  branch off of the feature branch
+  5.  repeat 1-3
+- For reviews:
+  1.  rebase onto main.
+  2.  review the diff on the PR
+  3.  squash-merge back to main
+  4.  next branch: rebase onto main. Repeat 2-3 until done.
