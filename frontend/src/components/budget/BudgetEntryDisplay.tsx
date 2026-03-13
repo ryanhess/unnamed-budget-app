@@ -72,7 +72,7 @@ const BudgetEntryCard = ({ entry }: { entry: BudgetEntry }): ReactNode => {
         let entryTotalAssigned, entryTotalSpent, entryAvailable: number;
         if (entry.type === "group") {
             //its a group here
-            const group = entry.content as BudgetGroup;
+            const group = entry.content;
 
             //prettier-ignore
             entryTotalAssigned = group.budget_items.reduce(
@@ -90,7 +90,7 @@ const BudgetEntryCard = ({ entry }: { entry: BudgetEntry }): ReactNode => {
 
             entryAvailable = entryTotalAssigned - entryTotalSpent;
         } else {
-            const item = entry.content as BudgetItem;
+            const item = entry.content;
             entryTotalAssigned = item.envelope.assigned;
             entryTotalSpent = item.envelope.spent;
             entryAvailable = item.envelope.available;
@@ -120,7 +120,6 @@ const BudgetEntryCard = ({ entry }: { entry: BudgetEntry }): ReactNode => {
             />
             {isGroup && isExpanded ? (
                 <div className="space-y-4">
-                    {/* @ts-expect-error */}
                     {entry.content.budget_items.map((item) => (
                         <BudgetItemDisplay key={item.id} item={item} />
                     ))}

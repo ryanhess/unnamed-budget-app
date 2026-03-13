@@ -20,7 +20,7 @@ const BudgetBody = ({ budgetEntries }: { budgetEntries: BudgetEntry[] }): ReactN
         <BodyLayoutContainer>
             {/* For now assume everything is a group */}
             {budgetEntries.map((entry, index) => (
-                <BudgetEntryCard entry={entry} />
+                <BudgetEntryCard key={index} entry={entry} />
             ))}
         </BodyLayoutContainer>
     );
