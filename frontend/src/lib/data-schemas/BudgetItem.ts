@@ -4,7 +4,7 @@ import { EnvelopeSchema } from "@/lib/data-schemas";
 const BudgetItemSchema = z.object({
     id: z.int(),
     name: z.string(),
-    budget_group_id: z.int(),
+    budget_group_id: z.union([z.int(), z.null()]),
     envelope: EnvelopeSchema,
 });
 
