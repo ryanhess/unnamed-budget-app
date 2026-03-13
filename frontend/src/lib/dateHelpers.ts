@@ -35,9 +35,9 @@ function getMonthAndYearFromOffset(
 
     let month;
     if (asType === "number") {
-        month = currentDate.toLocaleString("en-US", { month: "long" });
-    } else {
         month = currentDate.toLocaleString("en-US", { month: "numeric" });
+    } else {
+        month = currentDate.toLocaleString("en-US", { month: "long" });
     }
     const year = currentDate.getFullYear();
     return { month, year };
