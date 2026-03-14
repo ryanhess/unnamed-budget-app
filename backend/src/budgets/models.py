@@ -87,17 +87,17 @@ class BudgetGroupResponse(BaseModel):
 
     @computed_field
     @property
-    def total_assigned(self) -> float:
+    def assigned(self) -> float:
         return sum(item.envelope.assigned for item in self.budget_items)
 
     @computed_field
     @property
-    def total_spent(self) -> float:
+    def spent(self) -> float:
         return sum(item.envelope.spent for item in self.budget_items)
 
     @computed_field
     @property
-    def total_available(self) -> float:
+    def available(self) -> float:
         return sum(item.envelope.available for item in self.budget_items)
 
     class Config:
