@@ -61,49 +61,36 @@ const BudgetEntryHeading = ({
     );
 };
 
+const getEntryAssignedSpentAvail = (
+    entry: BudgetEntry
+): {
+    entryAssigned: number;
+    entrySpent: number;
+    entryAvailable: number;
+} => {
+    if (entry.type == "group") {
+        return {
+            entryAssigned: entry.content.assigned,
+            entrySpent: entry.content.spent,
+            entryAvailable: entry.content.available,
+        };
+    } else {
+        return {
+            entryAssigned: entry.content.envelope.assigned,
+            entrySpent: entry.content.envelope.spent,
+            entryAvailable: entry.content.envelope.spent,
+        };
+    }
+};
+
 const BudgetEntryCard = ({ entry }: { entry: BudgetEntry }): ReactNode => {
     const isGroup = entry.type === "group";
 
-    const getEntryAssignedSpentAvail = (): {
-        entryTotalAssigned: number;
-        entryTotalSpent: number;
-        entryAvailable: number;
-    } => {
-        let entryTotalAssigned, entryTotalSpent, entryAvailable: number;
-        if (entry.type === "group") {
-            //its a group here
-            const group = entry.content;
-
-            //prettier-ignore
-            entryTotalAssigned = group.budget_items.reduce(
-                (totalAssigned, item) => (
-                    totalAssigned + item.envelope.assigned
-                )
-            ,0);
-
-            //prettier-ignore
-            entryTotalSpent = group.budget_items.reduce(
-                (totalSpent, item) => (
-                    totalSpent + item.envelope.spent
-                )
-            , 0);
-
-            entryAvailable = entryTotalAssigned - entryTotalSpent;
-        } else {
-            const item = entry.content;
-            entryTotalAssigned = item.envelope.assigned;
-            entryTotalSpent = item.envelope.spent;
-            entryAvailable = item.envelope.available;
-        }
-
-        return { entryTotalAssigned, entryTotalSpent, entryAvailable };
-    };
-
     const [isExpanded, setIsExpanded] = useState(true);
-    const { entryTotalAssigned, entryTotalSpent, entryAvailable } = getEntryAssignedSpentAvail();
+    const { entryAssigned, entrySpent, entryAvailable } = getEntryAssignedSpentAvail(entry);
     const entryPercentSpent =
-        entryTotalAssigned > 0 ? Math.min((entryTotalSpent / entryTotalAssigned) * 100, 100) : 0;
-    const isEntryOverspent = entryTotalSpent > entryTotalAssigned;
+        entryAssigned > 0 ? Math.min((entrySpent / entryAssigned) * 100, 100) : 0;
+    const isEntryOverspent = entrySpent > entryAssigned;
 
     const toggleExpanded = () => {
         setIsExpanded(!isExpanded);
@@ -130,10 +117,7 @@ const BudgetEntryCard = ({ entry }: { entry: BudgetEntry }): ReactNode => {
                         percentSpent={entryPercentSpent}
                         isOverspent={isEntryOverspent}
                     />
-                    <BudgetDetails
-                        amountSpent={entryTotalSpent}
-                        amountAssigned={entryTotalAssigned}
-                    />
+                    <BudgetDetails amountSpent={entrySpent} amountAssigned={entryAssigned} />
                 </div>
             )}
         </div>
