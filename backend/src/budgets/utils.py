@@ -67,6 +67,8 @@ def _get_budget_groups_query_for_month(year: int, month: int):  # noqa ANN202
                     _budget_item_has_envelope_for_month(year, month)
                 )
             ).selectinload(
+                # select just the one we want here, so we're not
+                # selecting all the envelopes and filtering later
                 BudgetItemOrm.all_envelopes.and_(_envelope_is_for_month(year, month))
             )
         )
@@ -92,8 +94,7 @@ async def get_monthly_budget(
 
     for group_orm in this_month_group_orms:
         for grouped_item in group_orm.budget_items:
-            # the selected envelope must be set manually from the
-            # eagerly loaded envelope
+            # set the envelope based on the eagerly loaded envelope for the month.
             grouped_item.envelope = grouped_item.all_envelopes[0]
 
         group = BudgetGroupResponse.model_validate(group_orm)
