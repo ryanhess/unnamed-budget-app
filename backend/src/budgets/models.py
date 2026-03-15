@@ -9,7 +9,6 @@ from sqlalchemy import (
 from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property
 from src.database import OrmBase
 from typing import Literal
-from transactions.models import TransactionOrm
 
 
 class BudgetEntry(BaseModel):
@@ -149,10 +148,6 @@ class BudgetItemOrm(OrmBase):
     )
     budget_group: Mapped[BudgetGroupOrm | None] = relationship(
         back_populates="budget_items"
-    )
-
-    transactions: Mapped[list[TransactionOrm]] = relationship(
-        back_populates="budget_item"
     )
 
     # not a column in DB, enables leveraging relationship in routes.
