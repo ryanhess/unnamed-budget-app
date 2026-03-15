@@ -25,10 +25,7 @@ class EnvelopeCreate(BaseModel):
 
 class EnvelopeResponse(BaseModel):
     id: int
-    year: int
-    month: int
     assigned: float
-    budget_item_id: int
     spent: float
 
     @computed_field
@@ -85,6 +82,21 @@ class BudgetGroupResponse(BaseModel):
     # Defined below, so forward import
     budget_items: list["BudgetItemResponse"]
 
+    @computed_field
+    @property
+    def assigned(self) -> float:
+        return sum(item.envelope.assigned for item in self.budget_items)
+
+    @computed_field
+    @property
+    def spent(self) -> float:
+        return sum(item.envelope.spent for item in self.budget_items)
+
+    @computed_field
+    @property
+    def available(self) -> float:
+        return sum(item.envelope.available for item in self.budget_items)
+
     class Config:
         from_attributes = True
 
@@ -115,7 +127,6 @@ class BudgetItemUpdate(BaseModel):
 class BudgetItemResponse(BaseModel):
     id: int
     name: str
-    budget_group_id: int | None = None
 
     envelope: EnvelopeResponse
 
