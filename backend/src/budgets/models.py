@@ -85,6 +85,21 @@ class BudgetGroupResponse(BaseModel):
     # Defined below, so forward import
     budget_items: list["BudgetItemResponse"]
 
+    @computed_field
+    @property
+    def assigned(self) -> float:
+        return sum(item.envelope.assigned for item in self.budget_items)
+
+    @computed_field
+    @property
+    def spent(self) -> float:
+        return sum(item.envelope.spent for item in self.budget_items)
+
+    @computed_field
+    @property
+    def available(self) -> float:
+        return sum(item.envelope.available for item in self.budget_items)
+
     class Config:
         from_attributes = True
 

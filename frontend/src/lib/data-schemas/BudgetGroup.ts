@@ -5,6 +5,9 @@ const BudgetGroupSchema = z.object({
     id: z.int(),
     name: z.string(),
     budget_items: z.array(BudgetItemSchema),
+    assigned: z.number(),
+    spent: z.number(),
+    available: z.number(),
 });
 
 type BudgetGroup = z.infer<typeof BudgetGroupSchema>;
