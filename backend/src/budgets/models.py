@@ -25,10 +25,7 @@ class EnvelopeCreate(BaseModel):
 
 class EnvelopeResponse(BaseModel):
     id: int
-    year: int
-    month: int
     assigned: float
-    budget_item_id: int
     spent: float
 
     @computed_field
@@ -130,7 +127,6 @@ class BudgetItemUpdate(BaseModel):
 class BudgetItemResponse(BaseModel):
     id: int
     name: str
-    budget_group_id: int | None = None
 
     envelope: EnvelopeResponse
 
