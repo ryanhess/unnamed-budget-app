@@ -4,12 +4,14 @@ from sqlalchemy import (
     Identity,
     CheckConstraint,
     UniqueConstraint,
+    cast,
+    Float,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property
 from sqlalchemy import select, func, extract
 from src.database import OrmBase
 from typing import Literal
-from transactions.models import TransactionOrm
+from src.transactions.models import TransactionOrm
 
 
 class BudgetEntry(BaseModel):
@@ -61,8 +63,8 @@ class EnvelopeOrm(OrmBase):
     budget_item: Mapped["BudgetItemOrm"] = relationship(back_populates="all_envelopes")
 
     spent = column_property(
-        select(func.sum(TransactionOrm.amount))
-        .where(TransactionOrm.category == budget_item_id)
+        select(cast(func.coalesce(func.sum(-TransactionOrm.amount), 0), Float))
+        .where(TransactionOrm.budget_item_id == budget_item_id)
         .where(extract("year", TransactionOrm.date) == year)
         .where(extract("month", TransactionOrm.date) == month)
         .correlate_except(TransactionOrm)
