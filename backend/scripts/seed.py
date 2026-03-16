@@ -54,6 +54,8 @@ budget_items: list[BudgetItemOrm] = [
     BudgetItemOrm(name="Fitness", budget_group_id=5),
     BudgetItemOrm(name="Vitamins", budget_group_id=5),
     BudgetItemOrm(name="Ungrouped", budget_group_id=None),
+    BudgetItemOrm(name="Travel"),
+    BudgetItemOrm(name="Income"),
 ]
 
 

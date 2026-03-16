@@ -99,6 +99,18 @@ CATEGORY_WEIGHTS: dict[str, int] = {
 # Distribution weights for bank accounts 1-5
 ACCOUNT_WEIGHTS = [35, 20, 25, 10, 10]
 
+CATEGORY_TO_BUDGET_ITEM_ID: dict[str, int] = {
+    "Groceries": 1,
+    "Food & Dining": 2,
+    "Transportation": 3,
+    "Utilities": 5,
+    "Shopping": 8,
+    "Entertainment": 7,
+    "Health": 9,
+    "Travel": 13,
+    "Income": 14,
+}
+
 CATEGORIES = list(CATEGORY_WEIGHTS.keys())
 WEIGHTS = list(CATEGORY_WEIGHTS.values())
 START_DATE = date(2025, 1, 1)
@@ -135,6 +147,7 @@ def _generate_transactions(count: int) -> list[TransactionOrm]:
                 amount=amount,
                 type=txn_type,
                 bank_account_id=bank_account_id,
+                budget_item_id=CATEGORY_TO_BUDGET_ITEM_ID[category],
             )
         )
 
