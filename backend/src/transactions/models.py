@@ -6,10 +6,9 @@ from sqlalchemy import (
     Identity,
     Date as sqlalchemy_date,
 )
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 from src.database import OrmBase
 from datetime import date as date_type
-from src.budgets.models import BudgetItemOrm
 
 
 class TransactionType(str, Enum):
@@ -29,7 +28,7 @@ class TransactionCreate(BaseModel):
 # Pydantic Schema for API layer
 class TransactionResponse(BaseModel):
     id: int
-    date: str
+    date: date_type
     merchant: str
     category: str
     amount: float
@@ -52,7 +51,6 @@ class TransactionOrm(OrmBase):
     budget_item_id: Mapped[int | None] = mapped_column(
         ForeignKey("budget_items.id", ondelete="SET NULL"), nullable=True
     )
-    budget_item: Mapped[BudgetItemOrm | None] = relationship()
     amount: Mapped[float]
     type: Mapped[TransactionType] = mapped_column(SqlAlchEnum(TransactionType))
 

@@ -61,11 +61,12 @@ budget_items: list[BudgetItemOrm] = [
 
 async def seed() -> None:
     async with async_session() as session:
-        session.add_all(bank_accounts)
-        session.add_all(transactions)
         session.add_all(budget_groups)
         session.add_all(budget_items)
+        await session.flush()
         session.add_all(envelopes)
+        session.add_all(bank_accounts)
+        session.add_all(transactions)
         await session.commit()
 
 

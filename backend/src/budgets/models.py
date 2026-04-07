@@ -4,11 +4,14 @@ from sqlalchemy import (
     Identity,
     CheckConstraint,
     UniqueConstraint,
-    literal,
+    cast,
+    Float,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property
+from sqlalchemy import select, func, extract
 from src.database import OrmBase
 from typing import Literal
+from src.transactions.models import TransactionOrm
 
 
 class BudgetEntry(BaseModel):
@@ -49,9 +52,9 @@ class EnvelopeOrm(OrmBase):
     )
 
     id: Mapped[int] = mapped_column(Identity(always=True), primary_key=True)
-    year: Mapped[int]
-    month: Mapped[int]
-    assigned: Mapped[float]
+    year: Mapped[int] = mapped_column()
+    month: Mapped[int] = mapped_column()
+    assigned: Mapped[float] = mapped_column()
     budget_item_id: Mapped[int] = mapped_column(
         ForeignKey("budget_items.id", ondelete="CASCADE")
     )
@@ -59,7 +62,14 @@ class EnvelopeOrm(OrmBase):
     # not in the table, just used for SqlAlchemy's object oriented relationship
     budget_item: Mapped["BudgetItemOrm"] = relationship(back_populates="all_envelopes")
 
-    spent = column_property(literal(42))  # temporarily 42.
+    spent = column_property(
+        select(cast(func.coalesce(func.sum(-TransactionOrm.amount), 0), Float))
+        .where(TransactionOrm.budget_item_id == budget_item_id)
+        .where(extract("year", TransactionOrm.date) == year)
+        .where(extract("month", TransactionOrm.date) == month)
+        .correlate_except(TransactionOrm)
+        .scalar_subquery()
+    )
 
 
 class BudgetGroupCreate(BaseModel):
